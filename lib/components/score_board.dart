@@ -10,15 +10,18 @@ class ScoreBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
+      flex: 1,
       child: Container(
-        margin: EdgeInsets.all(context.dynamicWidth(0.06)), // 24/400
+        margin: EdgeInsets.all(context.dynamicWidth(0.0125)),
         padding: EdgeInsets.symmetric(
-          vertical: context.dynamicHeight(0.0114),
-          horizontal: context.dynamicWidth(0.065),
+          vertical: context.dynamicHeight(0.007), //5px = 5/700px
+          horizontal: context.dynamicWidth(0.0125), //5px = 5/400px
         ),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(6.0),
+          borderRadius: BorderRadius.circular(
+            context.dynamicWidth(0.025), //10px
+          ),
         ),
         child: Column(
           children: [
@@ -27,19 +30,19 @@ class ScoreBoard extends StatelessWidget {
               child: Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 22.0, //max text size,
+                  fontSize: 24.0, //max text size,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
             SizedBox(
-              height: context.dynamicHeight(0.0085714),
+              height: context.dynamicHeight(0.007), //5px
             ),
             FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(info,
                   style: const TextStyle(
-                    fontSize: 34.0,
+                    fontSize: 24.0,
                     fontWeight: FontWeight.bold,
                   )),
             )
