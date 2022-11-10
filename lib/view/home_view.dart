@@ -19,6 +19,7 @@ class _HomeViewState extends State<HomeView> {
     _game.initGame();
     _game.score = 0;
     _game.tries = 0;
+
     super.initState();
   }
 
@@ -64,40 +65,41 @@ class _HomeViewState extends State<HomeView> {
         itemBuilder: (context, index) {
           return GestureDetector(
               onTap: () {
-                setState(() {
-                  _game.tries++;
+                if (_game.gameImg![index] == Game.hiddenCardPng) {
+                  setState(() {
+                    _game.tries++;
 
-                  _game.gameImg![index] = _game.cardList[index];
-                  _game.matchCheck.add({index: _game.cardList[index]});
-                });
-                if (_game.matchCheck.length == 2) {
-                  //print(_game.matchCheck);
-                  //print(_game.matchCheck[0].values.first);
-                  // print(_game.matchCheck[1].values.first);
-                  // print("index: " + index.toString());
+                    _game.gameImg![index] = _game.cardList[index];
+                    _game.matchCheck.add({index: _game.cardList[index]});
+                  });
 
-                  if (_game.matchCheck[0].values.first ==
-                      _game.matchCheck[1].values.first) {
-                    _game.score += 100;
-                    _game.matchCheck.clear();
-                  } else {
-                    Future.delayed(const Duration(milliseconds: 500), () {
-                      //print(_game.gameImg);
-                      setState(() {
-                        _game.gameImg![_game.matchCheck[0].keys.first] =
-                            _game.hiddenCardpath;
-                        _game.gameImg![_game.matchCheck[1].keys.first] =
-                            _game.hiddenCardpath;
-                        _game.matchCheck.clear();
+                  if (_game.matchCheck.length == 2) {
+                    if (_game.matchCheck[0].values.first ==
+                        _game.matchCheck[1].values.first) {
+                      print("MATCH CARD");
+                      _game.score += 100;
+                      _game.matchCheck.clear();
+                    } else {
+                      Future.delayed(const Duration(milliseconds: 200), () {
+                        //print(_game.gameImg);
+                        setState(() {
+                          _game.gameImg![_game.matchCheck[0].keys.first] =
+                              Game.hiddenCardPng;
+                          _game.gameImg![_game.matchCheck[1].keys.first] =
+                              Game.hiddenCardPng;
+                          _game.matchCheck.clear();
+                        });
                       });
-                    });
+                    }
                   }
+                } else {
+                  return;
                 }
 
-                if (!_game.gameImg!.contains(_game.hiddenCardpath)) {
+                if (!_game.gameImg!.contains(Game.hiddenCardPng)) {
                   AlertView alert = AlertView(
-                    content: "WINNER!",
-                    title: "You won congrate!",
+                    content: "You won congrate!",
+                    title: "WINNER",
                     continueFunction: () {
                       setState(() {
                         _game.initGame();
