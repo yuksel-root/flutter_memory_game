@@ -1,5 +1,9 @@
 class Game {
-  final String hiddenCardpath = 'assets/images/hidden.png';
+  static const String hiddenCardPng = 'assets/images/hidden.png';
+  static const String circlePng = "assets/images/circle.png";
+  static const String trianglePng = "assets/images/triangle.png";
+  static const String hearthPng = "assets/images/heart.png";
+  static const String starPng = "assets/images/star.png";
 
   int tries = 0;
   int score = 0;
@@ -9,20 +13,25 @@ class Game {
   List<Map<int, String>> matchCheck = [];
 
   final List<String> cardList = [
-    "assets/images/circle.png",
-    "assets/images/triangle.png",
-    "assets/images/circle.png",
-    "assets/images/heart.png",
-    "assets/images/star.png",
-    "assets/images/triangle.png",
-    "assets/images/star.png",
-    "assets/images/heart.png",
+    circlePng,
+    trianglePng,
+    hearthPng,
+    starPng,
+    circlePng,
+    trianglePng,
+    hearthPng,
+    starPng,
+    circlePng,
+    trianglePng,
+    hearthPng,
+    starPng,
   ];
 
   void initGame() {
     tries = 0;
     score = 0;
-    cardCount = 8;
-    gameImg = List.generate(cardCount, (index) => hiddenCardpath);
+    cardCount = cardList.length;
+    cardList.shuffle();
+    gameImg = List.generate(cardCount, (index) => hiddenCardPng);
   }
 }
