@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/components/alert_dialog.dart';
 import 'package:flutter_memory_game/components/score_board.dart';
+import 'package:flutter_memory_game/core/constants/game_img_constants.dart';
 import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
 import 'package:flutter_memory_game/game_logic.dart';
 
@@ -52,12 +53,13 @@ class _HomeViewState extends State<HomeView> {
     return Expanded(
       flex: 100,
       child: GridView.builder(
-        itemCount: _game.gameImg!.length,
+        itemCount: _game.gameCard!.length,
+
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
+          crossAxisCount: 4,
           crossAxisSpacing: context.dynamicWidth(0.025), //10px
           mainAxisSpacing: context.dynamicHeight(0.0142), //10 px
-          childAspectRatio: 3 / 2,
+          childAspectRatio: 2 / 1,
         ),
         // context.dynamicHeight(0.004) * context.dynamicWidth(0.0075)
         padding: EdgeInsets.all(//3 * 3 px
@@ -65,28 +67,29 @@ class _HomeViewState extends State<HomeView> {
         itemBuilder: (context, index) {
           return GestureDetector(
               onTap: () {
-                if (_game.gameImg![index] == Game.hiddenCardPng) {
+                //print(_game.gameImg![index]);
+                if (_game.gameCard![index] == GameImgConstants.hiddenCardPng) {
                   setState(() {
                     _game.tries++;
 
-                    _game.gameImg![index] = _game.cardList[index];
+                    _game.gameCard![index] = _game.cardList[index];
                     _game.matchCheck.add({index: _game.cardList[index]});
                   });
 
                   if (_game.matchCheck.length == 2) {
                     if (_game.matchCheck[0].values.first ==
                         _game.matchCheck[1].values.first) {
-                      print("MATCH CARD");
+                      //      print("MATCH CARD");
                       _game.score += 100;
                       _game.matchCheck.clear();
                     } else {
-                      Future.delayed(const Duration(milliseconds: 200), () {
+                      Future.delayed(const Duration(milliseconds: 300), () {
                         //print(_game.gameImg);
                         setState(() {
-                          _game.gameImg![_game.matchCheck[0].keys.first] =
-                              Game.hiddenCardPng;
-                          _game.gameImg![_game.matchCheck[1].keys.first] =
-                              Game.hiddenCardPng;
+                          _game.gameCard![_game.matchCheck[0].keys.first] =
+                              GameImgConstants.hiddenCardPng;
+                          _game.gameCard![_game.matchCheck[1].keys.first] =
+                              GameImgConstants.hiddenCardPng;
                           _game.matchCheck.clear();
                         });
                       });
@@ -96,9 +99,9 @@ class _HomeViewState extends State<HomeView> {
                   return;
                 }
 
-                if (!_game.gameImg!.contains(Game.hiddenCardPng)) {
+                if (!_game.gameCard!.contains(GameImgConstants.hiddenCardPng)) {
                   AlertView alert = AlertView(
-                    content: "You won congrate!",
+                    content: "You won congrats!",
                     title: "WINNER",
                     continueFunction: () {
                       setState(() {
@@ -122,7 +125,9 @@ class _HomeViewState extends State<HomeView> {
                   color: const Color(0xFFFFB46A),
                   borderRadius: BorderRadius.circular(8.0),
                   image: DecorationImage(
-                    image: AssetImage(_game.gameImg![index]),
+                    repeat: ImageRepeat.noRepeat,
+                    scale: 2.0,
+                    image: AssetImage(_game.gameCard![index]),
                     fit: BoxFit.scaleDown,
                   ),
                 ),
