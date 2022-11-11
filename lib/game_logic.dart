@@ -1,37 +1,50 @@
-class Game {
-  static const String hiddenCardPng = 'assets/images/hidden.png';
-  static const String circlePng = "assets/images/circle.png";
-  static const String trianglePng = "assets/images/triangle.png";
-  static const String hearthPng = "assets/images/heart.png";
-  static const String starPng = "assets/images/star.png";
+import 'dart:math';
 
+import 'package:flutter_memory_game/core/constants/game_img_constants.dart';
+
+class Game {
   int tries = 0;
   int score = 0;
-  int cardCount = 8;
+  int cardCount = 0;
 
-  List<String>? gameImg;
+  List<String>? gameCard;
   List<Map<int, String>> matchCheck = [];
+  final List<String> randomImgList = [];
+  final List<String> cardList = [];
 
-  final List<String> cardList = [
-    circlePng,
-    trianglePng,
-    hearthPng,
-    starPng,
-    circlePng,
-    trianglePng,
-    hearthPng,
-    starPng,
-    circlePng,
-    trianglePng,
-    hearthPng,
-    starPng,
-  ];
+  void generaterRandomImage() {
+    var rng = Random();
+
+    for (int i = 0; i < 10; i++) {
+      randomImgList.add(GameImgConstants
+          .imageList[rng.nextInt(GameImgConstants.imageList.length)]);
+      cardList.add(randomImgList[i]);
+    }
+
+    print("random");
+    print(randomImgList);
+    print("random");
+
+    for (int i = 0; i < 10; i++) {
+      cardList.add(randomImgList[i]);
+    }
+
+    print(cardList);
+    print(cardList.length);
+  }
 
   void initGame() {
     tries = 0;
     score = 0;
+    generaterRandomImage();
     cardCount = cardList.length;
     cardList.shuffle();
-    gameImg = List.generate(cardCount, (index) => hiddenCardPng);
+    gameCard =
+        List.generate(cardCount, (index) => GameImgConstants.hiddenCardPng);
+
+    print("end");
+    print(cardList);
+    print(cardList.length);
+    print("end");
   }
 }
