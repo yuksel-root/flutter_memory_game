@@ -23,30 +23,42 @@ class ScoreBoard extends StatelessWidget {
             context.dynamicWidth(0.025), //10px
           ),
         ),
-        child: Column(
-          children: [
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 24.0, //max text size,
-                  fontWeight: FontWeight.bold,
+        child: Center(
+          child: Row(
+            children: [
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.center,
+                child: Center(
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    textDirection: TextDirection.ltr,
+                    title,
+                    style: const TextStyle(
+                      fontSize: 24.0, //max text size,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: context.dynamicHeight(0.007), //5px
-            ),
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(info,
-                  style: const TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                  )),
-            )
-          ],
+              SizedBox(
+                height: context.dynamicHeight(0.0010), //5px
+              ),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.center,
+                child: Center(
+                  child: Text("  :  $info",
+                      textAlign: TextAlign.center,
+                      textDirection: TextDirection.ltr,
+                      style: const TextStyle(
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.bold,
+                      )),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
