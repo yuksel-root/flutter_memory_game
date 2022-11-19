@@ -27,28 +27,58 @@ class _GameViewState extends State<GameView> {
 
     return Scaffold(
         backgroundColor: const Color(0xFFe55870),
+        appBar: AppBar(
+          flexibleSpace: Container(
+            height: context.mediaQuery.size.height,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xFF1D976C),
+                  Color(0xFF93F9B9),
+                ],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                stops: [0.0, 1.0],
+                tileMode: TileMode.repeated,
+              ),
+            ),
+            child: SizedBox(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Spacer(flex: 1),
+                  FittedBox(fit: BoxFit.cover, child: centerGameTitle()),
+                  const Spacer(flex: 1),
+                  FittedBox(
+                      fit: BoxFit.cover,
+                      child: elevatedBtnReplay(readGameView, context)),
+                  const Spacer(flex: 1),
+                ],
+              ),
+            ),
+          ),
+        ),
         body: Center(
           child: SingleChildScrollView(
-            child: SizedBox(
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFF2193b0),
+                    Color(0xFF6dd5ed),
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                  stops: [0.0, 1.0],
+                  tileMode: TileMode.repeated,
+                ),
+              ),
               height: context.mediaQuery.size.height,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Spacer(flex: 1),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Spacer(flex: 1),
-                      FittedBox(fit: BoxFit.cover, child: centerGameTitle()),
-                      const Spacer(flex: 1),
-                      FittedBox(
-                          fit: BoxFit.cover,
-                          child: elevatedBtnReplay(readGameView, context)),
-                      const Spacer(flex: 1),
-                    ],
-                  ),
                   const Spacer(flex: 1),
                   rowScoreBoard(readGameView.getTries, readGameView.getScore),
                   const Spacer(flex: 1),
@@ -62,14 +92,35 @@ class _GameViewState extends State<GameView> {
         ));
   }
 
-  ElevatedButton elevatedBtnReplay(
+  DecoratedBox elevatedBtnReplay(
       GameViewModel readGameView, BuildContext context) {
-    return ElevatedButton(
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [
+            Color(0xFFB2FEFA),
+            Color(0xFF6dd5ed),
+            Color(0xFFB2FEFA),
+          ],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          stops: [0.1, 0.9, 1.0],
+          tileMode: TileMode.repeated,
+        ),
+        boxShadow: const <BoxShadow>[
+          BoxShadow(
+              color: Color.fromRGBO(0, 0, 0, 0.57), //shadow for button
+              blurRadius: 5) //blur radius of shadow
+        ],
+        borderRadius: BorderRadius.circular(
+            context.dynamicHeight(0.008) * context.dynamicWidth(0.012)),
+      ),
+      child: ElevatedButton(
         style: ElevatedButton.styleFrom(
             shape: const StadiumBorder(),
-            onPrimary: Colors.white,
-            primary: const Color(0xFFFFB46A),
-            shadowColor: Colors.deepPurpleAccent,
+            primary: Colors.transparent,
+            onSurface: Colors.transparent,
+            shadowColor: Colors.transparent,
             padding: EdgeInsets.all(context.dynamicWidth(0.01) *
                 context.dynamicHeight(0.007))), //5*5 25px , 500w 700h
         onPressed: () {
@@ -83,7 +134,9 @@ class _GameViewState extends State<GameView> {
                 context.dynamicWidth(0.012), //6*6 36px
             fontWeight: FontWeight.bold,
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Expanded expandedCard(
@@ -137,7 +190,16 @@ class _GameViewState extends State<GameView> {
                 padding: EdgeInsets.all(context.dynamicHeight(0.004) *
                     context.dynamicWidth(0.006)), //3*3 9px
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFFB46A),
+                  gradient: const LinearGradient(
+                    colors: [
+                      Color(0xFFB2FEFA),
+                      Color(0xFF6dd5ed),
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    stops: [0.0, 1.0],
+                    tileMode: TileMode.repeated,
+                  ),
                   borderRadius: BorderRadius.circular(
                       context.dynamicHeight(0.002) *
                           context.dynamicWidth(0.004)), //2*2

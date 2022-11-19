@@ -21,7 +21,16 @@ class ScoreBoard extends StatelessWidget {
               context.dynamicWidth(0.004), //2*2 4px
         ),
         decoration: BoxDecoration(
-          color: Colors.white,
+          gradient: const LinearGradient(
+            colors: [
+              Colors.deepPurple,
+              Colors.deepPurpleAccent,
+            ],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            stops: [0.0, 1.0],
+            tileMode: TileMode.repeated,
+          ),
           borderRadius: BorderRadius.circular(
             context.dynamicHeight(0.004) *
                 context.dynamicWidth(0.006), //3*3 9px
@@ -39,6 +48,7 @@ class ScoreBoard extends StatelessWidget {
                     textDirection: TextDirection.ltr,
                     title,
                     style: TextStyle(
+                      color: Colors.white,
                       fontSize: context.dynamicHeight(0.007) *
                           context.dynamicWidth(0.01), //5*5 25px
                       fontWeight: FontWeight.bold,
@@ -57,6 +67,7 @@ class ScoreBoard extends StatelessWidget {
                       textAlign: TextAlign.center,
                       textDirection: TextDirection.ltr,
                       style: TextStyle(
+                        color: Colors.white,
                         fontSize: context.dynamicHeight(0.007) *
                             context.dynamicWidth(0.01),
                         fontWeight: FontWeight.bold,
