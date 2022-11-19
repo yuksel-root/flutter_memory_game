@@ -12,15 +12,19 @@ class ScoreBoard extends StatelessWidget {
     return Expanded(
       flex: 1,
       child: Container(
-        margin: EdgeInsets.all(context.dynamicWidth(0.0125)),
+        margin: EdgeInsets.all(context.dynamicHeight(0.002) *
+            context.dynamicWidth(0.004)), //2*2 4px
         padding: EdgeInsets.symmetric(
-          vertical: context.dynamicHeight(0.007), //5px = 5/700px
-          horizontal: context.dynamicWidth(0.0125), //5px = 5/400px
+          vertical: context.dynamicHeight(0.002) *
+              context.dynamicWidth(0.004), //2*2 4px
+          horizontal: context.dynamicHeight(0.002) *
+              context.dynamicWidth(0.004), //2*2 4px
         ),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(
-            context.dynamicWidth(0.025), //10px
+            context.dynamicHeight(0.004) *
+                context.dynamicWidth(0.006), //3*3 9px
           ),
         ),
         child: Center(
@@ -34,8 +38,9 @@ class ScoreBoard extends StatelessWidget {
                     textAlign: TextAlign.center,
                     textDirection: TextDirection.ltr,
                     title,
-                    style: const TextStyle(
-                      fontSize: 24.0, //max text size,
+                    style: TextStyle(
+                      fontSize: context.dynamicHeight(0.007) *
+                          context.dynamicWidth(0.01), //5*5 25px
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -51,8 +56,9 @@ class ScoreBoard extends StatelessWidget {
                   child: Text("  :  $info",
                       textAlign: TextAlign.center,
                       textDirection: TextDirection.ltr,
-                      style: const TextStyle(
-                        fontSize: 24.0,
+                      style: TextStyle(
+                        fontSize: context.dynamicHeight(0.007) *
+                            context.dynamicWidth(0.01),
                         fontWeight: FontWeight.bold,
                       )),
                 ),
