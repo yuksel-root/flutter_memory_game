@@ -3,7 +3,9 @@ import 'package:flutter_memory_game/core/constants/navigation_constants.dart';
 import 'package:flutter_memory_game/core/navigation/navigation_route.dart';
 import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_memory_game/view/home_view.dart';
+import 'package:flutter_memory_game/core/notifier/provider_list.dart';
+import 'package:flutter_memory_game/view/game_view.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,20 +15,25 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [...ApplicationProvider.instance.dependItems],
+      child: const MainApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MainApp extends StatelessWidget {
+  const MainApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const HomeView(),
+      home: const GameView(),
       onGenerateRoute: NavigationRoute.instance.generateRoute,
       navigatorKey: NavigationService.instance.navigatorKey,
-      initialRoute: NavigationConstants.HOME_VIEW,
+      initialRoute: NavigationConstants.homeView,
     );
   }
 }
