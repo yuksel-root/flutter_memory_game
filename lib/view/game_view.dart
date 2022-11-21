@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_memory_game/components/gradient_icon.dart';
 import 'package:flutter_memory_game/components/score_board.dart';
 import 'package:flutter_memory_game/core/constants/game_img_constants.dart';
 import 'package:flutter_memory_game/core/constants/navigation_constants.dart';
@@ -27,51 +28,15 @@ class _GameViewState extends State<GameView> {
 
     return Scaffold(
         backgroundColor: const Color(0xFFe55870),
-        appBar: AppBar(
-          flexibleSpace: Container(
-            height: context.mediaQuery.size.height,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color(0xFF1D976C),
-                  Color(0xFF93F9B9),
-                ],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                stops: [0.0, 1.0],
-                tileMode: TileMode.repeated,
-              ),
-            ),
-            child: SizedBox(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Spacer(flex: 1),
-                  FittedBox(fit: BoxFit.cover, child: centerGameTitle()),
-                  const Spacer(flex: 1),
-                  FittedBox(
-                      fit: BoxFit.cover,
-                      child: elevatedBtnReplay(readGameView, context)),
-                  const Spacer(flex: 1),
-                ],
-              ),
-            ),
-          ),
-        ),
+        appBar: gameAppBarWidget(context, readGameView),
         body: Center(
           child: SingleChildScrollView(
             child: Container(
               decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Color(0xFF2193b0),
-                    Color(0xFF6dd5ed),
-                  ],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                  stops: [0.0, 1.0],
-                  tileMode: TileMode.repeated,
+                image: DecorationImage(
+                  repeat: ImageRepeat.noRepeat,
+                  fit: BoxFit.fill,
+                  image: AssetImage(GameImgConstants.bg1Png),
                 ),
               ),
               height: context.mediaQuery.size.height,
@@ -80,10 +45,8 @@ class _GameViewState extends State<GameView> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Spacer(flex: 1),
-                  rowScoreBoard(readGameView.getTries, readGameView.getScore),
-                  const Spacer(flex: 1),
-                  expandedCard(readGameView.getTries, readGameView.getScore,
-                      readGameView, gameViewProv),
+                  expandedCardWidget(readGameView.getTries,
+                      readGameView.getScore, readGameView, gameViewProv),
                   const Spacer(flex: 1),
                 ],
               ),
@@ -92,54 +55,219 @@ class _GameViewState extends State<GameView> {
         ));
   }
 
-  DecoratedBox elevatedBtnReplay(
+  AppBar gameAppBarWidget(BuildContext context, GameViewModel readGameView) {
+    return AppBar(
+      flexibleSpace: centerAppBarWidgets(context),
+      actions: [actionsAppBarWidgets(readGameView, context)],
+      leading: leadingAppBarWidgets(readGameView, context),
+      leadingWidth: context.dynamicWidth(2),
+      toolbarHeight: context.dynamicHeight(0.12),
+    );
+  }
+
+  FittedBox actionsAppBarWidgets(
       GameViewModel readGameView, BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
+    return FittedBox(
+      child: Column(
+        children: [
+          FittedBox(
+              fit: BoxFit.scaleDown,
+              child: elevatedBtnPauseWidget(readGameView, context)),
+          FittedBox(
+              child: ScoreBoard(
+                  title: "Tries", info: readGameView.getTries.toString())),
+        ],
+      ),
+    );
+  }
+
+  FittedBox leadingAppBarWidgets(
+      GameViewModel readGameView, BuildContext context) {
+    return FittedBox(
+      child: Column(
+        children: [
+          FittedBox(
+            child: elevatedBtnPeekCards(readGameView, context),
+          ),
+          FittedBox(
+              child: ScoreBoard(
+                  title: "Score", info: readGameView.getScore.toString())),
+        ],
+      ),
+    );
+  }
+
+  Container centerAppBarWidgets(BuildContext context) {
+    return Container(
+      height: context.mediaQuery.size.height / 4,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
           colors: [
-            Color(0xFFB2FEFA),
-            Color(0xFF6dd5ed),
-            Color(0xFFB2FEFA),
+            Color(0xFF00bfff),
+            Color(0xFFbdc3c7),
           ],
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
-          stops: [0.1, 0.9, 1.0],
+          stops: [0.0, 1.0],
           tileMode: TileMode.repeated,
         ),
-        boxShadow: const <BoxShadow>[
-          BoxShadow(
-              color: Color.fromRGBO(0, 0, 0, 0.57), //shadow for button
-              blurRadius: 5) //blur radius of shadow
-        ],
-        borderRadius: BorderRadius.circular(
-            context.dynamicHeight(0.008) * context.dynamicWidth(0.012)),
       ),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            shape: const StadiumBorder(),
-            primary: Colors.transparent,
-            onSurface: Colors.transparent,
-            shadowColor: Colors.transparent,
-            padding: EdgeInsets.all(context.dynamicWidth(0.01) *
-                context.dynamicHeight(0.007))), //5*5 25px , 500w 700h
-        onPressed: () {
-          readGameView.navigateToPage(NavigationConstants.homeView);
-          readGameView.restartGame();
-        },
-        child: Text(
-          "Replay",
-          style: TextStyle(
-            fontSize: context.dynamicHeight(0.008) *
-                context.dynamicWidth(0.012), //6*6 36px
-            fontWeight: FontWeight.bold,
-          ),
+      child: FittedBox(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FittedBox(
+              child: gameLevelWidget(),
+            ),
+            SizedBox(
+              width: context.dynamicWidth(0.04),
+            ),
+            Row(
+              children: [
+                gradientStarWidget(),
+                SizedBox(
+                  width: context.dynamicWidth(0.01),
+                ),
+                gradientStarWidget(),
+                SizedBox(
+                  width: context.dynamicWidth(0.01),
+                ),
+                gradientStarWidget(),
+              ],
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Expanded expandedCard(
+  FittedBox gradientStarWidget() {
+    // ignore: prefer_const_constructors
+    return FittedBox(
+      // ignore: prefer_const_constructors
+      child: GradientIcon(
+        // ignore: prefer_const_constructors
+        iconGradient: const SweepGradient(
+          colors: [
+            Colors.purple,
+            Colors.red,
+            Colors.orange,
+            Colors.yellow,
+            Colors.blue,
+            Colors.indigo,
+            Colors.deepOrangeAccent,
+          ],
+          startAngle: 0.9,
+          endAngle: 6.0,
+          tileMode: TileMode.clamp,
+        ),
+        isbgGradient: false,
+        isIconGradient: true,
+        Icons.star,
+        0.01,
+        0.014,
+        bgGradient: null,
+      ),
+    );
+  }
+
+  ElevatedButton elevatedBtnPauseWidget(
+      GameViewModel readGameView, BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        primary: Colors.transparent,
+        onSurface: Colors.transparent,
+        shadowColor: Colors.transparent,
+      ), //5*5 25px , 500w 700h
+      onPressed: () {
+        readGameView.navigateToPage(NavigationConstants.homeView);
+        readGameView.restartGame();
+      },
+
+      // ignore: prefer_const_constructors
+      child: GradientIcon(
+        isbgGradient: true,
+        bgGradient: LinearGradient(
+          colors: [
+            Colors.deepPurple.withOpacity(0.8),
+            Colors.deepPurpleAccent.withOpacity(0.8),
+            Colors.deepPurpleAccent.withOpacity(0.8),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        isIconGradient: true,
+        Icons.pause,
+        0.01,
+        0.014,
+        iconGradient: const SweepGradient(
+          colors: [
+            Colors.purple,
+            Colors.red,
+            Colors.orange,
+            Colors.yellow,
+            Colors.blue,
+            Colors.indigo,
+            Colors.deepOrangeAccent,
+          ],
+          startAngle: 0.9,
+          endAngle: 6.0,
+          tileMode: TileMode.clamp,
+        ),
+        iconColor: Colors.white,
+      ),
+    );
+  }
+
+  ElevatedButton elevatedBtnPeekCards(
+      GameViewModel readGameView, BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        primary: Colors.transparent,
+        onSurface: Colors.transparent,
+        shadowColor: Colors.transparent,
+      ), //5*5 25px , 500w 700h
+      onPressed: () {
+        readGameView.navigateToPage(NavigationConstants.homeView);
+        readGameView.restartGame();
+      },
+      // ignore: prefer_const_constructors
+      child: GradientIcon(
+        isbgGradient: true,
+        bgGradient: LinearGradient(
+          colors: [
+            Colors.deepPurple.withOpacity(0.8),
+            Colors.deepPurpleAccent.withOpacity(0.8),
+            Colors.deepPurpleAccent.withOpacity(0.8),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        isIconGradient: true,
+        iconGradient: const SweepGradient(
+          colors: [
+            Colors.purple,
+            Colors.red,
+            Colors.orange,
+            Colors.yellow,
+            Colors.blue,
+            Colors.indigo,
+            Colors.deepOrangeAccent,
+          ],
+          startAngle: 0.9,
+          endAngle: 6.0,
+          tileMode: TileMode.clamp,
+        ),
+        Icons.search,
+        0.01,
+        0.014,
+        iconColor: Colors.white,
+      ),
+    );
+  }
+
+  Expanded expandedCardWidget(
       int tries, int score, readGameViewCtx, GameViewModel gameViewProv) {
     return Expanded(
       flex: 100,
@@ -184,75 +312,95 @@ class _GameViewState extends State<GameView> {
                 }
               });
             },
-            child: FittedBox(
-              fit: BoxFit.contain,
-              child: Container(
-                padding: EdgeInsets.all(context.dynamicHeight(0.004) *
-                    context.dynamicWidth(0.006)), //3*3 9px
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFFB2FEFA),
-                      Color(0xFF6dd5ed),
-                    ],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                    stops: [0.0, 1.0],
-                    tileMode: TileMode.repeated,
-                  ),
-                  borderRadius: BorderRadius.circular(
-                      context.dynamicHeight(0.002) *
-                          context.dynamicWidth(0.004)), //2*2
-                  image: DecorationImage(
-                    onError: (Object exception, StackTrace? stackTrace) {
-                      print('Exception: $exception');
-                      print('Stack Trace:\n$stackTrace');
-                    },
-                    repeat: ImageRepeat.noRepeat,
-
-                    scale: context.dynamicHeight(0.005) *
-                        context.dynamicWidth(0.008), //4*4
-                    opacity: 0.9,
-                    alignment: Alignment.center,
-                    image: AssetImage(readGameViewCtx.gameCard![index]),
-                    fit: BoxFit.scaleDown,
-                  ),
-                ),
-              ),
-            ),
+            child: gameCardWidget(context, readGameViewCtx, index),
           );
         },
       ),
     );
   }
 
-  Center centerGameTitle() {
-    return Center(
-      child: FittedBox(
-        fit: BoxFit.cover,
-        child: Text(
-          "Memory Game",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: context.dynamicHeight(0.01) *
-                context.dynamicWidth(0.014), //7*7 49px
-            fontWeight: FontWeight.bold,
+  FittedBox gameCardWidget(BuildContext context, readGameViewCtx, int index) {
+    return FittedBox(
+      fit: BoxFit.contain,
+      child: Container(
+        padding: EdgeInsets.all(context.dynamicHeight(0.004) *
+            context.dynamicWidth(0.006)), //3*3 9px
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              const Color(0xFFB2FEFA).withOpacity(0.6),
+              const Color(0xFF6dd5ed).withOpacity(0.6),
+            ],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            stops: const [0.0, 1.0],
+            tileMode: TileMode.repeated,
+          ),
+          border: Border.all(
+            color: const Color(0xFFB2FEFA).withOpacity(0.6),
+            width: 0.1,
+          ),
+          borderRadius: BorderRadius.circular(
+              context.dynamicHeight(0.002) * context.dynamicWidth(0.004)), //2*2
+          image: DecorationImage(
+            repeat: ImageRepeat.noRepeat,
+
+            scale: context.dynamicHeight(0.005) *
+                context.dynamicWidth(0.008), //4*4
+            opacity: 0.9,
+            alignment: Alignment.center,
+            image: AssetImage(readGameViewCtx.gameCard![index] ==
+                    GameImgConstants.hiddenCardPng
+                ? GameImgConstants.transparentPng
+                : readGameViewCtx.gameCard![index]),
+            fit: BoxFit.scaleDown,
           ),
         ),
       ),
     );
   }
 
-  Row rowScoreBoard(int tries, int score) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      verticalDirection: VerticalDirection.down,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        ScoreBoard(title: "Tries", info: "$tries"),
-        ScoreBoard(title: "Score", info: "$score"),
-      ],
+  Container gameLevelWidget() {
+    return Container(
+      padding: EdgeInsets.only(
+        bottom: context.dynamicHeight(0.01),
+        top: context.dynamicHeight(0.01),
+        left: context.dynamicWidth(0.04),
+        right: context.dynamicWidth(0.04),
+      ),
+      decoration: BoxDecoration(
+          gradient: const LinearGradient(colors: [
+            Colors.deepPurple,
+            Colors.deepPurpleAccent,
+          ]),
+          border: Border.all(
+            color: Colors.deepPurpleAccent,
+            width: 1,
+          ),
+          borderRadius: BorderRadius.circular(
+              context.dynamicHeight(0.005) * context.dynamicWidth(0.008))),
+      child: Row(
+        children: [
+          Text(
+            "STAGE",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: context.dynamicHeight(0.008) *
+                  context.dynamicWidth(0.014), //6*6 36px
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            "   1",
+            style: TextStyle(
+              color: Colors.yellow,
+              fontSize:
+                  context.dynamicHeight(0.008) * context.dynamicWidth(0.014),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
