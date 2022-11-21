@@ -57,7 +57,7 @@ class GameViewModel extends ChangeNotifier {
   Future<void> loadImageList() async {
     try {
       imageList =
-          List.generate(_totalImageCount, (i) => "assets/images/$i.png");
+          List.generate(_totalImageCount, (i) => "assets/card_images/$i.png");
     } catch (e) {
       print("add image error");
       print(e);
