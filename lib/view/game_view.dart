@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_memory_game/components/gradient_icon.dart';
+import 'package:flutter_memory_game/components/custom_app_bar.dart';
+import 'package:flutter_memory_game/components/gradient_widget.dart';
 import 'package:flutter_memory_game/components/score_board.dart';
 import 'package:flutter_memory_game/core/constants/game_img_constants.dart';
 import 'package:flutter_memory_game/core/constants/navigation_constants.dart';
@@ -28,7 +29,10 @@ class _GameViewState extends State<GameView> {
 
     return Scaffold(
         backgroundColor: const Color(0xFFe55870),
-        appBar: gameAppBarWidget(context, readGameView),
+        appBar: CustomAppBar(
+          dynamicPreferredSize: context.dynamicHeight(0.14),
+          appBar: gameAppBarWidget(context, readGameView),
+        ),
         body: Center(
           child: SingleChildScrollView(
             child: Container(
@@ -61,22 +65,25 @@ class _GameViewState extends State<GameView> {
       actions: [actionsAppBarWidgets(readGameView, context)],
       leading: leadingAppBarWidgets(readGameView, context),
       leadingWidth: context.dynamicWidth(2),
-      toolbarHeight: context.dynamicHeight(0.12),
     );
   }
 
-  FittedBox actionsAppBarWidgets(
+  SizedBox actionsAppBarWidgets(
       GameViewModel readGameView, BuildContext context) {
-    return FittedBox(
-      child: Column(
-        children: [
-          FittedBox(
-              fit: BoxFit.scaleDown,
-              child: elevatedBtnPauseWidget(readGameView, context)),
-          FittedBox(
-              child: ScoreBoard(
-                  title: "Tries", info: readGameView.getTries.toString())),
-        ],
+    return SizedBox(
+      child: Padding(
+        padding: EdgeInsets.all(
+            context.dynamicHeight(0.004) * context.dynamicWidth(0.006)),
+        child: Column(
+          children: [
+            Expanded(
+                flex: 5, child: elevatedBtnPauseWidget(readGameView, context)),
+            Expanded(
+                flex: 3,
+                child: ScoreBoard(
+                    title: "Tries", info: readGameView.getTries.toString())),
+          ],
+        ),
       ),
     );
   }
@@ -84,35 +91,28 @@ class _GameViewState extends State<GameView> {
   FittedBox leadingAppBarWidgets(
       GameViewModel readGameView, BuildContext context) {
     return FittedBox(
-      child: Column(
-        children: [
-          FittedBox(
-            child: elevatedBtnPeekCards(readGameView, context),
-          ),
-          FittedBox(
-              child: ScoreBoard(
-                  title: "Score", info: readGameView.getScore.toString())),
-        ],
+      child: Padding(
+        padding: EdgeInsets.all(
+            context.dynamicHeight(0.004) * context.dynamicWidth(0.006)),
+        child: Column(
+          children: [
+            FittedBox(
+              child: elevatedBtnPeekCards(readGameView, context),
+            ),
+            FittedBox(
+                child: ScoreBoard(
+                    title: "Score", info: readGameView.getScore.toString())),
+          ],
+        ),
       ),
     );
   }
 
-  Container centerAppBarWidgets(BuildContext context) {
-    return Container(
-      height: context.mediaQuery.size.height / 4,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color(0xFF00bfff),
-            Color(0xFFbdc3c7),
-          ],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          stops: [0.0, 1.0],
-          tileMode: TileMode.repeated,
-        ),
-      ),
-      child: FittedBox(
+  FittedBox centerAppBarWidgets(BuildContext context) {
+    return FittedBox(
+      child: Padding(
+        padding: EdgeInsets.all(
+            context.dynamicHeight(0.004) * context.dynamicWidth(0.006)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -146,28 +146,26 @@ class _GameViewState extends State<GameView> {
     // ignore: prefer_const_constructors
     return FittedBox(
       // ignore: prefer_const_constructors
-      child: GradientIcon(
+      child: GradientWidget(
         // ignore: prefer_const_constructors
-        iconGradient: const SweepGradient(
+        gradient: const RadialGradient(
           colors: [
-            Colors.purple,
-            Colors.red,
-            Colors.orange,
-            Colors.yellow,
-            Colors.blue,
-            Colors.indigo,
-            Colors.deepOrangeAccent,
+            Color(0xFF9400D3),
+            Color(0xFF4B0082),
+            Color(0xFF0000FF),
+            Color(0xFF00FF00),
+            Color(0xFFFFFF00),
+            Color(0xFFFF7F00),
+            Color(0xFFFF0000),
           ],
-          startAngle: 0.9,
-          endAngle: 6.0,
+          center: Alignment(0.0, 0.5),
           tileMode: TileMode.clamp,
         ),
-        isbgGradient: false,
-        isIconGradient: true,
-        Icons.star,
-        0.01,
-        0.014,
-        bgGradient: null,
+
+        widget: Icon(
+          Icons.star,
+          size: context.dynamicHeight(0.01) * context.dynamicWidth(0.014),
+        ),
       ),
     );
   }
@@ -175,47 +173,61 @@ class _GameViewState extends State<GameView> {
   ElevatedButton elevatedBtnPauseWidget(
       GameViewModel readGameView, BuildContext context) {
     return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        primary: Colors.transparent,
-        onSurface: Colors.transparent,
-        shadowColor: Colors.transparent,
-      ), //5*5 25px , 500w 700h
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.transparent),
+        shadowColor: MaterialStateProperty.all(Colors.transparent),
+        overlayColor: MaterialStateProperty.resolveWith<Color?>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.hovered)) {
+              return Colors.transparent;
+            }
+            if (states.contains(MaterialState.pressed)) {
+              return Colors.transparent;
+            }
+            return null;
+          },
+        ),
+      ),
       onPressed: () {
         readGameView.navigateToPage(NavigationConstants.homeView);
         readGameView.restartGame();
       },
 
       // ignore: prefer_const_constructors
-      child: GradientIcon(
-        isbgGradient: true,
-        bgGradient: LinearGradient(
-          colors: [
-            Colors.deepPurple.withOpacity(0.8),
-            Colors.deepPurpleAccent.withOpacity(0.8),
-            Colors.deepPurpleAccent.withOpacity(0.8),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(
+              context.dynamicHeight(0.01) * context.dynamicWidth(0.014)),
+          gradient: LinearGradient(
+            colors: [
+              Colors.deepPurple.withOpacity(0.5),
+              Colors.deepPurpleAccent.withOpacity(0.5),
+              Colors.deepPurpleAccent.withOpacity(0.5),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
         ),
-        isIconGradient: true,
-        Icons.pause,
-        0.01,
-        0.014,
-        iconGradient: const SweepGradient(
-          colors: [
-            Colors.purple,
-            Colors.red,
-            Colors.orange,
-            Colors.yellow,
-            Colors.blue,
-            Colors.indigo,
-            Colors.deepOrangeAccent,
-          ],
-          startAngle: 0.9,
-          endAngle: 6.0,
-          tileMode: TileMode.clamp,
+        child: GradientWidget(
+          widget: Icon(
+            Icons.pause,
+            size: context.dynamicHeight(0.01) * context.dynamicWidth(0.014),
+          ),
+          gradient: const SweepGradient(
+            colors: [
+              Color(0xFF9400D3),
+              Color(0xFF4B0082),
+              Color(0xFF0000FF),
+              Color(0xFF00FF00),
+              Color(0xFFFFFF00),
+              Color(0xFFFF7F00),
+              Color(0xFFFF0000),
+            ],
+            startAngle: 0.9,
+            endAngle: 6.0,
+            tileMode: TileMode.clamp,
+          ),
         ),
-        iconColor: Colors.white,
       ),
     );
   }
@@ -223,46 +235,60 @@ class _GameViewState extends State<GameView> {
   ElevatedButton elevatedBtnPeekCards(
       GameViewModel readGameView, BuildContext context) {
     return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        primary: Colors.transparent,
-        onSurface: Colors.transparent,
-        shadowColor: Colors.transparent,
-      ), //5*5 25px , 500w 700h
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.transparent),
+        shadowColor: MaterialStateProperty.all(Colors.transparent),
+        overlayColor: MaterialStateProperty.resolveWith<Color?>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.hovered)) {
+              return Colors.transparent;
+            }
+            if (states.contains(MaterialState.pressed)) {
+              return Colors.transparent;
+            }
+            return null;
+          },
+        ),
+      ),
       onPressed: () {
         readGameView.navigateToPage(NavigationConstants.homeView);
         readGameView.restartGame();
       },
       // ignore: prefer_const_constructors
-      child: GradientIcon(
-        isbgGradient: true,
-        bgGradient: LinearGradient(
-          colors: [
-            Colors.deepPurple.withOpacity(0.8),
-            Colors.deepPurpleAccent.withOpacity(0.8),
-            Colors.deepPurpleAccent.withOpacity(0.8),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.deepPurple.withOpacity(0.5),
+              Colors.deepPurpleAccent.withOpacity(0.5),
+              Colors.deepPurpleAccent.withOpacity(0.5),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(
+              context.dynamicHeight(0.01) * context.dynamicWidth(0.014)),
         ),
-        isIconGradient: true,
-        iconGradient: const SweepGradient(
-          colors: [
-            Colors.purple,
-            Colors.red,
-            Colors.orange,
-            Colors.yellow,
-            Colors.blue,
-            Colors.indigo,
-            Colors.deepOrangeAccent,
-          ],
-          startAngle: 0.9,
-          endAngle: 6.0,
-          tileMode: TileMode.clamp,
+        child: GradientWidget(
+          gradient: const SweepGradient(
+            colors: [
+              Color(0xFF9400D3),
+              Color(0xFF4B0082),
+              Color(0xFF0000FF),
+              Color(0xFF00FF00),
+              Color(0xFFFFFF00),
+              Color(0xFFFF7F00),
+              Color(0xFFFF0000),
+            ],
+            startAngle: 0.9,
+            endAngle: 6.0,
+            tileMode: TileMode.clamp,
+          ),
+          widget: Icon(
+            Icons.search,
+            size: context.dynamicHeight(0.01) * context.dynamicWidth(0.014),
+          ),
         ),
-        Icons.search,
-        0.01,
-        0.014,
-        iconColor: Colors.white,
       ),
     );
   }
@@ -353,7 +379,7 @@ class _GameViewState extends State<GameView> {
                     GameImgConstants.hiddenCardPng
                 ? GameImgConstants.transparentPng
                 : readGameViewCtx.gameCard![index]),
-            fit: BoxFit.scaleDown,
+            fit: BoxFit.contain,
           ),
         ),
       ),
@@ -363,40 +389,70 @@ class _GameViewState extends State<GameView> {
   Container gameLevelWidget() {
     return Container(
       padding: EdgeInsets.only(
-        bottom: context.dynamicHeight(0.01),
-        top: context.dynamicHeight(0.01),
-        left: context.dynamicWidth(0.04),
-        right: context.dynamicWidth(0.04),
+        bottom: context.dynamicHeight(0.001),
+        top: context.dynamicHeight(0.001),
+        left: context.dynamicWidth(0.02),
+        right: context.dynamicWidth(0.02),
       ),
       decoration: BoxDecoration(
-          gradient: const LinearGradient(colors: [
-            Colors.deepPurple,
-            Colors.deepPurpleAccent,
-          ]),
-          border: Border.all(
-            color: Colors.deepPurpleAccent,
-            width: 1,
-          ),
-          borderRadius: BorderRadius.circular(
-              context.dynamicHeight(0.005) * context.dynamicWidth(0.008))),
+        gradient: LinearGradient(colors: [
+          const Color(0xFF8470ff).withOpacity(0.5),
+          const Color(0xFF8470ff).withOpacity(0.5),
+        ]),
+        border: Border.all(
+          color: Color(0xFF8470ff).withOpacity(0.5),
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(
+            context.dynamicHeight(0.005) * context.dynamicWidth(0.008)),
+      ),
       child: Row(
+        // ignore: prefer_const_literals_to_create_immutables
         children: [
-          Text(
-            "STAGE",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: context.dynamicHeight(0.008) *
-                  context.dynamicWidth(0.014), //6*6 36px
-              fontWeight: FontWeight.bold,
+          // ignore: prefer_const_constructors
+          GradientWidget(
+            gradient: const LinearGradient(
+              colors: [
+                Color(0xFF9400D3),
+                Color(0xFF4B0082),
+                Color(0xFF0000FF),
+                Color(0xFF00FF00),
+                Color(0xFFFFFF00),
+                Color(0xFFFF7F00),
+                Color(0xFFFF0000),
+              ],
+            ),
+            widget: Text(
+              "STAGE",
+              style: TextStyle(
+                fontSize:
+                    context.dynamicHeight(0.008) * context.dynamicWidth(0.014),
+              ),
             ),
           ),
-          Text(
-            "   1",
-            style: TextStyle(
-              color: Colors.yellow,
-              fontSize:
-                  context.dynamicHeight(0.008) * context.dynamicWidth(0.014),
-              fontWeight: FontWeight.bold,
+          SizedBox(
+            width: context.dynamicWidth(0.05),
+          ),
+          GradientWidget(
+            gradient: const RadialGradient(
+              colors: [
+                Color(0xFF9400D3),
+                Color(0xFF4B0082),
+                Color(0xFF0000FF),
+                Color(0xFF00FF00),
+                Color(0xFFFFFF00),
+                Color(0xFFFF7F00),
+                Color(0xFFFF0000),
+              ],
+              center: Alignment(0.0, 0.3),
+              tileMode: TileMode.clamp,
+            ),
+            widget: Text(
+              "1",
+              style: TextStyle(
+                fontSize:
+                    context.dynamicHeight(0.009) * context.dynamicWidth(0.016),
+              ),
             ),
           ),
         ],
