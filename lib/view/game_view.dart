@@ -30,7 +30,7 @@ class _GameViewState extends State<GameView> {
     return Scaffold(
         backgroundColor: const Color(0xFFe55870),
         appBar: CustomAppBar(
-          dynamicPreferredSize: context.dynamicHeight(0.14),
+          dynamicPreferredSize: context.dynamicHeight(0.15),
           appBar: gameAppBarWidget(context, readGameView),
         ),
         body: Center(
@@ -61,84 +61,60 @@ class _GameViewState extends State<GameView> {
 
   AppBar gameAppBarWidget(BuildContext context, GameViewModel readGameView) {
     return AppBar(
-      flexibleSpace: centerAppBarWidgets(context),
-      actions: [actionsAppBarWidgets(readGameView, context)],
-      leading: leadingAppBarWidgets(readGameView, context),
-      leadingWidth: context.dynamicWidth(2),
+      flexibleSpace: centerAppBarWidgets(context, readGameView),
     );
   }
 
-  SizedBox actionsAppBarWidgets(
-      GameViewModel readGameView, BuildContext context) {
-    return SizedBox(
-      child: Padding(
-        padding: EdgeInsets.all(
-            context.dynamicHeight(0.004) * context.dynamicWidth(0.006)),
-        child: Column(
-          children: [
-            Expanded(
-                flex: 5, child: elevatedBtnPauseWidget(readGameView, context)),
-            Expanded(
-                flex: 3,
-                child: ScoreBoard(
-                    title: "Tries", info: readGameView.getTries.toString())),
-          ],
-        ),
-      ),
-    );
-  }
-
-  FittedBox leadingAppBarWidgets(
-      GameViewModel readGameView, BuildContext context) {
+  FittedBox centerAppBarWidgets(BuildContext context, readGameView) {
     return FittedBox(
       child: Padding(
-        padding: EdgeInsets.all(
-            context.dynamicHeight(0.004) * context.dynamicWidth(0.006)),
+        padding: EdgeInsets.only(top: context.dynamicHeight(0.014)),
         child: Column(
-          children: [
-            FittedBox(
-              child: elevatedBtnPeekCards(readGameView, context),
-            ),
-            FittedBox(
-                child: ScoreBoard(
-                    title: "Score", info: readGameView.getScore.toString())),
-          ],
-        ),
-      ),
-    );
-  }
-
-  FittedBox centerAppBarWidgets(BuildContext context) {
-    return FittedBox(
-      child: Padding(
-        padding: EdgeInsets.all(
-            context.dynamicHeight(0.004) * context.dynamicWidth(0.006)),
-        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FittedBox(
-              child: gameLevelWidget(),
-            ),
-            SizedBox(
-              width: context.dynamicWidth(0.04),
-            ),
-            Row(
+            Wrap(
+              alignment: WrapAlignment.spaceEvenly,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: context.dynamicWidth(0.15),
               children: [
-                gradientStarWidget(),
-                SizedBox(
-                  width: context.dynamicWidth(0.01),
-                ),
-                gradientStarWidget(),
-                SizedBox(
-                  width: context.dynamicWidth(0.01),
-                ),
-                gradientStarWidget(),
+                elevatedBtnPeekCards(readGameView, context),
+                gameLevelWidget(),
+                elevatedBtnPauseWidget(readGameView, context),
               ],
             ),
+            SizedBox(
+              height: context.dynamicHeight(0.007),
+            ),
+            FittedBox(
+              child: Wrap(
+                alignment: WrapAlignment.spaceEvenly,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: context.dynamicWidth(0.17),
+                children: [
+                  ScoreBoard(
+                      title: "Score", info: readGameView.getScore.toString()),
+                  gradientThreeStarXd(),
+                  ScoreBoard(
+                      title: "Tries", info: readGameView.getTries.toString())
+                ],
+              ),
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  Wrap gradientThreeStarXd() {
+    return Wrap(
+      alignment: WrapAlignment.spaceEvenly,
+      spacing: 2,
+      children: [
+        gradientStarWidget(),
+        gradientStarWidget(),
+        gradientStarWidget(),
+      ],
     );
   }
 
