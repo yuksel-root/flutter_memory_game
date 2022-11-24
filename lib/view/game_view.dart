@@ -31,7 +31,7 @@ class _GameViewState extends State<GameView> {
         backgroundColor: const Color(0xFFe55870),
         appBar: CustomAppBar(
           dynamicPreferredSize: context.dynamicHeight(0.15),
-          appBar: gameAppBarWidget(context, readGameView),
+          appBar: gameAppBarWidget(context, readGameView, gameViewProv),
         ),
         body: Center(
           child: SingleChildScrollView(
@@ -59,13 +59,15 @@ class _GameViewState extends State<GameView> {
         ));
   }
 
-  AppBar gameAppBarWidget(BuildContext context, GameViewModel readGameView) {
+  AppBar gameAppBarWidget(BuildContext context, GameViewModel readGameView,
+      GameViewModel gameViewProv) {
     return AppBar(
-      flexibleSpace: centerAppBarWidgets(context, readGameView),
+      flexibleSpace: flexibleAppBarWidgets(context, readGameView, gameViewProv),
     );
   }
 
-  FittedBox centerAppBarWidgets(BuildContext context, readGameView) {
+  FittedBox flexibleAppBarWidgets(
+      BuildContext context, GameViewModel readGameView, gameViewProv) {
     return FittedBox(
       child: Padding(
         padding: EdgeInsets.only(top: context.dynamicHeight(0.014)),
@@ -78,14 +80,12 @@ class _GameViewState extends State<GameView> {
               crossAxisAlignment: WrapCrossAlignment.center,
               spacing: context.dynamicWidth(0.15),
               children: [
-                elevatedBtnPeekCards(readGameView, context),
+                elevatedBtnPeekCards(readGameView, context, gameViewProv),
                 gameLevelWidget(),
                 elevatedBtnPauseWidget(readGameView, context),
               ],
             ),
-            SizedBox(
-              height: context.dynamicHeight(0.007),
-            ),
+            SizedBox(height: context.dynamicHeight(0.007)),
             FittedBox(
               child: Wrap(
                 alignment: WrapAlignment.spaceEvenly,
@@ -165,7 +165,7 @@ class _GameViewState extends State<GameView> {
         ),
       ),
       onPressed: () {
-        readGameView.navigateToPage(NavigationConstants.homeView);
+        readGameView.navigateToPageClear(NavigationConstants.homeView);
         readGameView.restartGame();
       },
 
@@ -208,8 +208,8 @@ class _GameViewState extends State<GameView> {
     );
   }
 
-  ElevatedButton elevatedBtnPeekCards(
-      GameViewModel readGameView, BuildContext context) {
+  ElevatedButton elevatedBtnPeekCards(GameViewModel readGameView,
+      BuildContext context, GameViewModel gameProv) {
     return ElevatedButton(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(Colors.transparent),
@@ -227,8 +227,13 @@ class _GameViewState extends State<GameView> {
         ),
       ),
       onPressed: () {
-        readGameView.navigateToPage(NavigationConstants.homeView);
-        readGameView.restartGame();
+        gameProv.setPeekCardCount = 1;
+
+        if ((readGameView.getPeekCardCount % 2) != 0) {
+          gameProv.openAllGameCard();
+        } else {
+          gameProv.closeAllGameCard();
+        }
       },
       // ignore: prefer_const_constructors
       child: Container(
@@ -295,6 +300,7 @@ class _GameViewState extends State<GameView> {
                   gameViewProv.isMatchCard();
                   if (readGameViewCtx.isMatchedCard) {
                     gameViewProv.setScore = 100;
+
                     gameViewProv.matchCheck!.clear();
                   } else {
                     Future.delayed(const Duration(milliseconds: 300), () {
@@ -424,7 +430,7 @@ class _GameViewState extends State<GameView> {
               tileMode: TileMode.clamp,
             ),
             widget: Text(
-              "1",
+              "10",
               style: TextStyle(
                 fontSize:
                     context.dynamicHeight(0.009) * context.dynamicWidth(0.016),

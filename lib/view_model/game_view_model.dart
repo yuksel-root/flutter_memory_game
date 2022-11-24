@@ -21,6 +21,7 @@ class GameViewModel extends ChangeNotifier {
 
   late int _tries;
   late int _score;
+  late int _peekCardsClickCount;
 
   late int _randomCardCount;
   late int _totalImageCount;
@@ -42,6 +43,8 @@ class GameViewModel extends ChangeNotifier {
 
     _tries = 0;
     _score = 0;
+    _peekCardsClickCount = 0;
+
     _randomCardCount = 0;
     _totalImageCount = 83;
     _minCardCount = 4;
@@ -56,8 +59,10 @@ class GameViewModel extends ChangeNotifier {
 
   Future<void> loadImageList() async {
     try {
+      imageList!.shuffle();
       imageList =
           List.generate(_totalImageCount, (i) => "assets/card_images/$i.png");
+      imageList!.shuffle();
     } catch (e) {
       print("add image error");
       print(e);
@@ -65,8 +70,10 @@ class GameViewModel extends ChangeNotifier {
   }
 
   Future<void> loadGameCardList() async {
+    gameCard!.shuffle();
     gameCard = List.generate(
         cardList!.length, (index) => GameImgConstants.hiddenCardPng);
+    gameCard!.shuffle();
   }
 
   Future<void> initGame() async {
@@ -79,7 +86,7 @@ class GameViewModel extends ChangeNotifier {
 
   Future<void> generateRandomImgList() async {
     var rng = Random();
-
+    imageList!.shuffle();
     _randomCardCount = rng.nextInt(_maxCardCount) + _minCardCount;
 
     for (int i = 0; i < _randomCardCount; i++) {
@@ -97,10 +104,12 @@ class GameViewModel extends ChangeNotifier {
         }
       }
     }
-
+    cardList!.shuffle();
+    randomImgList!.shuffle();
     for (int i = 0; i < _randomCardCount; i++) {
       cardList!.add(randomImgList![i]);
     }
+    cardList!.shuffle();
   }
 
   Future<void> gameIsFinish() async {
@@ -117,6 +126,23 @@ class GameViewModel extends ChangeNotifier {
 
     matchCheck!.add({index: cardList![index]});
 
+    notifyListeners();
+  }
+
+  Future<void> openAllGameCard() async {
+    gameCard!.clear();
+    print("gameCardLengthXX " + gameCard!.length.toString());
+    gameCard =
+        List.generate(cardList!.length, (index) => cardList!.elementAt(index));
+
+    notifyListeners();
+  }
+
+  Future<void> closeAllGameCard() async {
+    gameCard!.clear;
+    print("gameCardLengthYY " + gameCard!.length.toString());
+    gameCard = List.generate(
+        cardList!.length, (index) => GameImgConstants.hiddenCardPng);
     notifyListeners();
   }
 
@@ -149,7 +175,7 @@ class GameViewModel extends ChangeNotifier {
 
     setScoreClear();
     setTriesClear();
-
+    _peekCardsClickCountClear();
     notifyListeners();
   }
 
@@ -159,7 +185,7 @@ class GameViewModel extends ChangeNotifier {
       title: "YOU WINNER",
       continueFunction: () {
         _navigation
-            .navigateToPage(path: NavigationConstants.homeView, data: []);
+            .navigateToPageClear(path: NavigationConstants.homeView, data: []);
         restartGame();
       },
     );
@@ -172,8 +198,9 @@ class GameViewModel extends ChangeNotifier {
     );
   }
 
-  Future<void> navigateToPage(String path) async {
-    _navigation.navigateToPage(path: NavigationConstants.homeView, data: []);
+  Future<void> navigateToPageClear(String path) async {
+    _navigation
+        .navigateToPageClear(path: NavigationConstants.homeView, data: []);
   }
 
   GameState get state => _state!;
@@ -196,6 +223,17 @@ class GameViewModel extends ChangeNotifier {
   int get getTries => _tries;
   set setTries(int tries) {
     _tries += tries;
+    notifyListeners();
+  }
+
+  int get getPeekCardCount => _peekCardsClickCount;
+  set setPeekCardCount(int i) {
+    _peekCardsClickCount += i;
+    notifyListeners();
+  }
+
+  void _peekCardsClickCountClear() {
+    _peekCardsClickCount = 0;
     notifyListeners();
   }
 
