@@ -81,7 +81,7 @@ class _GameViewState extends State<GameView> {
               spacing: context.dynamicWidth(0.15),
               children: [
                 elevatedBtnPeekCards(readGameView, context, gameViewProv),
-                gameLevelWidget(),
+                gameLevelWidget(readGameView, gameViewProv),
                 elevatedBtnPauseWidget(readGameView, context),
               ],
             ),
@@ -274,8 +274,8 @@ class _GameViewState extends State<GameView> {
     );
   }
 
-  Expanded expandedCardWidget(
-      int tries, int score, readGameViewCtx, GameViewModel gameViewProv) {
+  Expanded expandedCardWidget(int tries, int score,
+      GameViewModel readGameViewCtx, GameViewModel gameViewProv) {
     return Expanded(
       flex: 100,
       child: GridView.builder(
@@ -290,45 +290,48 @@ class _GameViewState extends State<GameView> {
             context.dynamicHeight(0.004) * context.dynamicWidth(0.006)),
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () {
-              if (readGameViewCtx.gameCard![index] ==
-                  GameImgConstants.hiddenCardPng) {
-                gameViewProv.openGameCard(index);
-                readGameViewCtx.setTries = 1;
+              onTap: () {
+                if (readGameViewCtx.gameCard![index] ==
+                    GameImgConstants.hiddenCardPng) {
+                  gameViewProv.openGameCard(index);
+                  gameViewProv.setIsBackedCard = false;
+                  readGameViewCtx.setTries = 1;
 
-                if (readGameViewCtx.matchCheck!.length == 2) {
-                  gameViewProv.isMatchCard();
-                  if (readGameViewCtx.isMatchedCard) {
-                    gameViewProv.setScore = 100;
+                  if (readGameViewCtx.matchCheck!.length == 2) {
+                    gameViewProv.isMatchCard();
+                    if (readGameViewCtx.isMatchedCard) {
+                      gameViewProv.setScore = 100;
 
-                    gameViewProv.matchCheck!.clear();
-                  } else {
-                    Future.delayed(const Duration(milliseconds: 300), () {
-                      gameViewProv.closeGameCard();
-                    });
+                      gameViewProv.matchCheck!.clear();
+                    } else {
+                      Future.delayed(const Duration(milliseconds: 300), () {
+                        gameViewProv.setIsBackedCard = true;
+
+                        gameViewProv.closeGameCard();
+                      });
+                    }
                   }
-                }
-              } else {
-                return;
-              }
-              gameViewProv.gameIsFinish();
-              Future.delayed(const Duration(milliseconds: 100), () {
-                if (readGameViewCtx.getFinish) {
-                  gameViewProv.winnerAlert(context);
                 } else {
                   return;
                 }
-              });
-            },
-            child: gameCardWidget(context, readGameViewCtx, index),
-          );
+                gameViewProv.gameIsFinish();
+                Future.delayed(const Duration(milliseconds: 100), () {
+                  if (readGameViewCtx.getFinish) {
+                    gameViewProv.nextStageAlert(context, gameViewProv.getStage);
+                  } else {
+                    return;
+                  }
+                });
+              },
+              child: gameCardWidget(context, readGameViewCtx, index));
         },
       ),
     );
   }
 
-  FittedBox gameCardWidget(BuildContext context, readGameViewCtx, int index) {
-    return FittedBox(
+  FittedBox gameCardWidget(
+      BuildContext context, GameViewModel readGameViewCtx, int index) {
+    return (FittedBox(
       fit: BoxFit.contain,
       child: Container(
         padding: EdgeInsets.all(context.dynamicHeight(0.004) *
@@ -365,10 +368,10 @@ class _GameViewState extends State<GameView> {
           ),
         ),
       ),
-    );
+    ));
   }
 
-  Container gameLevelWidget() {
+  Container gameLevelWidget(GameViewModel gameViewProv, GameViewModel ctxProv) {
     return Container(
       padding: EdgeInsets.only(
         bottom: context.dynamicHeight(0.001),
@@ -382,7 +385,7 @@ class _GameViewState extends State<GameView> {
           const Color(0xFF8470ff).withOpacity(0.5),
         ]),
         border: Border.all(
-          color: Color(0xFF8470ff).withOpacity(0.5),
+          color: const Color(0xFF8470ff).withOpacity(0.5),
           width: 1,
         ),
         borderRadius: BorderRadius.circular(
@@ -430,7 +433,7 @@ class _GameViewState extends State<GameView> {
               tileMode: TileMode.clamp,
             ),
             widget: Text(
-              "10",
+              ctxProv.getStage.toString(),
               style: TextStyle(
                 fontSize:
                     context.dynamicHeight(0.009) * context.dynamicWidth(0.016),

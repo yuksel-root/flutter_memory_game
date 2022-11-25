@@ -18,10 +18,14 @@ class GameViewModel extends ChangeNotifier {
 
   late bool _isFinished;
   late bool _isMatchedCard;
+  late bool _isBack;
+
+  late double _angle;
 
   late int _tries;
   late int _score;
   late int _peekCardsClickCount;
+  late int _currentStage;
 
   late int _randomCardCount;
   late int _totalImageCount;
@@ -40,15 +44,18 @@ class GameViewModel extends ChangeNotifier {
 
     _isFinished = false;
     _isMatchedCard = false;
+    _isBack = true;
 
+    _angle = 0;
     _tries = 0;
     _score = 0;
     _peekCardsClickCount = 0;
+    _currentStage = 0;
 
     _randomCardCount = 0;
     _totalImageCount = 83;
-    _minCardCount = 4;
-    _maxCardCount = 4;
+    _minCardCount = 2;
+    _maxCardCount = 2;
 
     gameCard = [];
     matchCheck = [];
@@ -122,6 +129,7 @@ class GameViewModel extends ChangeNotifier {
   }
 
   Future<void> openGameCard(int index) async {
+    flipGameCard();
     gameCard![index] = cardList![index];
 
     matchCheck!.add({index: cardList![index]});
@@ -131,7 +139,7 @@ class GameViewModel extends ChangeNotifier {
 
   Future<void> openAllGameCard() async {
     gameCard!.clear();
-    print("gameCardLengthXX " + gameCard!.length.toString());
+
     gameCard =
         List.generate(cardList!.length, (index) => cardList!.elementAt(index));
 
@@ -140,7 +148,7 @@ class GameViewModel extends ChangeNotifier {
 
   Future<void> closeAllGameCard() async {
     gameCard!.clear;
-    print("gameCardLengthYY " + gameCard!.length.toString());
+
     gameCard = List.generate(
         cardList!.length, (index) => GameImgConstants.hiddenCardPng);
     notifyListeners();
@@ -156,6 +164,7 @@ class GameViewModel extends ChangeNotifier {
   }
 
   Future<void> closeGameCard() async {
+    flipGameCard();
     gameCard![matchCheck![0].keys.first] = GameImgConstants.hiddenCardPng;
     gameCard![matchCheck![1].keys.first] = GameImgConstants.hiddenCardPng;
     matchCheck!.clear();
@@ -173,20 +182,43 @@ class GameViewModel extends ChangeNotifier {
       print(e);
     }
 
+    setAngle = 0;
     setScoreClear();
+    setTriesClear();
+
+    _peekCardsClickCountClear();
+    notifyListeners();
+  }
+
+  void nextStage() {
+    gameCard!.clear();
+    randomImgList!.clear();
+    matchCheck!.clear();
+    cardList!.clear();
+
+    _currentStage++;
+    setAngle = 0;
+
     setTriesClear();
     _peekCardsClickCountClear();
     notifyListeners();
   }
 
-  Future<void> winnerAlert(BuildContext context) async {
-    AlertView alert = AlertView(
-      content: "You won congrats!",
-      title: "YOU WINNER",
+  Future<void> flipGameCard() async {
+    _angle = (_angle + pi) % (2 * pi);
+  }
+
+  Future<void> nextStageAlert(BuildContext context, int currentStage) async {
+    GameAlertView alert = GameAlertView(
+      score: _score,
+      tries: _tries,
+      content: "You are inceridble..",
+      title: "STAGE  " + currentStage.toString(),
+      continueButtonText: "NEXT",
       continueFunction: () {
         _navigation
             .navigateToPageClear(path: NavigationConstants.homeView, data: []);
-        restartGame();
+        nextStage();
       },
     );
     showDialog(
@@ -252,4 +284,16 @@ class GameViewModel extends ChangeNotifier {
     _isMatchedCard = isMatch;
     notifyListeners();
   }
+
+  bool get getIsBackedCard => _isBack;
+  set setIsBackedCard(bool isBack) {
+    _isBack != isBack;
+  }
+
+  double get getAngle => _angle;
+  set setAngle(double angle) {
+    _angle = angle;
+  }
+
+  int get getStage => _currentStage;
 }
