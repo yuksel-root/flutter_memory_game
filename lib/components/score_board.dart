@@ -4,7 +4,12 @@ import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
 class ScoreBoard extends StatelessWidget {
   final String title;
   final String info;
-  const ScoreBoard({Key? key, required this.title, required this.info})
+  final Gradient bgGradient;
+  const ScoreBoard(
+      {Key? key,
+      required this.title,
+      required this.info,
+      required this.bgGradient})
       : super(key: key);
 
   @override
@@ -25,16 +30,7 @@ class ScoreBoard extends StatelessWidget {
             context.dynamicWidth(0.004), //2*2 4px
       ),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            const Color(0xFF551a8b).withOpacity(0.5),
-            const Color(0xFF8b008b).withOpacity(0.5),
-          ],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          stops: const [0.0, 1.0],
-          tileMode: TileMode.repeated,
-        ),
+        gradient: bgGradient,
         borderRadius: BorderRadius.circular(
           context.dynamicHeight(0.004) * context.dynamicWidth(0.006), //3*3 9px
         ),

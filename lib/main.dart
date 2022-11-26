@@ -5,6 +5,7 @@ import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_memory_game/core/notifier/provider_list.dart';
 import 'package:flutter_memory_game/view/game_view.dart';
+import 'package:flutter_memory_game/view/test_view.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -30,7 +31,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const GameView(),
+      home: const TestView(),
       onGenerateRoute: NavigationRoute.instance.generateRoute,
       navigatorKey: NavigationService.instance.navigatorKey,
       initialRoute: NavigationConstants.homeView,
