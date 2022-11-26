@@ -55,7 +55,7 @@ class GameViewModel extends ChangeNotifier {
     _randomCardCount = 0;
     _totalImageCount = 83;
     _minCardCount = 2;
-    _maxCardCount = 2;
+    _maxCardCount = 1;
 
     gameCard = [];
     matchCheck = [];

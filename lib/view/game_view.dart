@@ -93,10 +93,32 @@ class _GameViewState extends State<GameView> {
                 spacing: context.dynamicWidth(0.17),
                 children: [
                   ScoreBoard(
-                      title: "Score", info: readGameView.getScore.toString()),
+                      bgGradient: LinearGradient(
+                        colors: [
+                          const Color(0xFF551a8b).withOpacity(0.5),
+                          const Color(0xFF8b008b).withOpacity(0.5),
+                        ],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        stops: const [0.0, 1.0],
+                        tileMode: TileMode.repeated,
+                      ),
+                      title: "Score",
+                      info: readGameView.getScore.toString()),
                   gradientThreeStarXd(),
                   ScoreBoard(
-                      title: "Tries", info: readGameView.getTries.toString())
+                      bgGradient: LinearGradient(
+                        colors: [
+                          const Color(0xFF551a8b).withOpacity(0.5),
+                          const Color(0xFF8b008b).withOpacity(0.5),
+                        ],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        stops: const [0.0, 1.0],
+                        tileMode: TileMode.repeated,
+                      ),
+                      title: "Tries",
+                      info: readGameView.getTries.toString())
                 ],
               ),
             ),
