@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/components/gradient_widget.dart';
 import 'package:flutter_memory_game/components/score_board.dart';
+
 import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
 
 class GameAlertView extends StatelessWidget {
@@ -103,13 +104,40 @@ class GameAlertView extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: context.dynamicHeight(0.005)),
           Wrap(
             alignment: WrapAlignment.spaceEvenly,
             spacing: context.dynamicWidth(0.01),
             children: [
-              FittedBox(child: boardScoreWidget(context)),
               FittedBox(
-                child: boardTriesWidget(context),
+                child: ScoreBoard(
+                    bgGradient: LinearGradient(
+                      colors: [
+                        const Color(0xFF551a8b).withOpacity(0.5),
+                        const Color(0xFF8b008b).withOpacity(0.5),
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      stops: const [0.0, 1.0],
+                      tileMode: TileMode.repeated,
+                    ),
+                    title: "Score",
+                    info: score.toString()),
+              ),
+              FittedBox(
+                child: ScoreBoard(
+                    bgGradient: LinearGradient(
+                      colors: [
+                        const Color(0xFF551a8b).withOpacity(0.5),
+                        const Color(0xFF8b008b).withOpacity(0.5),
+                      ],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      stops: const [0.0, 1.0],
+                      tileMode: TileMode.repeated,
+                    ),
+                    title: "Tries",
+                    info: tries.toString()),
               ),
             ],
           ),
@@ -156,159 +184,5 @@ class GameAlertView extends StatelessWidget {
         },
       ),
     ];
-  }
-
-  Container boardScoreWidget(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(
-          context.dynamicHeight(0.002) * context.dynamicWidth(0.004)), //2*2 4px
-      padding: EdgeInsets.symmetric(
-        vertical: context.dynamicHeight(0.002) *
-            context.dynamicWidth(0.004), //2*2 4px
-        horizontal: context.dynamicHeight(0.002) *
-            context.dynamicWidth(0.004), //2*2 4px
-      ),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            const Color(0xFF551a8b).withOpacity(0.5),
-            const Color(0xFF8b008b).withOpacity(0.5),
-          ],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          stops: const [0.0, 1.0],
-          tileMode: TileMode.repeated,
-        ),
-        borderRadius: BorderRadius.circular(
-          context.dynamicHeight(0.004) * context.dynamicWidth(0.006), //3*3 9px
-        ),
-      ),
-      child: scoreTextWidget(context),
-    );
-  }
-
-  Container boardTriesWidget(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(
-          context.dynamicHeight(0.002) * context.dynamicWidth(0.004)), //2*2 4px
-      padding: EdgeInsets.symmetric(
-        vertical: context.dynamicHeight(0.002) *
-            context.dynamicWidth(0.004), //2*2 4px
-        horizontal: context.dynamicHeight(0.002) *
-            context.dynamicWidth(0.004), //2*2 4px
-      ),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            const Color(0xFF551a8b).withOpacity(0.5),
-            const Color(0xFF8b008b).withOpacity(0.5),
-          ],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          stops: const [0.0, 1.0],
-          tileMode: TileMode.repeated,
-        ),
-        borderRadius: BorderRadius.circular(
-          context.dynamicHeight(0.004) * context.dynamicWidth(0.006), //3*3 9px
-        ),
-      ),
-      child: triesTextWidget(context),
-    );
-  }
-
-  Center triesTextWidget(BuildContext context) {
-    return Center(
-      child: Row(
-        children: [
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            alignment: Alignment.center,
-            child: Center(
-              child: Text(
-                textAlign: TextAlign.center,
-                textDirection: TextDirection.ltr,
-                "Tries",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: context.dynamicHeight(0.007) *
-                      context.dynamicWidth(0.01), //5*5 25px
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: context.dynamicHeight(0.0010), //5px
-          ),
-          triesTextWidget(context)
-        ],
-      ),
-    );
-  }
-
-  Center scoreTextWidget(BuildContext context) {
-    return Center(
-      child: Row(
-        children: [
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            alignment: Alignment.center,
-            child: Center(
-              child: Text(
-                textAlign: TextAlign.center,
-                textDirection: TextDirection.ltr,
-                "Score",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: context.dynamicHeight(0.007) *
-                      context.dynamicWidth(0.01), //5*5 25px
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: context.dynamicHeight(0.0010), //5px
-          ),
-          triesTextWidget(context)
-        ],
-      ),
-    );
-  }
-
-  FittedBox scoreFTextWidget(BuildContext context) {
-    return FittedBox(
-      fit: BoxFit.scaleDown,
-      alignment: Alignment.center,
-      child: Center(
-        child: Text("  :  $score",
-            textAlign: TextAlign.center,
-            textDirection: TextDirection.ltr,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize:
-                  context.dynamicHeight(0.007) * context.dynamicWidth(0.01),
-              fontWeight: FontWeight.bold,
-            )),
-      ),
-    );
-  }
-
-  FittedBox triesFTextWidget(BuildContext context) {
-    return FittedBox(
-      fit: BoxFit.scaleDown,
-      alignment: Alignment.center,
-      child: Center(
-        child: Text("  :  $tries",
-            textAlign: TextAlign.center,
-            textDirection: TextDirection.ltr,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize:
-                  context.dynamicHeight(0.007) * context.dynamicWidth(0.01),
-              fontWeight: FontWeight.bold,
-            )),
-      ),
-    );
   }
 }
