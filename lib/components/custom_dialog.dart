@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/components/gradient_widget.dart';
 import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
@@ -11,143 +10,147 @@ class CustomAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenHeight = context.mediaQuery.size.height;
     final screenWidth = context.mediaQuery.size.width;
+
     return BackdropFilter(
-      blendMode: BlendMode.colorDodge,
-      filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1), //add blur
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.fastLinearToSlowEaseIn,
-        child: Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: screenHeight / 8,
-                width: screenWidth / 1.5,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(20),
-                    topLeft: Radius.circular(20),
-                  ),
-                  color: Colors.indigo,
+      filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
+      child: Center(
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.fastLinearToSlowEaseIn,
+          child: Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FittedBox(
+                  child: containerTitleContentWidget(screenWidth),
                 ),
-                child: const Center(
-                  child: Icon(
-                    Icons.error_outline_outlined,
-                    color: Colors.white,
-                    size: 40,
-                  ),
-                ),
-              ),
-              Container(
-                  height: screenHeight / 3,
-                  width: screenWidth / 1.5,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                    ),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                    ),
-                    child: Column(
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: Container(
-                            color: Colors.blueAccent,
-                            child: Column(
-                              children: [
-                                gradientThreeStarXd(context),
-                                Text("OPEN"),
-                                Text("         4        "),
-                                GradientWidget(
-                                    gradient: LinearGradient(
-                                        colors: [Colors.white, Colors.yellow]),
-                                    widget: Icon(Icons.star)),
-                                Text("         4        "),
-                                Stack(
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: gradientThreeStarXd(
-                                        context,
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text("open : 5 "),
-                                    ),
-                                  ],
-                                ),
-                                Expanded(
-                                  child: Column(children: [
-                                    Stack(
-                                      children: [
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: gradientTwoStarXd(
-                                            context,
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text("open : 7 "),
-                                        ),
-                                      ],
-                                    ),
-                                    Stack(
-                                      children: [
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: gradientStarWidget(
-                                            context,
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Text("open : - "),
-                                        ),
-                                      ],
-                                    ),
-                                  ]),
-                                )
-                              ],
+                Expanded(
+                  child: Container(
+                      color: Colors.red,
+                      width: screenWidth / 1.5,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              color: Colors.blue,
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: columnFirstContentWidget(context),
+                                  ),
+                                  Expanded(
+                                    child: columnSecondContentWidget(context),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 5, vertical: 5),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Expanded(child: alertBtn1(context)),
-                                Expanded(child: alertBtn1(context)),
-                                Expanded(child: alertBtn1(context)),
-                              ],
-                            ),
+                          Expanded(
+                            child: rowButtonsThirdContentWidget(context),
                           ),
-                        ),
-                      ],
-                    ),
-                  ))
-            ],
+                        ],
+                      )),
+                )
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  Container containerTitleContentWidget(double screenWidth) {
+    return Container(
+      width: screenWidth / 1.5,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(20),
+          topLeft: Radius.circular(20),
+        ),
+        color: Colors.indigo,
+      ),
+      child: const Center(
+        child: Icon(
+          Icons.error_outline_outlined,
+          color: Colors.white,
+          size: 40,
+        ),
+      ),
+    );
+  }
+
+  Row rowButtonsThirdContentWidget(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(child: alertBtn1(context)),
+        Expanded(child: alertBtn1(context)),
+        Expanded(child: alertBtn1(context)),
+      ],
+    );
+  }
+
+  Column columnFirstContentWidget(BuildContext context) {
+    return Column(children: [
+      gradientThreeStarXd(
+        context,
+        context.dynamicHeight(0.01) * context.dynamicWidth(0.014),
+      ),
+      const Text("OPEN"),
+      const Text("4"),
+      const GradientWidget(
+          gradient: LinearGradient(colors: [Colors.white, Colors.yellow]),
+          widget: Icon(Icons.star)),
+      const Text("4"),
+    ]);
+  }
+
+  Column columnSecondContentWidget(BuildContext context) {
+    return Column(children: [
+      Stack(
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: gradientThreeStarXd(context,
+                context.dynamicHeight(0.008) * context.dynamicWidth(0.012)),
+          ),
+          const Align(
+            alignment: Alignment.centerRight,
+            child: Text("open : 5 "),
+          ),
+        ],
+      ),
+      Stack(
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: gradientTwoStarXd(context,
+                context.dynamicHeight(0.008) * context.dynamicWidth(0.012)),
+          ),
+          const Align(
+            alignment: Alignment.centerRight,
+            child: Text("open : 7 "),
+          ),
+        ],
+      ),
+      Stack(
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: gradientStarWidget(context,
+                context.dynamicHeight(0.008) * context.dynamicWidth(0.012)),
+          ),
+          const Align(
+            alignment: Alignment.centerRight,
+            child: Text("open : - "),
+          ),
+        ],
+      ),
+    ]);
   }
 
   ElevatedButton alertBtn1(BuildContext context) {
@@ -226,54 +229,51 @@ class CustomAlertDialog extends StatelessWidget {
     );
   }
 
-  Wrap gradientThreeStarXd(BuildContext context) {
+  Wrap gradientThreeStarXd(BuildContext context, double starIconSize) {
     return Wrap(
       alignment: WrapAlignment.spaceEvenly,
       spacing: 2,
       children: [
-        gradientStarWidget(context),
-        gradientStarWidget(context),
-        gradientStarWidget(context),
+        gradientStarWidget(context, starIconSize),
+        gradientStarWidget(context, starIconSize),
+        gradientStarWidget(context, starIconSize),
       ],
     );
   }
 
-  Wrap gradientTwoStarXd(BuildContext context) {
+  Wrap gradientTwoStarXd(BuildContext context, double starIconSize) {
     return Wrap(
       alignment: WrapAlignment.spaceEvenly,
       spacing: 2,
       children: [
-        gradientStarWidget(context),
-        gradientStarWidget(context),
-        gradientStarWidget(context),
+        gradientStarWidget(context, starIconSize),
+        gradientStarWidget(context, starIconSize),
+        gradientStarWidget(context, starIconSize),
       ],
     );
   }
 
-  FittedBox gradientStarWidget(BuildContext context) {
+  GradientWidget gradientStarWidget(BuildContext context, double starIconSize) {
     // ignore: prefer_const_constructors
-    return FittedBox(
+    return GradientWidget(
       // ignore: prefer_const_constructors
-      child: GradientWidget(
-        // ignore: prefer_const_constructors
-        gradient: const RadialGradient(
-          colors: [
-            Color(0xFF9400D3),
-            Color(0xFF4B0082),
-            Color(0xFF0000FF),
-            Color(0xFF00FF00),
-            Color(0xFFFFFF00),
-            Color(0xFFFF7F00),
-            Color(0xFFFF0000),
-          ],
-          center: Alignment(0.0, 0.5),
-          tileMode: TileMode.clamp,
-        ),
+      gradient: const RadialGradient(
+        colors: [
+          Color(0xFF9400D3),
+          Color(0xFF4B0082),
+          Color(0xFF0000FF),
+          Color(0xFF00FF00),
+          Color(0xFFFFFF00),
+          Color(0xFFFF7F00),
+          Color(0xFFFF0000),
+        ],
+        center: Alignment(0.0, 0.5),
+        tileMode: TileMode.clamp,
+      ),
 
-        widget: Icon(
-          Icons.star,
-          size: context.dynamicHeight(0.01) * context.dynamicWidth(0.014),
-        ),
+      widget: Icon(
+        Icons.star,
+        size: starIconSize,
       ),
     );
   }
