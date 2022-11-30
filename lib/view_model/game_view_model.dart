@@ -129,7 +129,7 @@ class GameViewModel extends ChangeNotifier {
   }
 
   Future<void> openGameCard(int index) async {
-    flipGameCard();
+    flipGameCard(1);
     gameCard![index] = cardList![index];
 
     matchCheck!.add({index: cardList![index]});
@@ -164,7 +164,7 @@ class GameViewModel extends ChangeNotifier {
   }
 
   Future<void> closeGameCard() async {
-    flipGameCard();
+    flipGameCard(-1);
     gameCard![matchCheck![0].keys.first] = GameImgConstants.hiddenCardPng;
     gameCard![matchCheck![1].keys.first] = GameImgConstants.hiddenCardPng;
     matchCheck!.clear();
@@ -204,8 +204,10 @@ class GameViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> flipGameCard() async {
-    _angle = (_angle + pi) % (2 * pi);
+  Future<void> flipGameCard(double direction) async {
+    setAngle = pi * direction;
+    print(_angle);
+    notifyListeners();
   }
 
   Future<void> nextStageAlert(BuildContext context, int currentStage) async {
@@ -213,7 +215,7 @@ class GameViewModel extends ChangeNotifier {
       score: _score,
       tries: _tries,
       content: "You are inceridble..",
-      title: "STAGE  " + currentStage.toString(),
+      title: "STAGE  $currentStage",
       continueButtonText: "NEXT",
       continueFunction: () {
         _navigation
@@ -293,6 +295,7 @@ class GameViewModel extends ChangeNotifier {
   double get getAngle => _angle;
   set setAngle(double angle) {
     _angle = angle;
+    notifyListeners();
   }
 
   int get getStage => _currentStage;
