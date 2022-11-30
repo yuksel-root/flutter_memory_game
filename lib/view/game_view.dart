@@ -312,40 +312,52 @@ class _GameViewState extends State<GameView> {
             context.dynamicHeight(0.004) * context.dynamicWidth(0.006)),
         itemBuilder: (context, index) {
           return GestureDetector(
-              onTap: () {
-                if (readGameViewCtx.gameCard![index] ==
-                    GameImgConstants.hiddenCardPng) {
-                  gameViewProv.openGameCard(index);
-                  gameViewProv.setIsBackedCard = false;
-                  readGameViewCtx.setTries = 1;
+            onTap: () {
+              if (readGameViewCtx.gameCard![index] ==
+                  GameImgConstants.hiddenCardPng) {
+                gameViewProv.openGameCard(index);
+                gameViewProv.setIsBackedCard = false;
+                readGameViewCtx.setTries = 1;
 
-                  if (readGameViewCtx.matchCheck!.length == 2) {
-                    gameViewProv.isMatchCard();
-                    if (readGameViewCtx.isMatchedCard) {
-                      gameViewProv.setScore = 100;
+                if (readGameViewCtx.matchCheck!.length == 2) {
+                  gameViewProv.isMatchCard();
+                  if (readGameViewCtx.isMatchedCard) {
+                    gameViewProv.setScore = 100;
 
-                      gameViewProv.matchCheck!.clear();
-                    } else {
-                      Future.delayed(const Duration(milliseconds: 300), () {
-                        gameViewProv.setIsBackedCard = true;
+                    gameViewProv.matchCheck!.clear();
+                  } else {
+                    Future.delayed(const Duration(milliseconds: 300), () {
+                      gameViewProv.setIsBackedCard = true;
 
-                        gameViewProv.closeGameCard();
-                      });
-                    }
+                      gameViewProv.closeGameCard();
+                    });
                   }
+                }
+              } else {
+                return;
+              }
+              gameViewProv.gameIsFinish();
+              Future.delayed(const Duration(milliseconds: 100), () {
+                if (readGameViewCtx.getFinish) {
+                  gameViewProv.nextStageAlert(context, gameViewProv.getStage);
                 } else {
                   return;
                 }
-                gameViewProv.gameIsFinish();
-                Future.delayed(const Duration(milliseconds: 100), () {
-                  if (readGameViewCtx.getFinish) {
-                    gameViewProv.nextStageAlert(context, gameViewProv.getStage);
-                  } else {
-                    return;
-                  }
-                });
+              });
+            },
+            child: TweenAnimationBuilder(
+              tween: Tween<double>(begin: 0, end: readGameViewCtx.getAngle),
+              duration: const Duration(seconds: 1),
+              builder: (BuildContext context, double val, __) {
+                return Transform(
+                  transform: Matrix4.identity()
+                    ..setEntry(3, 2, 0.001)
+                    ..rotateY(val),
+                  child: gameCardWidget(context, readGameViewCtx, index),
+                );
               },
-              child: gameCardWidget(context, readGameViewCtx, index));
+            ),
+          );
         },
       ),
     );
