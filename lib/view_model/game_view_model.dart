@@ -20,7 +20,9 @@ class GameViewModel extends ChangeNotifier {
   late bool _isMatchedCard;
   late bool _isBack;
 
-  late double _angle;
+  late List<Color> _cardBorderColors = [];
+  late List<double> _cardBorderWidth = [];
+  late List<String> _bgImages = [];
 
   late int _tries;
   late int _score;
@@ -33,10 +35,11 @@ class GameViewModel extends ChangeNotifier {
   late int _maxCardCount;
 
   late List<String>? gameCard;
-  late List<Map<int, String>>? matchCheck;
-  late List<String>? randomImgList;
-  late List<String>? cardList;
-  late List<String>? imageList;
+  late List<Map<int, String>>? _matchCheck;
+  late List<String>? _randomImgList;
+  late List<String>? _cardList;
+  late List<String>? _imageList;
+  late List<double>? _angleArr;
 
   GameViewModel() {
     _navigation = NavigationService.instance;
@@ -46,7 +49,6 @@ class GameViewModel extends ChangeNotifier {
     _isMatchedCard = false;
     _isBack = true;
 
-    _angle = 0;
     _tries = 0;
     _score = 0;
     _peekCardsClickCount = 0;
@@ -54,22 +56,26 @@ class GameViewModel extends ChangeNotifier {
 
     _randomCardCount = 0;
     _totalImageCount = 83;
-    _minCardCount = 2;
-    _maxCardCount = 1;
+    _minCardCount = 4;
+    _maxCardCount = 4;
 
     gameCard = [];
-    matchCheck = [];
-    randomImgList = [];
-    cardList = [];
-    imageList = [];
+    _matchCheck = [];
+    _randomImgList = [];
+    _cardList = [];
+    _imageList = [];
+    _angleArr = [];
+    _cardBorderColors = [];
+    _cardBorderWidth = [];
+    _bgImages = [];
   }
 
   Future<void> loadImageList() async {
     try {
-      imageList!.shuffle();
-      imageList =
+      _imageList!.shuffle();
+      _imageList =
           List.generate(_totalImageCount, (i) => "assets/card_images/$i.png");
-      imageList!.shuffle();
+      _imageList!.shuffle();
     } catch (e) {
       print("add image error");
       print(e);
@@ -79,44 +85,75 @@ class GameViewModel extends ChangeNotifier {
   Future<void> loadGameCardList() async {
     gameCard!.shuffle();
     gameCard = List.generate(
-        cardList!.length, (index) => GameImgConstants.hiddenCardPng);
+        _cardList!.length, (index) => GameImgConstants.hiddenCardPng);
     gameCard!.shuffle();
   }
 
+  Future<void> generateDefaultLists() async {
+    setAngleGameCardList();
+    setCardBorderColor();
+    setCardBorderWidth();
+  }
+
+  Future<void> setAngleGameCardList() async {
+    _angleArr = List.generate(_cardList!.length, (index) => 0);
+  }
+
+  Future<void> setCardBorderColor() async {
+    _cardBorderColors =
+        List.generate(_cardList!.length, (index) => const Color(0xFFB2FEFA));
+  }
+
+  void setCardBorderWidth() {
+    _cardBorderWidth = List.generate(_cardList!.length, (index) => 0);
+  }
+
+  void setBgImages() {
+    _bgImages = List.generate(1, (index) => GameImgConstants.bg1Png);
+  }
+
+  String getBgImages(int index) {
+    return _bgImages[index];
+  }
+
+  Color getCardBorderColors(int index) => _cardBorderColors[index];
+  double getCardBorderWidth(int index) => _cardBorderWidth[index];
   Future<void> initGame() async {
     loadImageList();
 
     generateRandomImgList();
 
     loadGameCardList();
+
+    generateDefaultLists();
   }
 
   Future<void> generateRandomImgList() async {
     var rng = Random();
-    imageList!.shuffle();
+    _imageList!.shuffle();
     _randomCardCount = rng.nextInt(_maxCardCount) + _minCardCount;
 
     for (int i = 0; i < _randomCardCount; i++) {
-      randomImgList!.add(imageList![rng.nextInt(imageList!.length)]);
+      _randomImgList!.add(_imageList![rng.nextInt(_imageList!.length)]);
 
       if (i == 0) {
-        cardList!.add(randomImgList![i]);
-        imageList!.remove(randomImgList![i]);
+        _cardList!.add(_randomImgList![i]);
+        _imageList!.remove(_randomImgList![i]);
       }
 
       if (i > 0) {
-        if (randomImgList![i - 1] != randomImgList![i]) {
-          cardList!.add(randomImgList![i]);
-          imageList!.remove(randomImgList![i]);
+        if (_randomImgList![i - 1] != _randomImgList![i]) {
+          _cardList!.add(_randomImgList![i]);
+          _imageList!.remove(_randomImgList![i]);
         }
       }
     }
-    cardList!.shuffle();
-    randomImgList!.shuffle();
+    _cardList!.shuffle();
+    _randomImgList!.shuffle();
     for (int i = 0; i < _randomCardCount; i++) {
-      cardList!.add(randomImgList![i]);
+      _cardList!.add(_randomImgList![i]);
     }
-    cardList!.shuffle();
+    _cardList!.shuffle();
   }
 
   Future<void> gameIsFinish() async {
@@ -128,20 +165,103 @@ class GameViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> flipGameCard(double direction, int index) async {
+    setAngleArr((direction * pi), index);
+
+    notifyListeners();
+  }
+
+  void clickCard(int index, BuildContext context) {
+    /*  print({
+                "match": readGameViewCtx.isMatchedCard,
+                "matchL": readGameViewCtx.matchCheck!.length,
+                "gameC": readGameViewCtx.gameCard
+              }); */
+    if (gameCard![index] == GameImgConstants.hiddenCardPng &&
+        _matchCheck!.length < 2) {
+      openGameCard(index);
+      setTries();
+
+      if (_matchCheck!.length == 2) {
+        isMatchCard();
+        if (isMatchedCard) {
+          setScore = 100;
+
+          _matchCheck!.clear();
+        } else {
+          closeGameCard();
+        }
+      }
+    } else {
+      return;
+    }
+
+    gameIsFinish();
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (getFinish) {
+        nextStageAlert(context, getStage);
+      } else {
+        return;
+      }
+    });
+  }
+
+  double getAngleArr(int index) => _angleArr![index];
+
+  void setAngleArr(double angle, int index) {
+    _angleArr![index] = (angle);
+    notifyListeners();
+  }
+
   Future<void> openGameCard(int index) async {
-    flipGameCard(1);
-    gameCard![index] = cardList![index];
+    flipGameCard(1, index);
+    gameCard![index] = _cardList![index];
 
-    matchCheck!.add({index: cardList![index]});
+    _matchCheck!.add({index: _cardList![index]});
 
+    notifyListeners();
+  }
+
+  void borderAnimete(int index0, int index1, int count) {
+    //print({"index0": index0, "\nindex1": index1});
+    if (count > 4) return;
+    _cardBorderColors[index0] = const Color.fromARGB(255, 255, 17, 0);
+    _cardBorderColors[index1] = const Color.fromARGB(255, 248, 17, 0);
+    Future.delayed(const Duration(milliseconds: 100), () {
+      _cardBorderColors[index0] = const Color(0xFFB2FEFA);
+      _cardBorderColors[index1] = const Color(0xFFB2FEFA);
+      notifyListeners();
+      Future.delayed(const Duration(milliseconds: 100), () {
+        borderAnimete(index0, index1, count + 1);
+      });
+    });
+    notifyListeners();
+  }
+
+  Future<void> closeGameCard() async {
+    final int index0 = _matchCheck![0].keys.first;
+    final int index1 = _matchCheck![1].keys.first;
+
+    Future.delayed(const Duration(milliseconds: 1350), () {
+      borderAnimete(index0, index1, 0);
+    });
+    Future.delayed(const Duration(milliseconds: 3000), () {
+      flipGameCard(0, index0);
+      flipGameCard(0, index1);
+
+      gameCard![index0] = GameImgConstants.hiddenCardPng;
+      gameCard![index1] = GameImgConstants.hiddenCardPng;
+    });
+
+    _matchCheck!.clear();
     notifyListeners();
   }
 
   Future<void> openAllGameCard() async {
     gameCard!.clear();
 
-    gameCard =
-        List.generate(cardList!.length, (index) => cardList!.elementAt(index));
+    gameCard = List.generate(
+        _cardList!.length, (index) => _cardList!.elementAt(index));
 
     notifyListeners();
   }
@@ -150,12 +270,12 @@ class GameViewModel extends ChangeNotifier {
     gameCard!.clear;
 
     gameCard = List.generate(
-        cardList!.length, (index) => GameImgConstants.hiddenCardPng);
+        _cardList!.length, (index) => GameImgConstants.hiddenCardPng);
     notifyListeners();
   }
 
   Future<void> isMatchCard() async {
-    if (matchCheck![0].values.first == matchCheck![1].values.first) {
+    if (_matchCheck![0].values.first == _matchCheck![1].values.first) {
       isMatchedCard = true;
     } else {
       isMatchedCard = false;
@@ -163,50 +283,34 @@ class GameViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> closeGameCard() async {
-    flipGameCard(-1);
-    gameCard![matchCheck![0].keys.first] = GameImgConstants.hiddenCardPng;
-    gameCard![matchCheck![1].keys.first] = GameImgConstants.hiddenCardPng;
-    matchCheck!.clear();
-    notifyListeners();
-  }
-
   Future<void> restartGame() async {
     try {
       gameCard!.clear();
-      randomImgList!.clear();
-      matchCheck!.clear();
-      cardList!.clear();
+      _randomImgList!.clear();
+      _matchCheck!.clear();
+      _cardList!.clear();
     } catch (e) {
       print("array clear error");
       print(e);
     }
 
-    setAngle = 0;
     setScoreClear();
     setTriesClear();
-
+    _currentStage = 0;
     _peekCardsClickCountClear();
     notifyListeners();
   }
 
   void nextStage() {
     gameCard!.clear();
-    randomImgList!.clear();
-    matchCheck!.clear();
-    cardList!.clear();
+    _randomImgList!.clear();
+    _matchCheck!.clear();
+    _cardList!.clear();
 
     _currentStage++;
-    setAngle = 0;
 
     setTriesClear();
     _peekCardsClickCountClear();
-    notifyListeners();
-  }
-
-  Future<void> flipGameCard(double direction) async {
-    setAngle = pi * direction;
-    print(_angle);
     notifyListeners();
   }
 
@@ -255,8 +359,8 @@ class GameViewModel extends ChangeNotifier {
   }
 
   int get getTries => _tries;
-  set setTries(int tries) {
-    _tries += tries;
+  void setTries() {
+    _tries += 1;
     notifyListeners();
   }
 
@@ -290,12 +394,6 @@ class GameViewModel extends ChangeNotifier {
   bool get getIsBackedCard => _isBack;
   set setIsBackedCard(bool isBack) {
     _isBack != isBack;
-  }
-
-  double get getAngle => _angle;
-  set setAngle(double angle) {
-    _angle = angle;
-    notifyListeners();
   }
 
   int get getStage => _currentStage;

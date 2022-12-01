@@ -27,36 +27,50 @@ class _GameViewState extends State<GameView> {
     final gameViewProv = Provider.of<GameViewModel>(context);
     final readGameView = context.read<GameViewModel>();
 
-    return Scaffold(
-        backgroundColor: const Color(0xFFe55870),
-        appBar: CustomAppBar(
-          dynamicPreferredSize: context.dynamicHeight(0.15),
-          appBar: gameAppBarWidget(context, readGameView, gameViewProv),
+    return Stack(
+      children: [
+        Image.asset(
+          gameViewProv.getBgImages(0),
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          fit: BoxFit.cover,
         ),
-        body: Center(
-          child: SingleChildScrollView(
-            child: Container(
-              decoration: const BoxDecoration(
+        Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: CustomAppBar(
+              dynamicPreferredSize: context.dynamicHeight(0.15),
+              appBar: gameAppBarWidget(context, readGameView, gameViewProv),
+            ),
+            body: Container(
+              height: context.mediaQuery.size.height,
+              width: context.mediaQuery.size.width,
+              decoration: BoxDecoration(
                 image: DecorationImage(
                   repeat: ImageRepeat.noRepeat,
-                  fit: BoxFit.fill,
-                  image: AssetImage(GameImgConstants.bg1Png),
+                  fit: BoxFit.cover,
+                  image: AssetImage(gameViewProv.getBgImages(0)),
                 ),
               ),
-              height: context.mediaQuery.size.height,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Spacer(flex: 1),
-                  expandedCardWidget(readGameView.getTries,
-                      readGameView.getScore, readGameView, gameViewProv),
-                  const Spacer(flex: 1),
-                ],
+              child: Center(
+                child: SingleChildScrollView(
+                  child: SizedBox(
+                    height: context.mediaQuery.size.height,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const Spacer(flex: 1),
+                        expandedCardWidget(readGameView.getTries,
+                            readGameView.getScore, readGameView, gameViewProv),
+                        const Spacer(flex: 1),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ));
+            )),
+      ],
+    );
   }
 
   AppBar gameAppBarWidget(BuildContext context, GameViewModel readGameView,
@@ -313,46 +327,16 @@ class _GameViewState extends State<GameView> {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
-              if (readGameViewCtx.gameCard![index] ==
-                  GameImgConstants.hiddenCardPng) {
-                gameViewProv.openGameCard(index);
-                gameViewProv.setIsBackedCard = false;
-                readGameViewCtx.setTries = 1;
-
-                if (readGameViewCtx.matchCheck!.length == 2) {
-                  gameViewProv.isMatchCard();
-                  if (readGameViewCtx.isMatchedCard) {
-                    gameViewProv.setScore = 100;
-
-                    gameViewProv.matchCheck!.clear();
-                  } else {
-                    Future.delayed(const Duration(milliseconds: 300), () {
-                      gameViewProv.setIsBackedCard = true;
-
-                      gameViewProv.closeGameCard();
-                    });
-                  }
-                }
-              } else {
-                return;
-              }
-              gameViewProv.gameIsFinish();
-              Future.delayed(const Duration(milliseconds: 100), () {
-                if (readGameViewCtx.getFinish) {
-                  gameViewProv.nextStageAlert(context, gameViewProv.getStage);
-                } else {
-                  return;
-                }
-              });
+              gameViewProv.clickCard(index, context);
             },
             child: TweenAnimationBuilder(
-              tween: Tween<double>(begin: 0, end: readGameViewCtx.getAngle),
-              duration: const Duration(seconds: 1),
+              tween: Tween<double>(
+                  begin: 0, end: readGameViewCtx.getAngleArr(index)),
+              duration: const Duration(milliseconds: 1500),
               builder: (BuildContext context, double val, __) {
                 return Transform(
-                  transform: Matrix4.identity()
-                    ..setEntry(3, 2, 0.001)
-                    ..rotateY(val),
+                  transform: Matrix4.rotationY(val)..setEntry(3, 2, 0.01),
+                  alignment: Alignment.center,
                   child: gameCardWidget(context, readGameViewCtx, index),
                 );
               },
@@ -364,7 +348,7 @@ class _GameViewState extends State<GameView> {
   }
 
   FittedBox gameCardWidget(
-      BuildContext context, GameViewModel readGameViewCtx, int index) {
+      BuildContext context, GameViewModel gameViewProv, int index) {
     return (FittedBox(
       fit: BoxFit.contain,
       child: Container(
@@ -382,8 +366,8 @@ class _GameViewState extends State<GameView> {
             tileMode: TileMode.repeated,
           ),
           border: Border.all(
-            color: const Color(0xFFB2FEFA).withOpacity(0.6),
-            width: 0.1,
+            color: gameViewProv.getCardBorderColors(index),
+            width: gameViewProv.getCardBorderWidth(index),
           ),
           borderRadius: BorderRadius.circular(
               context.dynamicHeight(0.002) * context.dynamicWidth(0.004)), //2*2
@@ -394,10 +378,10 @@ class _GameViewState extends State<GameView> {
                 context.dynamicWidth(0.008), //4*4
             opacity: 0.9,
             alignment: Alignment.center,
-            image: AssetImage(readGameViewCtx.gameCard![index] ==
-                    GameImgConstants.hiddenCardPng
-                ? GameImgConstants.transparentPng
-                : readGameViewCtx.gameCard![index]),
+            image: AssetImage(
+                gameViewProv.gameCard![index] == GameImgConstants.hiddenCardPng
+                    ? GameImgConstants.transparentPng
+                    : gameViewProv.gameCard![index]),
             fit: BoxFit.contain,
           ),
         ),
