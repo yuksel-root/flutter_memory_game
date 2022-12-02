@@ -25,51 +25,60 @@ class _GameViewState extends State<GameView> {
   @override
   Widget build(BuildContext context) {
     final gameViewProv = Provider.of<GameViewModel>(context);
-    final readGameView = context.read<GameViewModel>();
+    final readGameView = Provider.of<GameViewModel>(context);
 
     return Stack(
       children: [
-        Image.asset(
-          gameViewProv.getBgImages(0),
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          fit: BoxFit.cover,
-        ),
-        Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: CustomAppBar(
-              dynamicPreferredSize: context.dynamicHeight(0.15),
-              appBar: gameAppBarWidget(context, readGameView, gameViewProv),
-            ),
-            body: Container(
-              height: context.mediaQuery.size.height,
-              width: context.mediaQuery.size.width,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  repeat: ImageRepeat.noRepeat,
-                  fit: BoxFit.cover,
-                  image: AssetImage(gameViewProv.getBgImages(0)),
-                ),
-              ),
-              child: Center(
-                child: SingleChildScrollView(
-                  child: SizedBox(
-                    height: context.mediaQuery.size.height,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Spacer(flex: 1),
-                        expandedCardWidget(readGameView.getTries,
-                            readGameView.getScore, readGameView, gameViewProv),
-                        const Spacer(flex: 1),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            )),
+        context.watch<GameViewModel>().state == GameState.loading
+            ? buildLoadingWidget()
+            : setBackgroundImageWidget(gameViewProv, context),
+        scaffoldWidget(context, readGameView, gameViewProv),
       ],
+    );
+  }
+
+  Center buildLoadingWidget() => const Center(
+          child: CircularProgressIndicator(
+        color: Colors.green,
+      ));
+  Scaffold scaffoldWidget(BuildContext context, GameViewModel readGameView,
+      GameViewModel gameViewProv) {
+    return Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: CustomAppBar(
+          dynamicPreferredSize: context.dynamicHeight(0.15),
+          appBar: gameAppBarWidget(context, readGameView, gameViewProv),
+        ),
+        body: SizedBox(
+          height: context.mediaQuery.size.height,
+          width: context.mediaQuery.size.width,
+          child: Center(
+            child: SingleChildScrollView(
+              child: SizedBox(
+                height: context.mediaQuery.size.height,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Spacer(flex: 1),
+                    expandedCardWidget(readGameView.getTries,
+                        readGameView.getScore, readGameView, gameViewProv),
+                    const Spacer(flex: 1),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ));
+  }
+
+  Image setBackgroundImageWidget(
+      GameViewModel gameViewProv, BuildContext context) {
+    return Image.asset(
+      gameViewProv.getBgImages,
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      fit: BoxFit.cover,
     );
   }
 
@@ -222,7 +231,7 @@ class _GameViewState extends State<GameView> {
         ),
         child: GradientWidget(
           widget: Icon(
-            Icons.pause,
+            Icons.replay,
             size: context.dynamicHeight(0.01) * context.dynamicWidth(0.014),
           ),
           gradient: const SweepGradient(
@@ -264,11 +273,14 @@ class _GameViewState extends State<GameView> {
       ),
       onPressed: () {
         gameProv.setPeekCardCount = 1;
-
-        if ((readGameView.getPeekCardCount % 2) != 0) {
-          gameProv.openAllGameCard();
+        if (readGameView.getPeekCardCount < 2) {
+          if ((readGameView.getPeekCardCount % 2) != 0) {
+            gameProv.openAllGameCard();
+          } else {
+            return;
+          }
         } else {
-          gameProv.closeAllGameCard();
+          return;
         }
       },
       // ignore: prefer_const_constructors
@@ -332,7 +344,7 @@ class _GameViewState extends State<GameView> {
             child: TweenAnimationBuilder(
               tween: Tween<double>(
                   begin: 0, end: readGameViewCtx.getAngleArr(index)),
-              duration: const Duration(milliseconds: 1500),
+              duration: const Duration(milliseconds: 1000),
               builder: (BuildContext context, double val, __) {
                 return Transform(
                   transform: Matrix4.rotationY(val)..setEntry(3, 2, 0.01),
