@@ -5,17 +5,13 @@ import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_memory_game/core/notifier/provider_list.dart';
 import 'package:flutter_memory_game/view/game_view.dart';
-import 'package:flutter_memory_game/view_model/game_view_model.dart';
+
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
-    SystemUiOverlay.bottom,
-  ]);
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
+  await _init();
+  await splash();
   runApp(
     MultiProvider(
       providers: [...ApplicationProvider.instance.dependItems],
@@ -24,13 +20,27 @@ Future<void> main() async {
   );
 }
 
+Future splash() async {
+  await Future.delayed(const Duration(milliseconds: 250), () {
+    FlutterNativeSplash.remove();
+  });
+}
+
+Future<void> _init() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
+    SystemUiOverlay.bottom,
+  ]);
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+}
+
 class MainApp extends StatelessWidget {
   const MainApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final gameViewProv = Provider.of<GameViewModel>(context);
-    gameViewProv.setBgImages();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: const GameView(),
