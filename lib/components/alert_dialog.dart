@@ -150,7 +150,7 @@ class GameAlertView extends StatelessWidget {
     return <Widget>[
       TextButton(
         style: TextButton.styleFrom(
-          primary: Colors.black,
+          foregroundColor: Colors.black,
           animationDuration: const Duration(milliseconds: 1000),
         ),
         child: FittedBox(
