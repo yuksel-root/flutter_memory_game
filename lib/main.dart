@@ -21,7 +21,7 @@ Future<void> main() async {
 }
 
 Future splash() async {
-  await Future.delayed(const Duration(milliseconds: 250), () {
+  await Future.delayed(const Duration(seconds: 2), () {
     FlutterNativeSplash.remove();
   });
 }
