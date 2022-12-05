@@ -31,7 +31,7 @@ dev_dependencies:
  
 
 flutter_native_splash:
-  background_image: "assets/splash_images/sp1.png"
+  background_image: "assets/splash_images/sp2.jpg"
   image: assets/splash_images/sp_icon.png
   android: true
   android12: true

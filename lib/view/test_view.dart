@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/components/custom_dialog.dart';
 
 class TestView extends StatelessWidget {
+  //flutter pub run flutter_native_splash:create
+
+//flutter build apk --target-platform android-arm --analyze-size
+
+//flutter build appbundle --target-platform android-arm
+
+//flutter build apk --split-per-abi
   const TestView({Key? key}) : super(key: key);
 
   @override
