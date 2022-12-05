@@ -27,14 +27,10 @@ class _GameViewState extends State<GameView> {
     final gameViewProv = Provider.of<GameViewModel>(context);
     final readGameView = Provider.of<GameViewModel>(context);
 
-    return Stack(
-      children: [
-        context.watch<GameViewModel>().state == GameState.loading
-            ? buildLoadingWidget()
-            : setBackgroundImageWidget(gameViewProv, context),
-        scaffoldWidget(context, readGameView, gameViewProv),
-      ],
-    );
+    return Stack(children: [
+      setBackgroundImageWidget(gameViewProv, context),
+      scaffoldWidget(context, readGameView, gameViewProv),
+    ]);
   }
 
   Center buildLoadingWidget() => const Center(
@@ -78,7 +74,7 @@ class _GameViewState extends State<GameView> {
       gameViewProv.getBgImages,
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      fit: BoxFit.cover,
+      fit: BoxFit.fill,
     );
   }
 
@@ -344,7 +340,7 @@ class _GameViewState extends State<GameView> {
             child: TweenAnimationBuilder(
               tween: Tween<double>(
                   begin: 0, end: readGameViewCtx.getAngleArr(index)),
-              duration: const Duration(milliseconds: 1000),
+              duration: const Duration(milliseconds: 650),
               builder: (BuildContext context, double val, __) {
                 return Transform(
                   transform: Matrix4.rotationY(val)..setEntry(3, 2, 0.01),
