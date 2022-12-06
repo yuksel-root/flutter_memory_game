@@ -1,3 +1,4 @@
 class NavigationConstants {
-  static const homeView = '/';
+  static const splashView = '/';
+  static const homeView = '/home';
 }

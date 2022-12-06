@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/core/constants/navigation_constants.dart';
 import 'package:flutter_memory_game/view/game_view.dart';
+import 'package:flutter_memory_game/view/splash_view.dart';
 
 class NavigationRoute {
   static final NavigationRoute _instance = NavigationRoute._init();
@@ -10,6 +11,8 @@ class NavigationRoute {
 
   Route<dynamic> generateRoute(RouteSettings? settings) {
     switch (settings?.name) {
+      case NavigationConstants.splashView:
+        return pageNavigate(const SplashView());
       case NavigationConstants.homeView:
         return pageNavigate(const GameView());
 
