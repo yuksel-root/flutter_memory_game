@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/components/alert_dialog.dart';
 import 'package:flutter_memory_game/core/constants/game_img_constants.dart';
 import 'package:flutter_memory_game/core/constants/navigation_constants.dart';
+import 'package:flutter_memory_game/core/local_storage/local_storage_manager.dart';
 import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
 
 //-- GameState Variables -- //
@@ -15,9 +16,11 @@ enum GameState {
 
 class GameViewModel extends ChangeNotifier {
   late NavigationService _navigation;
+  late LocalStorageManager _storageManager;
   late GameState? _state;
 
 // -- Game Logic Variables - //
+  bool isFirstInit = true;
   late bool _isFinished;
   late bool _isMatchedCard;
   late int _tries;
@@ -51,6 +54,8 @@ class GameViewModel extends ChangeNotifier {
 
   GameViewModel() {
     _navigation = NavigationService.instance;
+    _storageManager = LocalStorageManager.instance;
+
     _state = GameState.empty;
 
     _isFinished = false;
@@ -82,6 +87,14 @@ class GameViewModel extends ChangeNotifier {
     _bgList = [];
     _randomBgList = [];
     gameBgImageList = [];
+  }
+
+  Future<void> saveBgList() async {
+    //print(_getBgList);
+    _storageManager.setStringList("bg", _getBgList);
+
+    print(await _storageManager.getStringList("bg"));
+    //print(await _storageManager.getAllValues);
   }
 
   void loadImageList() {
@@ -117,12 +130,15 @@ class GameViewModel extends ChangeNotifier {
     setAngleGameCardList();
     setCardBorderColor();
 
-    generateRandomBgList();
     setCardBorderWidth = 0;
   }
 
   void initGame() {
     generateRandomImgList();
+
+    generateRandomBgList();
+
+    saveBgList();
 
     loadGameCardList();
 
@@ -182,9 +198,7 @@ class GameViewModel extends ChangeNotifier {
     }
     _bgList!.shuffle();
     _randomBgList!.shuffle();
-    for (int i = 0; i < _totalBgImageCount; i++) {
-      _bgList!.add(_randomBgList![i]);
-    }
+
     _bgList!.shuffle();
   }
 
@@ -344,11 +358,14 @@ class GameViewModel extends ChangeNotifier {
 
   void restartGame() {
     try {
-      gameCard!.clear();
-      gameBgImageList!.clear();
-      _randomImgList!.clear();
       _matchCheck!.clear();
+      gameCard!.clear();
       _cardList!.clear();
+      _randomImgList!.clear();
+
+      gameBgImageList!.clear();
+      _randomBgList!.clear();
+      _bgList!.clear();
 
       _matchCount = 0;
       _currentStage = 0;
@@ -371,7 +388,7 @@ class GameViewModel extends ChangeNotifier {
 
     _matchCount = 0;
     _currentStage++;
-
+    generateRandomBgList();
     setTriesClear();
     _peekCardsClickCountClear();
     notifyListeners();
@@ -474,11 +491,17 @@ class GameViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setFirstInit() {
+    print(isFirstInit);
+    isFirstInit = !isFirstInit;
+  }
+
   String get getBgImages {
-    print(_bgList);
+    //print(_bgList);
     return _bgList![_currentStage];
   }
 
+  List<String> get _getBgList => _bgList!;
   GameState get state => _state!;
   bool get getFinish => _isFinished;
   int get getPeekCardCount => _peekCardsClickCount;
