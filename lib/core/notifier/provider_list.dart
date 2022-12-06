@@ -3,6 +3,8 @@ import 'package:flutter_memory_game/view_model/game_view_model.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../../view_model/splash_view_model.dart';
+
 class ApplicationProvider {
   static ApplicationProvider? _instance;
   static ApplicationProvider get instance {
@@ -12,6 +14,9 @@ class ApplicationProvider {
 
   ApplicationProvider._init();
   List<SingleChildWidget> dependItems = [
+    ChangeNotifierProvider(
+      create: (context) => SplashViewModel(),
+    ),
     ChangeNotifierProvider(
       create: (context) => GameViewModel(),
     ),
