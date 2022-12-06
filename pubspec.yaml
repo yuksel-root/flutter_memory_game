@@ -18,10 +18,11 @@ dependencies:
   provider: ^6.0.4
   
   #Native Splash Screen
-  flutter_native_splash: ^2.2.16
 
   #icons
   fluttericon: ^2.0.0
+  flutter_secure_storage: ^6.0.0
+  lottie: ^2.0.0
 
 
 dev_dependencies:

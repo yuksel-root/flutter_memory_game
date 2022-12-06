@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'INavigationService.dart';
 
 class NavigationService implements INavigationService {
-  static final NavigationService _instance = NavigationService._init();
-  static NavigationService get instance => _instance;
+  static NavigationService? _instance;
+  static NavigationService get instance {
+    if (_instance != null) return _instance!;
+    _instance = NavigationService._init();
+    return _instance!;
+  }
 
   NavigationService._init();
 
