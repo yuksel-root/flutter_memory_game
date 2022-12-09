@@ -21,7 +21,13 @@ dependencies:
 
   #icons
   fluttericon: ^2.0.0
+
+
+  #Local Storage
   flutter_secure_storage: ^6.0.0
+
+
+  #Lottie animations
   lottie: ^2.0.0
 
 
@@ -31,13 +37,6 @@ dev_dependencies:
     sdk: flutter
  
 
-flutter_native_splash:
-  background_image: "assets/splash_images/sp2.jpg"
-  image: assets/splash_images/sp_icon.png
-  android: true
-  android12: true
-  ios: true
-  web: true
  
  
 
@@ -48,3 +47,4 @@ flutter:
   - assets/bg_images/
   - assets/card_images/
   - assets/splash_images/
+  - assets/animation_jsons/
