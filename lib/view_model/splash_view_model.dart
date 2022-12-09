@@ -7,16 +7,24 @@ class SplashViewModel extends ChangeNotifier {
   bool isFirstInit = true;
   final NavigationService _navigation = NavigationService.instance;
   late LocalStorageManager _storageManager;
-
+  double _imageOpacity = 0;
   SplashViewModel() {
     _storageManager = LocalStorageManager.instance;
 
     setIsFirstInit();
 
-    Future.delayed(const Duration(seconds: 5)).then((value) {
+    Future.delayed(const Duration(seconds: 7)).then((value) {
       _navigation.navigateToPageClear(path: NavigationConstants.homeView);
     });
   }
+
+  void setOpacity() {
+    _imageOpacity = 1;
+    notifyListeners();
+  }
+
+  get getOpacity => _imageOpacity;
+
   void setIsFirstInit() {
     isFirstInit = !isFirstInit;
     firstInitSave();
