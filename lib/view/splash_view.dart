@@ -13,69 +13,79 @@ class SplashView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final splashProv = Provider.of<SplashViewModel>(context);
-    Future.delayed(const Duration(milliseconds: 200)).then((value) {
+    Future.delayed(const Duration(seconds: 1)).then((value) {
       splashProv.setOpacity();
     });
     return Stack(children: [
-      const Positioned.fill(
-          child: Image(
+      const Image(
         image: AssetImage(GameImgConstants.splashBg),
         fit: BoxFit.fill,
-      )),
+        alignment: Alignment.center,
+      ),
       Scaffold(
-        backgroundColor: Color(0xFFffe7ba),
-        body: Column(children: [
-          const Spacer(flex: 1),
-          Expanded(
-            flex: 4,
-            child: buildAnimatedOpacity(splashProv, context),
-          ),
-          Expanded(
-            flex: 4,
-            child: buildRowMessage(context),
-          )
-        ]),
+        backgroundColor: const Color(0xFFffe7ba),
+        body: Center(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Spacer(flex: 1),
+                Expanded(
+                  flex: 10,
+                  child: buildAnimatedOpacity(splashProv, context),
+                ),
+                const Spacer(flex: 5),
+                Expanded(
+                  flex: 10,
+                  child: buildIndicator(context),
+                ),
+                Expanded(
+                  flex: 5,
+                  child: buildRowMessage(context),
+                ),
+              ]),
+        ),
       ),
     ]);
   }
 
   Center buildRowMessage(BuildContext context) {
     return Center(
-      child: Column(children: [
-        const GradientWidget(
-            gradient: LinearGradient(colors: [
-              Color(0xFFFF7F00),
-              Color(0xFF9400D3),
-              Color(0xFF00bfff),
-              Color(0xFFFF7F00),
-            ]),
-            widget: Center(
-              child: Text(
-                textAlign: TextAlign.center,
-                "Hello, How are you Today?",
-                style: TextStyle(fontSize: 25),
+      child: GradientWidget(
+          gradient: const LinearGradient(colors: [
+            Color(0xFF9400D3),
+            Color(0xFF00bfff),
+          ]),
+          widget: Center(
+            child: Text(
+              textAlign: TextAlign.center,
+              "   Loading...    ",
+              style: TextStyle(
+                fontSize:
+                    context.dynamicHeight(0.008) * context.dynamicWidth(0.014),
               ),
-            )),
-        LottieCustomWidget(
-          width: context.dynamicWidth(0.4),
-          height: context.dynamicHeight(0.28571),
-          path: AppConstants.colorful_indicator,
-        )
-      ]),
+            ),
+          )),
     );
   }
 
-  Center buildAnimatedOpacity(
+  LottieCustomWidget buildIndicator(BuildContext context) {
+    return LottieCustomWidget(
+      width: context.dynamicWidth(0.8),
+      height: context.dynamicHeight(0.28571),
+      path: AppConstants.colorful_indicator,
+    );
+  }
+
+  AnimatedOpacity buildAnimatedOpacity(
       SplashViewModel splashProv, BuildContext context) {
-    return Center(
-      child: AnimatedOpacity(
-        opacity: splashProv.getOpacity,
-        duration: const Duration(seconds: 2),
-        child: LottieCustomWidget(
-          width: context.dynamicWidth(0.4),
-          height: context.dynamicHeight(0.3571),
-          path: AppConstants.hamster_json,
-        ),
+    return AnimatedOpacity(
+      opacity: splashProv.getOpacity,
+      duration: const Duration(seconds: 2),
+      child: LottieCustomWidget(
+        width: context.dynamicWidth(1),
+        height: context.dynamicHeight(0.71428),
+        path: AppConstants.hamster_json,
       ),
     );
   }

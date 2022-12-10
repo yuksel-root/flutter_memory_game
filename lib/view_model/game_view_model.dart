@@ -34,6 +34,7 @@ class GameViewModel extends ChangeNotifier {
   late int _minCardCount;
   late int _maxCardCount;
   late int _totalBgImageCount;
+  late int _bgCounter;
 
 //-- Animation Variables -- //
   late List<Color> _cardBorderColors;
@@ -68,9 +69,10 @@ class GameViewModel extends ChangeNotifier {
     _currentStage = 0;
 
     _totalImageCount = 83;
-    _minCardCount = 2;
-    _maxCardCount = 1;
-    _totalBgImageCount = 10;
+    _minCardCount = 3;
+    _maxCardCount = 6;
+    _totalBgImageCount = 11;
+    _bgCounter = 0;
 
     _animationAngleArr = [];
     _cardBorderColors = [];
@@ -93,7 +95,7 @@ class GameViewModel extends ChangeNotifier {
     //print(_getBgList);
     _storageManager.setStringList("bg", _getBgList);
 
-    print(await _storageManager.getStringList("bg"));
+    //print(await _storageManager.getStringList("bg"));
     //print(await _storageManager.getAllValues);
   }
 
@@ -113,13 +115,25 @@ class GameViewModel extends ChangeNotifier {
       _bgImagesList!.clear();
       _bgImagesList =
           List.generate(_totalBgImageCount, (i) => "assets/bg_images/bg$i.jpg");
-      _bgImagesList!.shuffle();
     } catch (e) {
       print({"add _bgImages error": e});
     }
   }
 
+  void loadBgList() {
+    loadBgImageList();
+
+    try {
+      _bgList!.clear();
+      _bgList =
+          List.generate(_totalBgImageCount, (i) => "assets/bg_images/bg$i.jpg");
+    } catch (e) {
+      print({"add _bgsImages error": e});
+    }
+  }
+
   void loadGameCardList() {
+    gameCard!.clear();
     gameCard!.shuffle();
     gameCard = List.generate(
         _cardList!.length, (index) => GameImgConstants.hiddenCardPng);
@@ -136,9 +150,10 @@ class GameViewModel extends ChangeNotifier {
   void initGame() {
     generateRandomImgList();
 
-    generateRandomBgList();
+    loadBgList();
+    //generateRandomBgList();
 
-    saveBgList();
+    //saveBgList();
 
     loadGameCardList();
 
@@ -147,6 +162,7 @@ class GameViewModel extends ChangeNotifier {
 
   void generateRandomImgList() {
     loadImageList();
+    gameCard!.clear();
     var rng = Random();
     _imageList!.shuffle();
     _randomCardCount = rng.nextInt(_maxCardCount) + _minCardCount;
@@ -179,7 +195,6 @@ class GameViewModel extends ChangeNotifier {
     _randomBgList!.clear();
     _bgList!.clear();
     var rng = Random();
-    _bgImagesList!.shuffle();
 
     for (int i = 0; i < _totalBgImageCount; i++) {
       _randomBgList!.add(_bgImagesList![rng.nextInt(_bgImagesList!.length)]);
@@ -196,10 +211,6 @@ class GameViewModel extends ChangeNotifier {
         }
       }
     }
-    _bgList!.shuffle();
-    _randomBgList!.shuffle();
-
-    _bgList!.shuffle();
   }
 
   void gameIsFinish() {
@@ -266,22 +277,14 @@ class GameViewModel extends ChangeNotifier {
   }
 
   void borderAnimate(int i0, int i1, int count, Color color, double borderW) {
-    if (count > 4) return;
+    if (count > 3) return;
 
     _cardBorderColors[i0] = color;
     _cardBorderColors[i1] = color;
     notifyListeners();
-    _cardBorderWidth[i0] = borderW > 0.1 && borderW < 0.5
-        ? borderW += Random().nextDouble() * 0.256
-        : borderW > 0.5 && borderW > 0.2
-            ? borderW -= Random().nextDouble() * 0.123
-            : borderW += Random().nextDouble() * 0.195;
+    _cardBorderWidth[i0] = 0.400;
     notifyListeners();
-    _cardBorderWidth[i1] = borderW > 0.1 && borderW < 0.5
-        ? borderW += Random().nextDouble() * 0.261
-        : borderW > 0.5 && borderW > 0.2
-            ? borderW -= borderW += Random().nextDouble() * 0.112
-            : borderW += Random().nextDouble() * 0.316;
+    _cardBorderWidth[i1] = _cardBorderWidth[i0];
     notifyListeners();
     Future.delayed(const Duration(milliseconds: 112), () {
       _cardBorderColors[i0] = const Color(0xFFB2FEFA);
@@ -292,6 +295,7 @@ class GameViewModel extends ChangeNotifier {
       Future.delayed(const Duration(milliseconds: 112), () {
         borderAnimate(i0, i1, count + 1, color, Random().nextDouble() * 0.114);
       });
+      notifyListeners();
     });
     notifyListeners();
   }
@@ -370,12 +374,18 @@ class GameViewModel extends ChangeNotifier {
       _matchCount = 0;
       _currentStage = 0;
 
+      if (_bgCounter < 10) {
+        setBgCounter();
+      } else {
+        clearBgCounter();
+      }
       setScoreClear();
       setTriesClear();
       _peekCardsClickCountClear();
     } catch (e) {
       print({"res game error": e});
     }
+
     notifyListeners();
   }
 
@@ -387,8 +397,13 @@ class GameViewModel extends ChangeNotifier {
     _cardList!.clear();
 
     _matchCount = 0;
+
     _currentStage++;
-    generateRandomBgList();
+    if (_bgCounter < 10) {
+      setBgCounter();
+    } else {
+      clearBgCounter();
+    }
     setTriesClear();
     _peekCardsClickCountClear();
     notifyListeners();
@@ -498,8 +513,20 @@ class GameViewModel extends ChangeNotifier {
 
   String get getBgImages {
     //print(_bgList);
-    return _bgList![_currentStage];
+    return _bgList![getBgCount];
   }
+
+  void setBgCounter() {
+    _bgCounter += 1;
+    notifyListeners();
+  }
+
+  void clearBgCounter() {
+    _bgCounter = 0;
+    notifyListeners();
+  }
+
+  int get getBgCount => _bgCounter;
 
   List<String> get _getBgList => _bgList!;
   GameState get state => _state!;

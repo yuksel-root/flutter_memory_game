@@ -12,8 +12,7 @@ class SplashViewModel extends ChangeNotifier {
     _storageManager = LocalStorageManager.instance;
 
     setIsFirstInit();
-
-    Future.delayed(const Duration(seconds: 7)).then((value) {
+    Future.delayed(const Duration(seconds: 8)).then((value) {
       _navigation.navigateToPageClear(path: NavigationConstants.homeView);
     });
   }
@@ -33,6 +32,6 @@ class SplashViewModel extends ChangeNotifier {
 
   Future<void> firstInitSave() async {
     _storageManager.setBool("isFirstInit", isFirstInit);
-    print(await _storageManager.getAllValues);
+    //print(await _storageManager.getAllValues);
   }
 }

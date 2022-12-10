@@ -11,11 +11,14 @@ class LottieCustomWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Lottie.asset(
-      fit: BoxFit.cover,
-      height: height!,
-      width: width!,
-      "assets/animation_jsons/$path.json",
+    return Center(
+      child: Lottie.asset(
+        fit: BoxFit.cover,
+        height: height!,
+        alignment: Alignment.center,
+        width: width!,
+        "assets/animation_jsons/$path.json",
+      ),
     );
   }
 }

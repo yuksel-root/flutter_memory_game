@@ -33,8 +33,8 @@ class GameAlertView extends StatelessWidget {
   GradientWidget alertDialogWidget(BuildContext context) {
     return GradientWidget(
       gradient: LinearGradient(colors: [
-        Colors.grey.withOpacity(0.1),
-        Colors.white.withOpacity(0.1),
+        const Color(0xFFffe7ba).withOpacity(0.2),
+        const Color(0xFFffe7ba).withOpacity(0.2),
       ]),
       widget: AlertDialog(
         actionsAlignment: MainAxisAlignment.end,
