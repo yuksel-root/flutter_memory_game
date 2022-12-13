@@ -18,6 +18,11 @@ class _GameViewState extends State<GameView> {
   @override
   void initState() {
     Provider.of<GameViewModel>(context, listen: false).initGame();
+    Future.microtask(() async {
+      await Future.delayed(const Duration(milliseconds: 200)).then((value) {
+        Provider.of<GameViewModel>(context, listen: false).setOpacity = 1;
+      });
+    });
 
     super.initState();
   }
@@ -27,15 +32,12 @@ class _GameViewState extends State<GameView> {
     final gameViewProv = Provider.of<GameViewModel>(context);
     final readGameView = Provider.of<GameViewModel>(context);
 
-    return Stack(children: [
-      setBackgroundImageWidget(gameViewProv, context),
-      scaffoldWidget(context, readGameView, gameViewProv),
-    ]);
+    return scaffoldWidget(context, readGameView, gameViewProv);
   }
 
   Center buildLoadingWidget() => const Center(
           child: CircularProgressIndicator(
-        color: Colors.green,
+        color: Color.fromRGBO(76, 175, 80, 1),
       ));
   Scaffold scaffoldWidget(BuildContext context, GameViewModel readGameView,
       GameViewModel gameViewProv) {
@@ -45,22 +47,31 @@ class _GameViewState extends State<GameView> {
           dynamicPreferredSize: context.dynamicHeight(0.15),
           appBar: gameAppBarWidget(context, readGameView, gameViewProv),
         ),
-        body: SizedBox(
-          height: context.mediaQuery.size.height,
-          width: context.mediaQuery.size.width,
-          child: Center(
-            child: SingleChildScrollView(
-              child: SizedBox(
-                height: context.mediaQuery.size.height,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Spacer(flex: 1),
-                    expandedCardWidget(readGameView.getTries,
-                        readGameView.getScore, readGameView, gameViewProv),
-                    const Spacer(flex: 1),
-                  ],
+        body: AnimatedOpacity(
+          opacity: gameViewProv.getOpacity,
+          duration: const Duration(seconds: 2),
+          child: Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+              image: AssetImage(gameViewProv.getBgImages),
+              fit: BoxFit.cover,
+            )),
+            height: context.mediaQuery.size.height,
+            width: context.mediaQuery.size.width,
+            child: Center(
+              child: SingleChildScrollView(
+                child: SizedBox(
+                  height: context.mediaQuery.size.height,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Spacer(flex: 1),
+                      expandedCardWidget(readGameView.getTries,
+                          readGameView.getScore, readGameView, gameViewProv),
+                      const Spacer(flex: 1),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -206,11 +217,8 @@ class _GameViewState extends State<GameView> {
         ),
       ),
       onPressed: () {
-        readGameView.navigateToPageClear(NavigationConstants.homeView);
         readGameView.restartGame();
       },
-
-      // ignore: prefer_const_constructors
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(
@@ -279,7 +287,6 @@ class _GameViewState extends State<GameView> {
           return;
         }
       },
-      // ignore: prefer_const_constructors
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(

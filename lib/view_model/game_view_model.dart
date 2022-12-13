@@ -41,6 +41,8 @@ class GameViewModel extends ChangeNotifier {
   late List<double> _cardBorderWidth;
   late List<double>? _animationAngleArr;
 
+  double _pageOpacity = 0;
+
 //-- Game Logic List -- //
   late List<Map<int, String>>? _matchCheck;
   late List<String>? _imageList;
@@ -90,6 +92,13 @@ class GameViewModel extends ChangeNotifier {
     _randomBgList = [];
     gameBgImageList = [];
   }
+
+  set setOpacity(double i) {
+    _pageOpacity = i;
+    notifyListeners();
+  }
+
+  get getOpacity => _pageOpacity;
 
   Future<void> saveBgList() async {
     //print(_getBgList);
@@ -385,7 +394,8 @@ class GameViewModel extends ChangeNotifier {
     } catch (e) {
       print({"res game error": e});
     }
-
+    navigateToPageClear(NavigationConstants.homeView);
+    setOpacity = 0;
     notifyListeners();
   }
 
