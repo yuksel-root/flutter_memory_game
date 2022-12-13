@@ -14,7 +14,27 @@ class NavigationRoute {
       case NavigationConstants.splashView:
         return pageNavigate(const SplashView());
       case NavigationConstants.homeView:
-        return pageNavigate(const GameView());
+        return pageNavigate(TweenAnimationBuilder(
+          tween: Tween(begin: 0.0, end: 1.0),
+          duration: const Duration(seconds: 5),
+          builder: <double>(context, value, child) {
+            return ShaderMask(
+              blendMode: BlendMode.modulate,
+              shaderCallback: (rect) {
+                return RadialGradient(
+                  colors: const [
+                    Colors.white,
+                    Colors.white,
+                    Colors.transparent,
+                  ],
+                  radius: value * 5,
+                ).createShader(rect);
+              },
+              child: child,
+            );
+          },
+          child: const GameView(),
+        ));
 
       default:
         return MaterialPageRoute(
