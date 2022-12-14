@@ -12,7 +12,7 @@ class SplashViewModel extends ChangeNotifier {
     _storageManager = LocalStorageManager.instance;
 
     setIsFirstInit();
-    Future.delayed(const Duration(seconds: 8)).then((value) {
+    Future.delayed(const Duration(seconds: 3)).then((value) {
       _navigation.navigateToPageClear(path: NavigationConstants.homeView);
     });
   }

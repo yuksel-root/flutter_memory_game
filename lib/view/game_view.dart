@@ -49,7 +49,8 @@ class _GameViewState extends State<GameView> {
         ),
         body: AnimatedOpacity(
           opacity: gameViewProv.getOpacity,
-          duration: const Duration(seconds: 2),
+          curve: Curves.elasticInOut,
+          duration: const Duration(microseconds: 200),
           child: Container(
             decoration: BoxDecoration(
                 image: DecorationImage(
