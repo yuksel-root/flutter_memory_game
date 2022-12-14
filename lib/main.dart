@@ -38,7 +38,7 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       onGenerateRoute: NavigationRoute.instance.generateRoute,
       navigatorKey: NavigationService.instance.navigatorKey,
-      initialRoute: NavigationConstants.splashView,
+      initialRoute: NavigationConstants.homeView,
     );
   }
 }
