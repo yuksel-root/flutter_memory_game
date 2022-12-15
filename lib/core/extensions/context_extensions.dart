@@ -5,6 +5,6 @@ extension ContextExtension on BuildContext {
 }
 
 extension MediaQueryExtension on BuildContext {
-  double dynamicWidth(double val) => mediaQuery.size.width * val;
-  double dynamicHeight(double val) => mediaQuery.size.height * val;
+  double dynamicW(double val) => mediaQuery.size.width * val;
+  double dynamicH(double val) => mediaQuery.size.height * val;
 }

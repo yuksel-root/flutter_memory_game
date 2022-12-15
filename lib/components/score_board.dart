@@ -22,17 +22,15 @@ class ScoreBoard extends StatelessWidget {
   Container boardContainerWidget(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(
-          context.dynamicHeight(0.002) * context.dynamicWidth(0.004)), //2*2 4px
+          context.dynamicH(0.002) * context.dynamicW(0.004)), //2*2 4px
       padding: EdgeInsets.symmetric(
-        vertical: context.dynamicHeight(0.002) *
-            context.dynamicWidth(0.004), //2*2 4px
-        horizontal: context.dynamicHeight(0.002) *
-            context.dynamicWidth(0.004), //2*2 4px
+        vertical: context.dynamicH(0.002) * context.dynamicW(0.004), //2*2 4px
+        horizontal: context.dynamicH(0.002) * context.dynamicW(0.004), //2*2 4px
       ),
       decoration: BoxDecoration(
         gradient: bgGradient,
         borderRadius: BorderRadius.circular(
-          context.dynamicHeight(0.004) * context.dynamicWidth(0.006), //3*3 9px
+          context.dynamicH(0.004) * context.dynamicW(0.006), //3*3 9px
         ),
       ),
       child: titleTextWidget(context),
@@ -53,15 +51,15 @@ class ScoreBoard extends StatelessWidget {
                 title,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: context.dynamicHeight(0.007) *
-                      context.dynamicWidth(0.01), //5*5 25px
+                  fontSize: context.dynamicH(0.007) *
+                      context.dynamicW(0.01), //5*5 25px
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
           ),
           SizedBox(
-            height: context.dynamicHeight(0.0010), //5px
+            height: context.dynamicH(0.0010), //5px
           ),
           infoTextWidget(context)
         ],
@@ -79,8 +77,7 @@ class ScoreBoard extends StatelessWidget {
             textDirection: TextDirection.ltr,
             style: TextStyle(
               color: Colors.white,
-              fontSize:
-                  context.dynamicHeight(0.007) * context.dynamicWidth(0.01),
+              fontSize: context.dynamicH(0.007) * context.dynamicW(0.01),
               fontWeight: FontWeight.bold,
             )),
       ),

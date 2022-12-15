@@ -40,21 +40,18 @@ class CustomBtn extends StatelessWidget {
           },
         ),
       ),
-      onPressed: () => onPressFunc(),
-      child: FittedBox(
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: bgGradient,
-            borderRadius: borderRadius,
-          ),
-          child: GradientWidget(
-            gradient: iconGradient,
+      onPressed: onPressFunc(),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: borderRadius,
+          gradient: bgGradient,
+        ),
+        child: GradientWidget(
             widget: Icon(
               iconName,
               size: iconSize,
             ),
-          ),
-        ),
+            gradient: iconGradient),
       ),
     );
   }

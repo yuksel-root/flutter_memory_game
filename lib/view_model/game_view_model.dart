@@ -394,7 +394,7 @@ class GameViewModel extends ChangeNotifier {
     } catch (e) {
       print({"res game error": e});
     }
-    navigateToPageClear(NavigationConstants.homeView);
+    navigateToPageClear(NavigationConstants.gameView);
     setOpacity = 0;
     notifyListeners();
   }
@@ -428,7 +428,7 @@ class GameViewModel extends ChangeNotifier {
       continueButtonText: "NEXT",
       continueFunction: () {
         _navigation
-            .navigateToPageClear(path: NavigationConstants.homeView, data: []);
+            .navigateToPageClear(path: NavigationConstants.gameView, data: []);
         nextStage();
         notifyListeners();
       },
@@ -445,7 +445,7 @@ class GameViewModel extends ChangeNotifier {
 
   void navigateToPageClear(String path) {
     _navigation
-        .navigateToPageClear(path: NavigationConstants.homeView, data: []);
+        .navigateToPageClear(path: NavigationConstants.gameView, data: []);
     notifyListeners();
   }
 

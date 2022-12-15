@@ -61,8 +61,7 @@ class SplashView extends StatelessWidget {
               textAlign: TextAlign.center,
               "   Loading...    ",
               style: TextStyle(
-                fontSize:
-                    context.dynamicHeight(0.008) * context.dynamicWidth(0.014),
+                fontSize: context.dynamicH(0.008) * context.dynamicW(0.014),
               ),
             ),
           )),
@@ -71,8 +70,8 @@ class SplashView extends StatelessWidget {
 
   LottieCustomWidget buildIndicator(BuildContext context) {
     return LottieCustomWidget(
-      width: context.dynamicWidth(0.8),
-      height: context.dynamicHeight(0.28571),
+      width: context.dynamicW(0.8),
+      height: context.dynamicH(0.28571),
       path: AppConstants.colorful_indicator,
     );
   }
@@ -83,8 +82,8 @@ class SplashView extends StatelessWidget {
       opacity: splashProv.getOpacity,
       duration: const Duration(seconds: 2),
       child: LottieCustomWidget(
-        width: context.dynamicWidth(1),
-        height: context.dynamicHeight(0.71428),
+        width: context.dynamicW(1),
+        height: context.dynamicH(0.71428),
         path: AppConstants.hamster_json,
       ),
     );

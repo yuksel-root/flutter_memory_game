@@ -44,7 +44,7 @@ class _GameViewState extends State<GameView> {
     return Scaffold(
         backgroundColor: Colors.transparent,
         appBar: CustomAppBar(
-          dynamicPreferredSize: context.dynamicHeight(0.15),
+          dynamicPreferredSize: context.dynamicH(0.15),
           appBar: gameAppBarWidget(context, readGameView, gameViewProv),
         ),
         body: AnimatedOpacity(
@@ -101,7 +101,7 @@ class _GameViewState extends State<GameView> {
       BuildContext context, GameViewModel readGameView, gameViewProv) {
     return FittedBox(
       child: Padding(
-        padding: EdgeInsets.only(top: context.dynamicHeight(0.014)),
+        padding: EdgeInsets.only(top: context.dynamicH(0.014)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -109,19 +109,19 @@ class _GameViewState extends State<GameView> {
             Wrap(
               alignment: WrapAlignment.spaceEvenly,
               crossAxisAlignment: WrapCrossAlignment.center,
-              spacing: context.dynamicWidth(0.15),
+              spacing: context.dynamicW(0.15),
               children: [
                 elevatedBtnPeekCards(readGameView, context, gameViewProv),
                 gameLevelWidget(readGameView, gameViewProv),
                 elevatedBtnPauseWidget(readGameView, context),
               ],
             ),
-            SizedBox(height: context.dynamicHeight(0.007)),
+            SizedBox(height: context.dynamicH(0.007)),
             FittedBox(
               child: Wrap(
                 alignment: WrapAlignment.spaceEvenly,
                 crossAxisAlignment: WrapCrossAlignment.center,
-                spacing: context.dynamicWidth(0.17),
+                spacing: context.dynamicW(0.17),
                 children: [
                   ScoreBoard(
                       bgGradient: LinearGradient(
@@ -193,7 +193,7 @@ class _GameViewState extends State<GameView> {
 
         widget: Icon(
           Icons.star,
-          size: context.dynamicHeight(0.01) * context.dynamicWidth(0.014),
+          size: context.dynamicH(0.01) * context.dynamicW(0.014),
         ),
       ),
     );
@@ -223,7 +223,7 @@ class _GameViewState extends State<GameView> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(
-              context.dynamicHeight(0.01) * context.dynamicWidth(0.014)),
+              context.dynamicH(0.01) * context.dynamicW(0.014)),
           gradient: LinearGradient(
             colors: [
               Colors.deepPurple.withOpacity(0.5),
@@ -237,7 +237,7 @@ class _GameViewState extends State<GameView> {
         child: GradientWidget(
           widget: Icon(
             Icons.replay,
-            size: context.dynamicHeight(0.01) * context.dynamicWidth(0.014),
+            size: context.dynamicH(0.01) * context.dynamicW(0.014),
           ),
           gradient: const SweepGradient(
             colors: [
@@ -300,7 +300,7 @@ class _GameViewState extends State<GameView> {
             end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(
-              context.dynamicHeight(0.01) * context.dynamicWidth(0.014)),
+              context.dynamicH(0.01) * context.dynamicW(0.014)),
         ),
         child: GradientWidget(
           gradient: const SweepGradient(
@@ -319,7 +319,7 @@ class _GameViewState extends State<GameView> {
           ),
           widget: Icon(
             Icons.search,
-            size: context.dynamicHeight(0.01) * context.dynamicWidth(0.014),
+            size: context.dynamicH(0.01) * context.dynamicW(0.014),
           ),
         ),
       ),
@@ -334,12 +334,12 @@ class _GameViewState extends State<GameView> {
         itemCount: readGameViewCtx.gameCard!.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 4,
-          crossAxisSpacing: context.dynamicWidth(0.02), //10px
-          mainAxisSpacing: context.dynamicHeight(0.014), //10px
+          crossAxisSpacing: context.dynamicW(0.02), //10px
+          mainAxisSpacing: context.dynamicH(0.014), //10px
           childAspectRatio: 1 / 1,
         ),
         padding: EdgeInsets.all(//3*3 4px
-            context.dynamicHeight(0.004) * context.dynamicWidth(0.006)),
+            context.dynamicH(0.004) * context.dynamicW(0.006)),
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
@@ -368,8 +368,8 @@ class _GameViewState extends State<GameView> {
     return (FittedBox(
       fit: BoxFit.contain,
       child: Container(
-        padding: EdgeInsets.all(context.dynamicHeight(0.004) *
-            context.dynamicWidth(0.006)), //3*3 9px
+        padding: EdgeInsets.all(
+            context.dynamicH(0.004) * context.dynamicW(0.006)), //3*3 9px
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -386,12 +386,11 @@ class _GameViewState extends State<GameView> {
             width: gameViewProv.getCardBorderWidth(index),
           ),
           borderRadius: BorderRadius.circular(
-              context.dynamicHeight(0.002) * context.dynamicWidth(0.004)), //2*2
+              context.dynamicH(0.002) * context.dynamicW(0.004)), //2*2
           image: DecorationImage(
             repeat: ImageRepeat.noRepeat,
 
-            scale: context.dynamicHeight(0.005) *
-                context.dynamicWidth(0.008), //4*4
+            scale: context.dynamicH(0.005) * context.dynamicW(0.008), //4*4
             opacity: 0.9,
             alignment: Alignment.center,
             image: AssetImage(
@@ -408,10 +407,10 @@ class _GameViewState extends State<GameView> {
   Container gameLevelWidget(GameViewModel gameViewProv, GameViewModel ctxProv) {
     return Container(
       padding: EdgeInsets.only(
-        bottom: context.dynamicHeight(0.001),
-        top: context.dynamicHeight(0.001),
-        left: context.dynamicWidth(0.02),
-        right: context.dynamicWidth(0.02),
+        bottom: context.dynamicH(0.001),
+        top: context.dynamicH(0.001),
+        left: context.dynamicW(0.02),
+        right: context.dynamicW(0.02),
       ),
       decoration: BoxDecoration(
         gradient: LinearGradient(colors: [
@@ -423,7 +422,7 @@ class _GameViewState extends State<GameView> {
           width: 1,
         ),
         borderRadius: BorderRadius.circular(
-            context.dynamicHeight(0.005) * context.dynamicWidth(0.008)),
+            context.dynamicH(0.005) * context.dynamicW(0.008)),
       ),
       child: Row(
         // ignore: prefer_const_literals_to_create_immutables
@@ -444,13 +443,12 @@ class _GameViewState extends State<GameView> {
             widget: Text(
               "STAGE",
               style: TextStyle(
-                fontSize:
-                    context.dynamicHeight(0.008) * context.dynamicWidth(0.014),
+                fontSize: context.dynamicH(0.008) * context.dynamicW(0.014),
               ),
             ),
           ),
           SizedBox(
-            width: context.dynamicWidth(0.05),
+            width: context.dynamicW(0.05),
           ),
           GradientWidget(
             gradient: const RadialGradient(
@@ -469,8 +467,7 @@ class _GameViewState extends State<GameView> {
             widget: Text(
               ctxProv.getStage.toString(),
               style: TextStyle(
-                fontSize:
-                    context.dynamicHeight(0.009) * context.dynamicWidth(0.016),
+                fontSize: context.dynamicH(0.009) * context.dynamicW(0.016),
               ),
             ),
           ),

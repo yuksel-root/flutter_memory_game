@@ -38,11 +38,11 @@ class GameAlertView extends StatelessWidget {
       ]),
       widget: AlertDialog(
         actionsAlignment: MainAxisAlignment.end,
-        actionsPadding: EdgeInsets.all(
-            context.dynamicHeight(0.005) * context.dynamicWidth(0.008)),
+        actionsPadding:
+            EdgeInsets.all(context.dynamicH(0.005) * context.dynamicW(0.008)),
         alignment: Alignment.center,
-        buttonPadding: EdgeInsets.all(
-            context.dynamicHeight(0.005) * context.dynamicWidth(0.008)),
+        buttonPadding:
+            EdgeInsets.all(context.dynamicH(0.005) * context.dynamicW(0.008)),
         title: FittedBox(
           fit: BoxFit.contain,
           child: GradientWidget(
@@ -61,8 +61,8 @@ class GameAlertView extends StatelessWidget {
               title,
               maxLines: 1,
               style: TextStyle(
-                fontSize: context.dynamicHeight(0.005) *
-                    context.dynamicWidth(0.008), //4*4 16px
+                fontSize: context.dynamicH(0.005) *
+                    context.dynamicW(0.008), //4*4 16px
                 fontFamily: "Greycliff CF Bold",
               ),
             ),
@@ -70,8 +70,8 @@ class GameAlertView extends StatelessWidget {
         ),
         content: contentTextWidget(context),
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(context.dynamicHeight(0.005) *
-                context.dynamicWidth(0.008))), //4*4 16px
+            borderRadius: BorderRadius.circular(
+                context.dynamicH(0.005) * context.dynamicW(0.008))), //4*4 16px
         actions: continueButtonWidget(context),
       ),
     );
@@ -98,16 +98,16 @@ class GameAlertView extends StatelessWidget {
               content,
               maxLines: 3,
               style: TextStyle(
-                fontSize: context.dynamicHeight(0.005) *
-                    context.dynamicWidth(0.008), //4*4 16px
+                fontSize: context.dynamicH(0.005) *
+                    context.dynamicW(0.008), //4*4 16px
                 fontFamily: "Greycliff CF Medium",
               ),
             ),
           ),
-          SizedBox(height: context.dynamicHeight(0.005)),
+          SizedBox(height: context.dynamicH(0.005)),
           Wrap(
             alignment: WrapAlignment.spaceEvenly,
-            spacing: context.dynamicWidth(0.01),
+            spacing: context.dynamicW(0.01),
             children: [
               FittedBox(
                 child: ScoreBoard(
@@ -171,8 +171,8 @@ class GameAlertView extends StatelessWidget {
               continueButtonText,
               style: TextStyle(
                 letterSpacing: 1.5,
-                fontSize: context.dynamicHeight(0.007) *
-                    context.dynamicWidth(0.01), //5*5 25px
+                fontSize:
+                    context.dynamicH(0.007) * context.dynamicW(0.01), //5*5 25px
                 fontFamily: "Greycliff CF Bold",
                 fontWeight: FontWeight.bold,
               ),

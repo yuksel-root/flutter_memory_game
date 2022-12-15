@@ -98,7 +98,7 @@ class CustomAlertDialog extends StatelessWidget {
     return Column(children: [
       gradientThreeStarXd(
         context,
-        context.dynamicHeight(0.01) * context.dynamicWidth(0.014),
+        context.dynamicH(0.01) * context.dynamicW(0.014),
       ),
       const Text("OPEN"),
       const Text("4"),
@@ -115,8 +115,8 @@ class CustomAlertDialog extends StatelessWidget {
         children: [
           Align(
             alignment: Alignment.centerLeft,
-            child: gradientThreeStarXd(context,
-                context.dynamicHeight(0.008) * context.dynamicWidth(0.012)),
+            child: gradientThreeStarXd(
+                context, context.dynamicH(0.008) * context.dynamicW(0.012)),
           ),
           const Align(
             alignment: Alignment.centerRight,
@@ -128,8 +128,8 @@ class CustomAlertDialog extends StatelessWidget {
         children: [
           Align(
             alignment: Alignment.centerLeft,
-            child: gradientTwoStarXd(context,
-                context.dynamicHeight(0.008) * context.dynamicWidth(0.012)),
+            child: gradientTwoStarXd(
+                context, context.dynamicH(0.008) * context.dynamicW(0.012)),
           ),
           const Align(
             alignment: Alignment.centerRight,
@@ -141,8 +141,8 @@ class CustomAlertDialog extends StatelessWidget {
         children: [
           Align(
             alignment: Alignment.centerLeft,
-            child: gradientStarWidget(context,
-                context.dynamicHeight(0.008) * context.dynamicWidth(0.012)),
+            child: gradientStarWidget(
+                context, context.dynamicH(0.008) * context.dynamicW(0.012)),
           ),
           const Align(
             alignment: Alignment.centerRight,
@@ -174,8 +174,8 @@ class CustomAlertDialog extends StatelessWidget {
       // ignore: prefer_const_constructors
       child: Container(
         padding: EdgeInsets.symmetric(
-          vertical: context.dynamicHeight(0.01),
-          horizontal: context.dynamicWidth(0.014),
+          vertical: context.dynamicH(0.01),
+          horizontal: context.dynamicW(0.014),
         ),
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -188,7 +188,7 @@ class CustomAlertDialog extends StatelessWidget {
             end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(
-              context.dynamicHeight(0.005) * context.dynamicWidth(0.008)),
+              context.dynamicH(0.005) * context.dynamicW(0.008)),
         ),
         child: GradientWidget(
           gradient: const SweepGradient(
@@ -210,14 +210,12 @@ class CustomAlertDialog extends StatelessWidget {
               children: [
                 Icon(
                   Icons.menu,
-                  size:
-                      context.dynamicHeight(0.01) * context.dynamicWidth(0.014),
+                  size: context.dynamicH(0.01) * context.dynamicW(0.014),
                 ),
                 Text(
                   "MENU",
                   style: TextStyle(
-                    fontSize: context.dynamicHeight(0.01) *
-                        context.dynamicWidth(0.014),
+                    fontSize: context.dynamicH(0.01) * context.dynamicW(0.014),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
