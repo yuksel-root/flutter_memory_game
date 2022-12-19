@@ -1,5 +1,7 @@
 import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
+import 'package:flutter_memory_game/core/notifier/time_state.dart';
 import 'package:flutter_memory_game/view_model/game_view_model.dart';
+import 'package:flutter_memory_game/view_model/home_view_model.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +20,13 @@ class ApplicationProvider {
       create: (context) => SplashViewModel(),
     ),
     ChangeNotifierProvider(
+      create: (context) => HomeViewModel(),
+    ),
+    ChangeNotifierProvider(
       create: (context) => GameViewModel(),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => TimeState(),
     ),
     Provider.value(value: NavigationService.instance)
   ];
