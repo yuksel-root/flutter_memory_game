@@ -40,7 +40,9 @@ class CustomBtn extends StatelessWidget {
           },
         ),
       ),
-      onPressed: onPressFunc(),
+      onPressed: () {
+        onPressFunc();
+      },
       child: Container(
         decoration: BoxDecoration(
           borderRadius: borderRadius,
