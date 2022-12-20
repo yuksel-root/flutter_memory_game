@@ -40,8 +40,9 @@ flutter:
   uses-material-design: true
 
   assets:
-  - assets/bg_images/
-  - assets/card_images/
-  - assets/splash_images/
-  - assets/animation_jsons/
-  - assets/main_bg_images/
+  - assets/game_bg_jpeg/
+  - assets/game_card_png/
+  - assets/splash_jpeg/
+  - assets/animations_json/
+  - assets/home_bg_jpeg/
+  - assets/icons_png/
