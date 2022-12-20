@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_memory_game/components/gradient_widget.dart';
 
 class CustomBtn extends StatelessWidget {
   final Function onPressFunc;
   final Gradient bgGradient;
-  final Gradient iconGradient;
-  final IconData iconName;
   final BorderRadius borderRadius;
-  final double iconSize;
+  final Widget child;
   const CustomBtn({
     Key? key,
     required this.onPressFunc,
     required this.bgGradient,
-    required this.iconGradient,
-    required this.iconName,
     required this.borderRadius,
-    required this.iconSize,
+    required this.child,
   }) : super(key: key);
 
   @override
@@ -48,12 +43,7 @@ class CustomBtn extends StatelessWidget {
           borderRadius: borderRadius,
           gradient: bgGradient,
         ),
-        child: GradientWidget(
-            widget: Icon(
-              iconName,
-              size: iconSize,
-            ),
-            gradient: iconGradient),
+        child: child,
       ),
     );
   }
