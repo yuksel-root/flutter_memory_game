@@ -5,6 +5,8 @@ import 'package:flutter_memory_game/core/constants/game_img_constants.dart';
 import 'package:flutter_memory_game/core/constants/navigation_constants.dart';
 import 'package:flutter_memory_game/core/local_storage/local_storage_manager.dart';
 import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
+import 'package:flutter_memory_game/core/notifier/time_state.dart';
+import 'package:provider/provider.dart';
 
 //-- GameState Variables -- //
 enum GameState {
@@ -112,7 +114,7 @@ class GameViewModel extends ChangeNotifier {
     try {
       _imageList!.clear();
       _imageList =
-          List.generate(_totalImageCount, (i) => "assets/card_images/$i.png");
+          List.generate(_totalImageCount, (i) => "assets/game_card_png/$i.png");
       _imageList!.shuffle();
     } catch (e) {
       print({"add card_images error": e});
@@ -122,8 +124,8 @@ class GameViewModel extends ChangeNotifier {
   void loadBgImageList() {
     try {
       _bgImagesList!.clear();
-      _bgImagesList =
-          List.generate(_totalBgImageCount, (i) => "assets/bg_images/bg$i.jpg");
+      _bgImagesList = List.generate(
+          _totalBgImageCount, (i) => "assets/game_bg_jpeg/bg$i.jpeg");
     } catch (e) {
       print({"add _bgImages error": e});
     }
@@ -134,8 +136,8 @@ class GameViewModel extends ChangeNotifier {
 
     try {
       _bgList!.clear();
-      _bgList =
-          List.generate(_totalBgImageCount, (i) => "assets/bg_images/bg$i.jpg");
+      _bgList = List.generate(
+          _totalBgImageCount, (i) => "assets/game_bg_jpeg/bg$i.jpeg");
     } catch (e) {
       print({"add _bgsImages error": e});
     }
@@ -156,13 +158,20 @@ class GameViewModel extends ChangeNotifier {
     setCardBorderWidth = 0;
   }
 
+  void arrayClears() {
+    gameCard!.clear();
+    gameBgImageList!.clear();
+    _randomImgList!.clear();
+    _matchCheck!.clear();
+    _cardList!.clear();
+  }
+
   void initGame() {
+    arrayClears();
+
     generateRandomImgList();
 
     loadBgList();
-    //generateRandomBgList();
-
-    //saveBgList();
 
     loadGameCardList();
 
@@ -400,11 +409,7 @@ class GameViewModel extends ChangeNotifier {
   }
 
   void nextStage() {
-    gameCard!.clear();
-    gameBgImageList!.clear();
-    _randomImgList!.clear();
-    _matchCheck!.clear();
-    _cardList!.clear();
+    arrayClears();
 
     _matchCount = 0;
 
@@ -414,7 +419,7 @@ class GameViewModel extends ChangeNotifier {
     } else {
       clearBgCounter();
     }
-    setTriesClear();
+
     _peekCardsClickCountClear();
     notifyListeners();
   }

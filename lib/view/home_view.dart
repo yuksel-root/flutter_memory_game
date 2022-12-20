@@ -3,15 +3,18 @@ import 'package:flutter_memory_game/components/custom_column_box.dart';
 import 'package:flutter_memory_game/components/custom_elevated_button.dart';
 import 'package:flutter_memory_game/components/gradient_widget.dart';
 import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
+import 'package:flutter_memory_game/view_model/home_view_model.dart';
+import 'package:provider/provider.dart';
 
 final _mainTxt1Clr = [
+  Colors.cyanAccent,
   Colors.yellowAccent,
+  Colors.pinkAccent,
   Colors.cyanAccent,
   Colors.pinkAccent,
-  Colors.purpleAccent,
-  Colors.cyanAccent,
-  Colors.pinkAccent,
+  Colors.yellowAccent,
 ];
+
 final _mainTxt2Clr = [
   Colors.cyanAccent,
   Colors.white,
@@ -26,17 +29,18 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final homeProv = Provider.of<HomeViewModel>(context);
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
             fit: BoxFit.fill,
-            image: AssetImage("assets/main_bg_images/main_bg2.jpeg")),
+            image: AssetImage("assets/main_bg_images/main_bg.jpeg")),
       ),
       child: Column(
         children: [
-          settingsButtonWidgets(context),
+          settingsButtonWidgets(context, homeProv),
           expandedMainTexts(context, 2),
-          expandedModeBoxes(context, 4),
+          expandedModeBoxes(context, 4, homeProv),
         ],
       ),
     );
@@ -58,7 +62,8 @@ class HomeView extends StatelessWidget {
         ));
   }
 
-  Expanded expandedModeBoxes(BuildContext context, int flex) {
+  Expanded expandedModeBoxes(
+      BuildContext context, int flex, HomeViewModel homeProv) {
     return Expanded(
       flex: flex,
       child: Wrap(
@@ -66,14 +71,16 @@ class HomeView extends StatelessWidget {
         crossAxisAlignment: WrapCrossAlignment.center,
         spacing: context.dynamicW(0.2),
         children: [
-          modeSelectBox(Icons.bar_chart_sharp, context, "Stage Mode"),
-          modeSelectBox(Icons.access_alarms_rounded, context, "Arcade Mode"),
+          modeSelectBox(Icons.bar_chart_sharp, context, "Stage Mode", homeProv),
+          modeSelectBox(
+              Icons.access_alarms_rounded, context, "Arcade Mode", homeProv),
         ],
       ),
     );
   }
 
-  FittedBox settingsButtonWidgets(BuildContext context) {
+  FittedBox settingsButtonWidgets(
+      BuildContext context, HomeViewModel homeProv) {
     return FittedBox(
       child: Wrap(
         alignment: WrapAlignment.start,
@@ -87,11 +94,20 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  CustomColumnBox modeSelectBox(
-      IconData iconName, BuildContext context, String text) {
+  CustomColumnBox modeSelectBox(IconData iconName, BuildContext context,
+      String text, HomeViewModel homeProv) {
     final cPadding =
         EdgeInsets.all(context.dynamicH(0.004) * context.dynamicW(0.008));
     return CustomColumnBox(
+      clickFunction: () {
+        if (text == "Stage Mode") {
+          homeProv.clickStageMode();
+          print("stage");
+        } else {
+          homeProv.clickArcadeMode();
+          print("arcade");
+        }
+      },
       cPadding: cPadding,
       bgGradient: LinearGradient(
         begin: Alignment.topLeft,
@@ -156,6 +172,8 @@ class HomeView extends StatelessWidget {
 
   CustomBtn elevatedBtn(BuildContext context, IconData icon) {
     return CustomBtn(
+      borderRadius: BorderRadius.circular(
+          context.dynamicH(0.01) * context.dynamicW(0.014)),
       bgGradient: LinearGradient(
         colors: [
           Colors.deepPurpleAccent.withOpacity(0.5),
@@ -166,21 +184,21 @@ class HomeView extends StatelessWidget {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
       ),
-      iconGradient: const SweepGradient(
-        colors: [
-          Colors.cyanAccent,
-          Colors.pinkAccent,
-          Colors.yellowAccent,
-          Colors.cyanAccent
-        ],
-        startAngle: 0.9,
-        endAngle: 6.0,
-        tileMode: TileMode.clamp,
+      child: GradientWidget(
+        gradient: const SweepGradient(
+          colors: [
+            Colors.cyanAccent,
+            Colors.pinkAccent,
+            Colors.yellowAccent,
+            Colors.cyanAccent
+          ],
+          startAngle: 0.9,
+          endAngle: 6.0,
+          tileMode: TileMode.clamp,
+        ),
+        widget:
+            Icon(icon, size: context.dynamicH(0.01) * context.dynamicW(0.014)),
       ),
-      iconSize: context.dynamicH(0.01) * context.dynamicW(0.014),
-      borderRadius: BorderRadius.circular(
-          context.dynamicH(0.01) * context.dynamicW(0.014)),
-      iconName: icon,
       onPressFunc: () {},
     );
   }

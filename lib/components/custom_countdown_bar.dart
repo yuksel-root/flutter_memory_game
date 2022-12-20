@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/components/gradient_widget.dart';
+import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
 
 class CustomCountDownBar extends StatelessWidget {
   final double? width;
@@ -13,24 +14,14 @@ class CustomCountDownBar extends StatelessWidget {
   Widget build(BuildContext context) {
     CustomCountDownBar(totalValue: totalValue, value: value, width: width);
     double ratio = value / totalValue;
-
+    print({"w: ": width});
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        GradientWidget(
-          gradient: SweepGradient(colors: [
-            Color(0xFF9400D3),
-            Color(0xFF4B0082),
-            Color(0xFF0000FF),
-            Color(0xFF00FF00),
-            Color(0xFFFFFF00),
-            Color(0xFFFF7F00),
-            Color(0xFFFF0000),
-          ]),
-          widget: const Icon(size: 50, Icons.hourglass_full_sharp),
-        ),
-        SizedBox(
-          width: 5,
+        Image(
+          image: const AssetImage("assets/icons_png/hg.png"),
+          height: context.dynamicH(0.042),
+          width: context.dynamicW(0.06),
         ),
         Stack(
           children: [

@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/components/custom_app_bar.dart';
+import 'package:flutter_memory_game/components/custom_countdown_bar.dart';
 import 'package:flutter_memory_game/components/gradient_widget.dart';
 import 'package:flutter_memory_game/components/score_board.dart';
 import 'package:flutter_memory_game/core/constants/game_img_constants.dart';
 import 'package:flutter_memory_game/core/constants/navigation_constants.dart';
 import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
+import 'package:flutter_memory_game/core/notifier/time_state.dart';
 import 'package:flutter_memory_game/view_model/game_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +19,7 @@ class GameView extends StatefulWidget {
 }
 
 class _GameViewState extends State<GameView> {
+  bool init = false;
   @override
   void initState() {
     Provider.of<GameViewModel>(context, listen: false).initGame();
@@ -29,23 +34,25 @@ class _GameViewState extends State<GameView> {
 
   @override
   Widget build(BuildContext context) {
+    final timeProv = Provider.of<TimeState>(context, listen: false);
+    if (init == false) {
+      timeProv.initTime(context);
+      init = true;
+    }
     final gameViewProv = Provider.of<GameViewModel>(context);
-    final readGameView = Provider.of<GameViewModel>(context);
 
-    return scaffoldWidget(context, readGameView, gameViewProv);
+    print({"ctx": context.dynamicW(0.9)});
+
+    return scaffoldWidget(context, gameViewProv, timeProv);
   }
 
-  Center buildLoadingWidget() => const Center(
-          child: CircularProgressIndicator(
-        color: Color.fromRGBO(76, 175, 80, 1),
-      ));
-  Scaffold scaffoldWidget(BuildContext context, GameViewModel readGameView,
-      GameViewModel gameViewProv) {
+  Scaffold scaffoldWidget(
+      BuildContext context, GameViewModel gameViewProv, TimeState timeProv) {
     return Scaffold(
         backgroundColor: Colors.transparent,
         appBar: CustomAppBar(
           dynamicPreferredSize: context.dynamicH(0.15),
-          appBar: gameAppBarWidget(context, readGameView, gameViewProv),
+          appBar: gameAppBarWidget(context, gameViewProv, timeProv),
         ),
         body: AnimatedOpacity(
           opacity: gameViewProv.getOpacity,
@@ -68,8 +75,8 @@ class _GameViewState extends State<GameView> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Spacer(flex: 1),
-                      expandedCardWidget(readGameView.getTries,
-                          readGameView.getScore, readGameView, gameViewProv),
+                      expandedCardWidget(gameViewProv.getTries,
+                          gameViewProv.getScore, gameViewProv),
                       const Spacer(flex: 1),
                     ],
                   ),
@@ -90,15 +97,15 @@ class _GameViewState extends State<GameView> {
     );
   }
 
-  AppBar gameAppBarWidget(BuildContext context, GameViewModel readGameView,
-      GameViewModel gameViewProv) {
+  AppBar gameAppBarWidget(
+      BuildContext context, GameViewModel gameViewProv, TimeState timeProv) {
     return AppBar(
-      flexibleSpace: flexibleAppBarWidgets(context, readGameView, gameViewProv),
+      flexibleSpace: flexibleAppBarWidgets(context, gameViewProv, timeProv),
     );
   }
 
   FittedBox flexibleAppBarWidgets(
-      BuildContext context, GameViewModel readGameView, gameViewProv) {
+      BuildContext context, gameViewProv, TimeState timeProv) {
     return FittedBox(
       child: Padding(
         padding: EdgeInsets.only(top: context.dynamicH(0.014)),
@@ -111,9 +118,9 @@ class _GameViewState extends State<GameView> {
               crossAxisAlignment: WrapCrossAlignment.center,
               spacing: context.dynamicW(0.15),
               children: [
-                elevatedBtnPeekCards(readGameView, context, gameViewProv),
-                gameLevelWidget(readGameView, gameViewProv),
-                elevatedBtnPauseWidget(readGameView, context),
+                elevatedBtnPeekCards(context, gameViewProv),
+                gameLevelWidget(gameViewProv, gameViewProv),
+                elevatedBtnPauseWidget(gameViewProv, context, timeProv),
               ],
             ),
             SizedBox(height: context.dynamicH(0.007)),
@@ -123,36 +130,18 @@ class _GameViewState extends State<GameView> {
                 crossAxisAlignment: WrapCrossAlignment.center,
                 spacing: context.dynamicW(0.17),
                 children: [
-                  ScoreBoard(
-                      bgGradient: LinearGradient(
-                        colors: [
-                          const Color(0xFF551a8b).withOpacity(0.5),
-                          const Color(0xFF8b008b).withOpacity(0.5),
-                        ],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        stops: const [0.0, 1.0],
-                        tileMode: TileMode.repeated,
-                      ),
-                      title: "Score",
-                      info: readGameView.getScore.toString()),
-                  gradientThreeStarXd(),
-                  ScoreBoard(
-                      bgGradient: LinearGradient(
-                        colors: [
-                          const Color(0xFF551a8b).withOpacity(0.5),
-                          const Color(0xFF8b008b).withOpacity(0.5),
-                        ],
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        stops: const [0.0, 1.0],
-                        tileMode: TileMode.repeated,
-                      ),
-                      title: "Tries",
-                      info: readGameView.getTries.toString())
+                  Center(
+                    child: Consumer<TimeState>(
+                      builder: ((context, timeState, _) => CustomCountDownBar(
+                            width: context.dynamicW(0.9),
+                            value: timeState.getTime,
+                            totalValue: context.dynamicW(0.9),
+                          )),
+                    ),
+                  ),
                 ],
               ),
-            ),
+            )
           ],
         ),
       ),
@@ -200,7 +189,7 @@ class _GameViewState extends State<GameView> {
   }
 
   ElevatedButton elevatedBtnPauseWidget(
-      GameViewModel readGameView, BuildContext context) {
+      GameViewModel gameProv, BuildContext context, TimeState timeProv) {
     return ElevatedButton(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(Colors.transparent),
@@ -218,7 +207,8 @@ class _GameViewState extends State<GameView> {
         ),
       ),
       onPressed: () {
-        readGameView.restartGame();
+        gameProv.restartGame();
+        timeProv.setDefaultTime(context.dynamicW(0.8));
       },
       child: Container(
         decoration: BoxDecoration(
@@ -258,7 +248,7 @@ class _GameViewState extends State<GameView> {
     );
   }
 
-  ElevatedButton elevatedBtnPeekCards(GameViewModel readGameView,
+  ElevatedButton elevatedBtnPeekCards(
       BuildContext context, GameViewModel gameProv) {
     return ElevatedButton(
       style: ButtonStyle(
@@ -278,8 +268,8 @@ class _GameViewState extends State<GameView> {
       ),
       onPressed: () {
         gameProv.setPeekCardCount = 1;
-        if (readGameView.getPeekCardCount < 2) {
-          if ((readGameView.getPeekCardCount % 2) != 0) {
+        if (gameProv.getPeekCardCount < 2) {
+          if ((gameProv.getPeekCardCount % 2) != 0) {
             gameProv.openAllGameCard();
           } else {
             return;
@@ -326,12 +316,12 @@ class _GameViewState extends State<GameView> {
     );
   }
 
-  Expanded expandedCardWidget(int tries, int score,
-      GameViewModel readGameViewCtx, GameViewModel gameViewProv) {
+  Expanded expandedCardWidget(
+      int tries, int score, GameViewModel gameViewProv) {
     return Expanded(
       flex: 100,
       child: GridView.builder(
-        itemCount: readGameViewCtx.gameCard!.length,
+        itemCount: gameViewProv.gameCard!.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 4,
           crossAxisSpacing: context.dynamicW(0.02), //10px
@@ -346,14 +336,14 @@ class _GameViewState extends State<GameView> {
               gameViewProv.clickCard(index, context);
             },
             child: TweenAnimationBuilder(
-              tween: Tween<double>(
-                  begin: 0, end: readGameViewCtx.getAngleArr(index)),
+              tween:
+                  Tween<double>(begin: 0, end: gameViewProv.getAngleArr(index)),
               duration: const Duration(milliseconds: 650),
               builder: (BuildContext context, double val, __) {
                 return Transform(
                   transform: Matrix4.rotationY(val)..setEntry(3, 2, 0.01),
                   alignment: Alignment.center,
-                  child: gameCardWidget(context, readGameViewCtx, index),
+                  child: gameCardWidget(context, gameViewProv, index),
                 );
               },
             ),

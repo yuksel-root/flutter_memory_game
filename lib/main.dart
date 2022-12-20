@@ -4,13 +4,12 @@ import 'package:flutter_memory_game/core/navigation/navigation_route.dart';
 import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_memory_game/core/notifier/provider_list.dart';
-import 'package:flutter_memory_game/view/splash_view.dart';
-
+import 'package:flutter_memory_game/view/game_view.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
   await _init();
-  //await splash();
+
   runApp(
     MultiProvider(
       providers: [...ApplicationProvider.instance.dependItems],
@@ -38,7 +37,7 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       onGenerateRoute: NavigationRoute.instance.generateRoute,
       navigatorKey: NavigationService.instance.navigatorKey,
-      initialRoute: NavigationConstants.homeView,
+      home: const GameView(),
     );
   }
 }
