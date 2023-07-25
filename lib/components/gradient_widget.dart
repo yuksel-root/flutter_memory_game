@@ -14,7 +14,8 @@ class GradientWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ShaderMask(
       blendMode: BlendMode.srcATop,
-      shaderCallback: (bounds) => gradient.createShader(bounds),
+      shaderCallback: (bounds) => gradient
+          .createShader(Rect.fromLTWH(0, 0, bounds.width, bounds.height)),
       child: widget,
     );
   }
