@@ -174,6 +174,14 @@ class HomeView extends StatelessWidget {
     return CustomBtn(
       borderRadius: BorderRadius.circular(
           context.dynamicH(0.01) * context.dynamicW(0.014)),
+      boxShadow: const [
+        BoxShadow(
+          color: Colors.transparent,
+          blurRadius: 10,
+          spreadRadius: 0.5,
+          offset: Offset(0, 8),
+        ),
+      ],
       bgGradient: LinearGradient(
         colors: [
           Colors.deepPurpleAccent.withOpacity(0.5),

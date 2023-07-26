@@ -5,12 +5,14 @@ class CustomBtn extends StatelessWidget {
   final Gradient bgGradient;
   final BorderRadius borderRadius;
   final Widget child;
+  final List<BoxShadow> boxShadow;
   const CustomBtn({
     Key? key,
     required this.onPressFunc,
     required this.bgGradient,
     required this.borderRadius,
     required this.child,
+    required this.boxShadow,
   }) : super(key: key);
 
   @override
@@ -40,9 +42,9 @@ class CustomBtn extends StatelessWidget {
       },
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: borderRadius,
-          gradient: bgGradient,
-        ),
+            borderRadius: borderRadius,
+            gradient: bgGradient,
+            boxShadow: boxShadow),
         child: child,
       ),
     );

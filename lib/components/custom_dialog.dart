@@ -48,7 +48,22 @@ class CustomAlertDialog extends StatelessWidget {
                 Expanded(
                   child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.red,
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.deepPurple,
+                            Color(0xff6dd5ed),
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                        ),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black,
+                            blurRadius: 10,
+                            spreadRadius: 0.5,
+                            offset: Offset(0, 1),
+                          ),
+                        ],
                         shape: BoxShape.rectangle,
                         borderRadius: BorderRadius.only(
                           bottomLeft: Radius.circular(context.dynamicH(0.005) *
@@ -65,7 +80,22 @@ class CustomAlertDialog extends StatelessWidget {
                             flex: 20,
                             child: Container(
                               decoration: BoxDecoration(
-                                color: Colors.blue,
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.deepPurple,
+                                    Color(0xff6dd5ed),
+                                  ],
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                ),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black,
+                                    blurRadius: 10,
+                                    spreadRadius: 5,
+                                    offset: Offset(0, 10),
+                                  ),
+                                ],
                                 shape: BoxShape.rectangle,
                                 borderRadius: BorderRadius.circular(
                                   context.dynamicH(0.005) *
@@ -116,19 +146,42 @@ class CustomAlertDialog extends StatelessWidget {
     return Container(
       width: screenWidth / 1.5,
       decoration: BoxDecoration(
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black,
+            blurRadius: 10,
+            spreadRadius: 5,
+            offset: Offset(0, 10),
+          ),
+        ],
+        gradient: LinearGradient(
+          colors: [
+            Colors.deepPurple,
+            Color(0xff6dd5ed),
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(
               context.dynamicH(0.005) * context.dynamicW(0.008)),
           topLeft: Radius.circular(
               context.dynamicH(0.005) * context.dynamicW(0.008)),
         ),
-        color: Colors.purple,
       ),
       child: Center(
           child: gradientText(
         context,
         "STAGE 1",
         context.dynamicH(0.01) * context.dynamicW(0.014),
+        LinearGradient(
+          colors: [
+            Colors.deepPurple,
+            Color(0xff6dd5ed),
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
       )),
     );
   }
@@ -172,6 +225,14 @@ class CustomAlertDialog extends StatelessWidget {
               context,
               "WELL DONE",
               context.dynamicH(0.01) * context.dynamicW(0.014),
+              LinearGradient(
+                colors: [
+                  Colors.deepPurple,
+                  Color(0xff6dd5ed),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
             ),
           ]),
     );
@@ -181,6 +242,14 @@ class CustomAlertDialog extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.green,
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black,
+            blurRadius: 10,
+            spreadRadius: 2,
+            offset: Offset(0, 10),
+          ),
+        ],
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(
           context.dynamicH(0.005) * context.dynamicW(0.008),
@@ -194,24 +263,36 @@ class CustomAlertDialog extends StatelessWidget {
               context,
               "Score:",
               context.dynamicH(0.01) * context.dynamicW(0.014),
+              LinearGradient(
+                colors: [
+                  Colors.deepPurple,
+                  Color(0xff6dd5ed),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
             ),
             gradientText(
               context,
               "500",
               context.dynamicH(0.01) * context.dynamicW(0.014),
+              LinearGradient(
+                colors: [
+                  Colors.deepPurple,
+                  Color(0xff6dd5ed),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
             ),
           ]),
     );
   }
 
   GradientWidget gradientText(
-      BuildContext context, String text, double fontSize) {
+      BuildContext context, String text, double fontSize, Gradient gradient) {
     return GradientWidget(
-      gradient: LinearGradient(colors: [
-        Colors.pink,
-        Colors.redAccent,
-        Colors.amber,
-      ]),
+      gradient: gradient,
       widget: RichText(
         textAlign: TextAlign.center,
         text: TextSpan(
@@ -237,6 +318,14 @@ class CustomAlertDialog extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.purple,
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black,
+            blurRadius: 10,
+            spreadRadius: 1,
+            offset: Offset(0, 10),
+          ),
+        ],
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(
           context.dynamicH(0.005) * context.dynamicW(0.008),
@@ -250,16 +339,40 @@ class CustomAlertDialog extends StatelessWidget {
               context,
               " Moves: 300 ",
               context.dynamicH(0.007141) * context.dynamicW(0.01),
+              LinearGradient(
+                colors: [
+                  Colors.deepPurple,
+                  Color(0xff6dd5ed),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
             ),
             gradientText(
               context,
               "   TIMES: 117 ",
               context.dynamicH(0.00714) * context.dynamicW(0.01),
+              LinearGradient(
+                colors: [
+                  Colors.deepPurple,
+                  Color(0xff6dd5ed),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
             ),
             gradientText(
               context,
               " Bonus: 0 ",
               context.dynamicH(0.00714) * context.dynamicW(0.01),
+              LinearGradient(
+                colors: [
+                  Colors.deepPurple,
+                  Color(0xff6dd5ed),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
             ),
           ]),
     );
@@ -270,6 +383,14 @@ class CustomAlertDialog extends StatelessWidget {
       borderRadius: BorderRadius.circular(
         context.dynamicH(0.005) * context.dynamicW(0.008),
       ),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.deepPurpleAccent.withOpacity(0.5),
+          blurRadius: 10,
+          spreadRadius: 0.5,
+          offset: Offset(0, 4),
+        ),
+      ],
       bgGradient: LinearGradient(
         colors: [
           Colors.deepPurple.withOpacity(0.5),
@@ -306,6 +427,14 @@ class CustomAlertDialog extends StatelessWidget {
             context,
             text,
             context.dynamicH(0.00714) * context.dynamicW(0.01),
+            LinearGradient(
+              colors: [
+                Color(0xffE0EAFC),
+                Color(0xffCFDEF3),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
           )
         ],
       ),
