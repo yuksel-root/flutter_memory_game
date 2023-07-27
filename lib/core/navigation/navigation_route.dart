@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/core/constants/navigation_constants.dart';
 import 'package:flutter_memory_game/view/game_view.dart';
 import 'package:flutter_memory_game/view/home_view.dart';
+import 'package:flutter_memory_game/view/levels_view.dart';
 import 'package:flutter_memory_game/view/splash_view.dart';
 
 class NavigationRoute {
@@ -18,6 +19,8 @@ class NavigationRoute {
         return pageNavigate(const HomeView());
       case NavigationConstants.gameView:
         return pageNavigate(const GameView());
+      case NavigationConstants.levelView:
+        return pageNavigate(const LevelsView());
 
       default:
         return MaterialPageRoute(
