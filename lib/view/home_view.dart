@@ -34,7 +34,7 @@ class HomeView extends StatelessWidget {
       decoration: const BoxDecoration(
         image: DecorationImage(
             fit: BoxFit.fill,
-            image: AssetImage("assets/main_bg_images/main_bg.jpeg")),
+            image: AssetImage("assets/home_bg_jpeg/main_bg.jpeg")),
       ),
       child: Column(
         children: [

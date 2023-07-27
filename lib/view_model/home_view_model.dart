@@ -26,7 +26,7 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   void clickStageMode() {
-    navigateToPageClear(NavigationConstants.gameView);
+    navigateToPageClear(NavigationConstants.levelView);
   }
 
   void clickArcadeMode() {

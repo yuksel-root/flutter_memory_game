@@ -41,8 +41,6 @@ class _GameViewState extends State<GameView> {
     }
     final gameViewProv = Provider.of<GameViewModel>(context);
 
-    print({"ctx": context.dynamicW(0.9)});
-
     return scaffoldWidget(context, gameViewProv, timeProv);
   }
 
