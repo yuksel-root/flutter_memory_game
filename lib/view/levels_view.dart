@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/components/custom_app_bar.dart';
 import 'package:flutter_memory_game/components/custom_column_box.dart';
+import 'package:flutter_memory_game/components/custom_elevated_button.dart';
 import 'package:flutter_memory_game/components/gradient_widget.dart';
 import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
 import 'package:flutter_memory_game/view_model/game_view_model.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class LevelsView extends StatelessWidget {
@@ -29,19 +31,17 @@ class LevelsView extends StatelessWidget {
           ),
         ),
         body: AnimatedOpacity(
-          opacity: gameViewProv.getOpacity,
+          opacity: 1,
           curve: Curves.elasticInOut,
           duration: const Duration(microseconds: 200),
           child: Container(
             decoration: BoxDecoration(
                 image: DecorationImage(
-              image: AssetImage(gameViewProv.getBgImages),
+              image: AssetImage("assets/game_bg_jpeg/bg0.jpeg"),
               fit: BoxFit.cover,
             )),
-            height: context.mediaQuery.size.height,
-            width: context.mediaQuery.size.width,
             child: Center(
-              child: SingleChildScrollView(
+              child: Container(
                 child: SizedBox(
                   height: context.mediaQuery.size.height,
                   child: Column(
@@ -71,55 +71,76 @@ class LevelsView extends StatelessWidget {
     gameViewProv,
   ) {
     return FittedBox(
-      child: Wrap(children: [
-        gradientStarWidget(context, 20),
-        Text(
-          " 1 / 100 ",
-          style: TextStyle(fontSize: 20),
-        ),
-      ], alignment: WrapAlignment.spaceEvenly),
+      child: Column(
+        children: [
+          Wrap(
+            alignment: WrapAlignment.end,
+            crossAxisAlignment: WrapCrossAlignment.end,
+            spacing: context.dynamicH(0.4),
+            children: [
+              elevatedBtn(context, Icons.arrow_back_rounded),
+              SizedBox(),
+            ],
+          ),
+          Wrap(children: [
+            gradientStarWidget(
+              context,
+              context.dynamicW(0.01) * context.dynamicH(0.01),
+            ),
+            gradientText(
+              context,
+              " 1 / 100",
+              context.dynamicW(0.01) * context.dynamicH(0.01),
+              LinearGradient(
+                colors: [
+                  Colors.deepPurple,
+                  Color(0xff6dd5ed),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+            )
+          ], alignment: WrapAlignment.spaceEvenly),
+        ],
+      ),
     );
   }
 
-  FittedBox expandedCardWidget(
+  Expanded expandedCardWidget(
       BuildContext context, GameViewModel gameViewProv) {
-    return FittedBox(
+    return Expanded(
+      flex: 100,
       child: GridView.builder(
-        itemCount: 4,
+        itemCount: 40,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 4,
           crossAxisSpacing: context.dynamicW(0.02), //10px
-          mainAxisSpacing: context.dynamicH(0.014), //10px
+          mainAxisSpacing: context.dynamicH(0.01428), //10px
           childAspectRatio: 1 / 1,
         ),
         padding: EdgeInsets.all(//3*3 4px
             context.dynamicH(0.004) * context.dynamicW(0.006)),
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: () {},
-            child: TweenAnimationBuilder(
-              tween:
-                  Tween<double>(begin: 0, end: gameViewProv.getAngleArr(index)),
-              duration: const Duration(milliseconds: 650),
-              builder: (BuildContext context, double val, __) {
-                return Transform(
-                  transform: Matrix4.rotationY(val)..setEntry(3, 2, 0.01),
-                  alignment: Alignment.center,
-                  child: levelBoxContainer(context, gameViewProv, index),
-                );
-              },
-            ),
-          );
+              onTap: () {},
+              child: levelBox(
+                context,
+                gameViewProv,
+                index,
+              ));
         },
       ),
     );
   }
 
-  Container levelBoxContainer(
-      BuildContext context, GameViewModel gameViewProv, int index) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
+  FittedBox levelBox(BuildContext context, GameViewModel gameProv, int index) {
+    final cPadding =
+        EdgeInsets.all(context.dynamicH(0.0028) * context.dynamicW(0.004));
+    return FittedBox(
+      child: CustomColumnBox(
+        clickFunction: () {},
+        cPadding: cPadding,
+        bgGradient: LinearGradient(
           colors: [
             Colors.deepPurple,
             Color(0xff6dd5ed),
@@ -127,22 +148,52 @@ class LevelsView extends StatelessWidget {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black,
-            blurRadius: 10,
-            spreadRadius: 0.5,
-            offset: Offset(0, 1),
+        columnChild1: GradientWidget(
+          gradient: const SweepGradient(
+            colors: [
+              Colors.cyanAccent,
+              Colors.pinkAccent,
+              Colors.yellowAccent,
+              Colors.cyanAccent
+            ],
           ),
-        ],
-        shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(
-              context.dynamicH(0.005) * context.dynamicW(0.008)),
-          bottomRight: Radius.circular(
-              context.dynamicH(0.005) * context.dynamicW(0.008)),
+          widget: gradientText(
+            context,
+            "1",
+            context.dynamicW(0.01) * context.dynamicH(0.01),
+            LinearGradient(
+              colors: [
+                Colors.deepPurple,
+                Color(0xff6dd5ed),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+        ),
+        columnChild2: GradientWidget(
+          gradient: const SweepGradient(colors: [
+            Color(0xff4D5B5B),
+            Color(0xff5E6C6C),
+          ]),
+          widget: gradientThreeStarXd(
+            context,
+            context.dynamicW(0.01) * context.dynamicH(0.01),
+          ),
         ),
       ),
+    );
+  }
+
+  Wrap gradientThreeStarXd(BuildContext context, double starIconSize) {
+    return Wrap(
+      alignment: WrapAlignment.spaceEvenly,
+      spacing: context.dynamicW(0.004),
+      children: [
+        gradientStarWidget(context, starIconSize),
+        gradientStarWidget(context, starIconSize),
+        gradientStarWidget(context, starIconSize),
+      ],
     );
   }
 
@@ -168,6 +219,72 @@ class LevelsView extends StatelessWidget {
         Icons.star,
         size: starIconSize,
       ),
+    );
+  }
+
+  GradientWidget gradientText(
+      BuildContext context, String text, double fontSize, Gradient gradient) {
+    return GradientWidget(
+      gradient: gradient,
+      widget: RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          children: <TextSpan>[
+            TextSpan(
+              text: text,
+              style: GoogleFonts.bungeeSpice(),
+            ),
+          ],
+          style: TextStyle(fontSize: fontSize, letterSpacing: 1, shadows: [
+            BoxShadow(
+              color: Colors.white,
+              spreadRadius: 5,
+              offset: Offset(1, 1),
+            )
+          ]),
+        ),
+      ),
+    );
+  }
+
+  CustomBtn elevatedBtn(BuildContext context, IconData icon) {
+    return CustomBtn(
+      borderRadius: BorderRadius.circular(
+          context.dynamicH(0.01) * context.dynamicW(0.014)),
+      boxShadow: const [
+        BoxShadow(
+          color: Colors.transparent,
+          blurRadius: 10,
+          spreadRadius: 0.5,
+          offset: Offset(0, 8),
+        ),
+      ],
+      bgGradient: LinearGradient(
+        colors: [
+          Colors.deepPurpleAccent.withOpacity(0.5),
+          Colors.deepPurple.withOpacity(0.5),
+          Colors.deepPurpleAccent.withOpacity(0.5),
+          Colors.deepPurpleAccent.withOpacity(0.5),
+        ],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+      child: GradientWidget(
+        gradient: const SweepGradient(
+          colors: [
+            Colors.cyanAccent,
+            Colors.pinkAccent,
+            Colors.yellowAccent,
+            Colors.cyanAccent
+          ],
+          startAngle: 0.9,
+          endAngle: 6.0,
+          tileMode: TileMode.clamp,
+        ),
+        widget:
+            Icon(icon, size: context.dynamicH(0.01) * context.dynamicW(0.01)),
+      ),
+      onPressFunc: () {},
     );
   }
 }
