@@ -3,6 +3,7 @@ import 'package:flutter_memory_game/components/custom_app_bar.dart';
 import 'package:flutter_memory_game/components/custom_column_box.dart';
 import 'package:flutter_memory_game/components/custom_elevated_button.dart';
 import 'package:flutter_memory_game/components/gradient_widget.dart';
+import 'package:flutter_memory_game/core/constants/app_colors.dart';
 import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
 import 'package:flutter_memory_game/view_model/game_view_model.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -92,12 +93,7 @@ class LevelsView extends StatelessWidget {
               " 1 / 100",
               context.dynamicW(0.01) * context.dynamicH(0.01),
               LinearGradient(
-                colors: [
-                  Colors.deepPurple,
-                  Color(0xff6dd5ed),
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+                colors: AppColors.rainBowColors,
               ),
             )
           ], alignment: WrapAlignment.spaceEvenly),
@@ -150,16 +146,11 @@ class LevelsView extends StatelessWidget {
         ),
         columnChild1: GradientWidget(
           gradient: const SweepGradient(
-            colors: [
-              Colors.cyanAccent,
-              Colors.pinkAccent,
-              Colors.yellowAccent,
-              Colors.cyanAccent
-            ],
+            colors: AppColors.fakeRainbowColors,
           ),
           widget: gradientText(
             context,
-            "1",
+            (index + 1).toString(),
             context.dynamicW(0.01) * context.dynamicH(0.01),
             LinearGradient(
               colors: [
@@ -171,15 +162,9 @@ class LevelsView extends StatelessWidget {
             ),
           ),
         ),
-        columnChild2: GradientWidget(
-          gradient: const SweepGradient(colors: [
-            Color(0xff4D5B5B),
-            Color(0xff5E6C6C),
-          ]),
-          widget: gradientThreeStarXd(
-            context,
-            context.dynamicW(0.01) * context.dynamicH(0.01),
-          ),
+        columnChild2: gradientThreeStarXd(
+          context,
+          context.dynamicW(0.01) * context.dynamicH(0.01),
         ),
       ),
     );
@@ -202,15 +187,7 @@ class LevelsView extends StatelessWidget {
     return GradientWidget(
       // ignore: prefer_const_constructors
       gradient: const RadialGradient(
-        colors: [
-          Color(0xFF9400D3),
-          Color(0xFF4B0082),
-          Color(0xFF0000FF),
-          Color(0xFF00FF00),
-          Color(0xFFFFFF00),
-          Color(0xFFFF7F00),
-          Color(0xFFFF0000),
-        ],
+        colors: AppColors.rainBowColors,
         center: Alignment(0.0, 0.5),
         tileMode: TileMode.clamp,
       ),

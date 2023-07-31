@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/components/custom_elevated_button.dart';
 import 'package:flutter_memory_game/components/gradient_widget.dart';
+import 'package:flutter_memory_game/core/constants/app_colors.dart';
 import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -176,11 +177,14 @@ class CustomAlertDialog extends StatelessWidget {
         context.dynamicH(0.01) * context.dynamicW(0.014),
         LinearGradient(
           colors: [
-            Colors.deepPurple,
-            Color(0xff6dd5ed),
+            Color(0xFF9400D3),
+            Color(0xFF4B0082),
+            Color(0xFF0000FF),
+            Color(0xFF00FF00),
+            Color(0xFFFFFF00),
+            Color(0xFFFF7F00),
+            Color(0xFFFF0000),
           ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
         ),
       )),
     );
@@ -226,12 +230,7 @@ class CustomAlertDialog extends StatelessWidget {
               "WELL DONE",
               context.dynamicH(0.01) * context.dynamicW(0.014),
               LinearGradient(
-                colors: [
-                  Colors.deepPurple,
-                  Color(0xff6dd5ed),
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
+                colors: AppColors.rainBowColors,
               ),
             ),
           ]),
@@ -265,11 +264,9 @@ class CustomAlertDialog extends StatelessWidget {
               context.dynamicH(0.01) * context.dynamicW(0.014),
               LinearGradient(
                 colors: [
-                  Colors.deepPurple,
-                  Color(0xff6dd5ed),
+                  Color(0xff70e1f5),
+                  Color(0xffffd194),
                 ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
               ),
             ),
             gradientText(
@@ -278,8 +275,8 @@ class CustomAlertDialog extends StatelessWidget {
               context.dynamicH(0.01) * context.dynamicW(0.014),
               LinearGradient(
                 colors: [
-                  Colors.deepPurple,
-                  Color(0xff6dd5ed),
+                  Color(0xfff12711),
+                  Color(0xfff5af19),
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -340,10 +337,7 @@ class CustomAlertDialog extends StatelessWidget {
               " Moves: 300 ",
               context.dynamicH(0.007141) * context.dynamicW(0.01),
               LinearGradient(
-                colors: [
-                  Colors.deepPurple,
-                  Color(0xff6dd5ed),
-                ],
+                colors: AppColors.coolBlue,
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -353,10 +347,7 @@ class CustomAlertDialog extends StatelessWidget {
               "   TIMES: 117 ",
               context.dynamicH(0.00714) * context.dynamicW(0.01),
               LinearGradient(
-                colors: [
-                  Colors.deepPurple,
-                  Color(0xff6dd5ed),
-                ],
+                colors: AppColors.coolBlue,
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -366,10 +357,7 @@ class CustomAlertDialog extends StatelessWidget {
               " Bonus: 0 ",
               context.dynamicH(0.00714) * context.dynamicW(0.01),
               LinearGradient(
-                colors: [
-                  Colors.deepPurple,
-                  Color(0xff6dd5ed),
-                ],
+                colors: AppColors.coolBlue,
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -428,10 +416,7 @@ class CustomAlertDialog extends StatelessWidget {
             text,
             context.dynamicH(0.00714) * context.dynamicW(0.01),
             LinearGradient(
-              colors: [
-                Color(0xffE0EAFC),
-                Color(0xffCFDEF3),
-              ],
+              colors: AppColors.coolBlue,
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
