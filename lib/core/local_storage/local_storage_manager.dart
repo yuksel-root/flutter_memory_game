@@ -53,8 +53,11 @@ class LocalStorageManager {
   Future<void> setBoolList(String key, List<bool> value) =>
       _setList<bool>(key, value);
 
-  Future<String?> getString(String key) async =>
-      await _secureStorage.read(key: key);
+  Future<String?> getString(String key) async {
+    String? string = await _secureStorage.read(key: key);
+
+    return string;
+  }
 
   Future<bool?> getBool(String key) async {
     String? string = await _secureStorage.read(key: key);

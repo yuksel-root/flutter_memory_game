@@ -27,6 +27,7 @@ class GameViewModel extends ChangeNotifier {
   late bool _isMatchedCard;
   late int _tries;
   late int _score;
+  late String? _highscore;
   late int _peekCardsClickCount;
   late int _currentStage;
   late int _matchCount;
@@ -69,6 +70,7 @@ class GameViewModel extends ChangeNotifier {
     _matchCount = 0;
     _tries = 0;
     _score = 0;
+    _highscore = 'NULL';
     _peekCardsClickCount = 0;
     _currentStage = 0;
 
@@ -519,6 +521,20 @@ class GameViewModel extends ChangeNotifier {
   set isMatchedCard(bool isMatch) {
     _isMatchedCard = isMatch;
     notifyListeners();
+  }
+
+  set setHighScore(String newHighScore) {
+    print("dasldamsdkSDSADASDASDSADASDSADmadlka SETHG");
+    print(_highscore);
+    print("dasldamsdkmadlkFDFDSFSDFSDFSDFa SETHG");
+    _highscore = newHighScore;
+  }
+
+  String? get getHighScore {
+    print("JLMDLSAKDMSALDKSMFDFSDFSDFAD GETHG");
+    print(_highscore);
+    print("JLMDLSAKDMSALDKSMAD GETHG");
+    return _highscore;
   }
 
   void setFirstInit() {

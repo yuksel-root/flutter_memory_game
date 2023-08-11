@@ -5,6 +5,9 @@ import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_memory_game/core/notifier/provider_list.dart';
 import 'package:flutter_memory_game/view/game_view.dart';
+import 'package:flutter_memory_game/view/home_view.dart';
+import 'package:flutter_memory_game/view/levels_view.dart';
+
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
