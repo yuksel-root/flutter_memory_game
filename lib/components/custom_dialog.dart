@@ -4,7 +4,10 @@ import 'package:flutter_memory_game/components/custom_elevated_button.dart';
 import 'package:flutter_memory_game/components/gradient_widget.dart';
 import 'package:flutter_memory_game/core/constants/app_colors.dart';
 import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
+import 'package:flutter_memory_game/view/game_view.dart';
+import 'package:flutter_memory_game/view_model/game_view_model.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class CustomAlertDialog extends StatelessWidget {
   final String title;
@@ -27,6 +30,7 @@ class CustomAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenHeight = context.mediaQuery.size.height;
     final screenWidth = context.mediaQuery.size.width;
+    final gameViewProv = Provider.of<GameViewModel>(context);
 
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
@@ -35,18 +39,21 @@ class CustomAlertDialog extends StatelessWidget {
           height: screenHeight / 1.1,
           duration: const Duration(milliseconds: 500),
           curve: Curves.fastLinearToSlowEaseIn,
-          child: Dialog(
-            shape: RoundedRectangleBorder(
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
               borderRadius: BorderRadius.all(Radius.circular(
                   context.dynamicH(0.005) * context.dynamicW(0.008))),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 FittedBox(
                   child: containerTitleContentWidget(context, screenWidth),
                 ),
                 Expanded(
+                  flex: 40,
                   child: Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -75,6 +82,8 @@ class CustomAlertDialog extends StatelessWidget {
                       ),
                       width: screenWidth / 1.5,
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           const Spacer(flex: 1),
                           Expanded(
@@ -114,12 +123,14 @@ class CustomAlertDialog extends StatelessWidget {
                                   const Spacer(flex: 1),
                                   Expanded(
                                     flex: 10,
-                                    child: columnSecondContentWidget(context),
+                                    child: columnSecondContentWidget(
+                                        context, gameViewProv),
                                   ),
                                   const Spacer(flex: 1),
                                   Expanded(
                                     flex: 10,
-                                    child: columnThirdContentWidget(context),
+                                    child: columnThirdContentWidget(
+                                        context, gameViewProv),
                                   ),
                                   const Spacer(flex: 1),
                                 ],
@@ -228,7 +239,7 @@ class CustomAlertDialog extends StatelessWidget {
             gradientText(
               context,
               "WELL DONE",
-              context.dynamicH(0.01) * context.dynamicW(0.014),
+              context.dynamicH(0.01) * context.dynamicW(0.01),
               LinearGradient(
                 colors: AppColors.rainBowColors,
               ),
@@ -237,7 +248,8 @@ class CustomAlertDialog extends StatelessWidget {
     );
   }
 
-  Container columnThirdContentWidget(BuildContext context) {
+  Container columnThirdContentWidget(
+      BuildContext context, GameViewModel gameProv) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.green,
@@ -261,7 +273,7 @@ class CustomAlertDialog extends StatelessWidget {
             gradientText(
               context,
               "Score:",
-              context.dynamicH(0.01) * context.dynamicW(0.014),
+              context.dynamicH(0.01) * context.dynamicW(0.01),
               LinearGradient(
                 colors: [
                   Color(0xff70e1f5),
@@ -271,8 +283,8 @@ class CustomAlertDialog extends StatelessWidget {
             ),
             gradientText(
               context,
-              "500",
-              context.dynamicH(0.01) * context.dynamicW(0.014),
+              gameProv.getScore.toString(),
+              context.dynamicH(0.01) * context.dynamicW(0.01),
               LinearGradient(
                 colors: [
                   Color(0xfff12711),
@@ -311,7 +323,8 @@ class CustomAlertDialog extends StatelessWidget {
     );
   }
 
-  Container columnSecondContentWidget(BuildContext context) {
+  Container columnSecondContentWidget(
+      BuildContext context, GameViewModel gameProv) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.purple,
@@ -334,7 +347,7 @@ class CustomAlertDialog extends StatelessWidget {
           children: [
             gradientText(
               context,
-              " Moves: 300 ",
+              " Moves: ${gameProv.getTries}",
               context.dynamicH(0.007141) * context.dynamicW(0.01),
               LinearGradient(
                 colors: AppColors.coolBlue,
@@ -354,7 +367,7 @@ class CustomAlertDialog extends StatelessWidget {
             ),
             gradientText(
               context,
-              " Bonus: 0 ",
+              " HighScore: ${gameProv.getHighScore} ",
               context.dynamicH(0.00714) * context.dynamicW(0.01),
               LinearGradient(
                 colors: AppColors.coolBlue,

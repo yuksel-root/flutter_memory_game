@@ -22,7 +22,7 @@ class CustomColumnBox extends StatelessWidget {
     return Material(
       borderRadius: BorderRadius.all(Radius.circular(10)),
       elevation: 20,
-      color: Colors.grey,
+      color: Colors.black,
       child: InkWell(
         onTap: () => {
           clickFunction(),
@@ -57,14 +57,14 @@ class CustomColumnBox extends StatelessWidget {
                 boxShadow: const [
                   BoxShadow(
                     color: Color(0xff799BA7),
-                    offset: Offset(20.0, 20.0),
-                    blurRadius: 30,
+                    offset: Offset(10.0, 10.0),
+                    blurRadius: 15,
                     spreadRadius: 0.0,
                   ),
                   BoxShadow(
                     color: Color(0xff769AB0),
-                    offset: Offset(-20.0, -20.0),
-                    blurRadius: 30,
+                    offset: Offset(-10.0, -10.0),
+                    blurRadius: 15,
                     spreadRadius: 0.0,
                   ),
                 ],
