@@ -5,8 +5,6 @@ import 'package:flutter_memory_game/core/constants/game_img_constants.dart';
 import 'package:flutter_memory_game/core/constants/navigation_constants.dart';
 import 'package:flutter_memory_game/core/local_storage/local_storage_manager.dart';
 import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
-import 'package:flutter_memory_game/core/notifier/time_state.dart';
-import 'package:provider/provider.dart';
 
 //-- GameState Variables -- //
 enum GameState {
@@ -27,7 +25,8 @@ class GameViewModel extends ChangeNotifier {
   late bool _isMatchedCard;
   late int _tries;
   late int _score;
-  late String? _highscore;
+  late int _highscore;
+  late int _timeInfo;
   late int _peekCardsClickCount;
   late int _currentStage;
   late int _matchCount;
@@ -70,7 +69,8 @@ class GameViewModel extends ChangeNotifier {
     _matchCount = 0;
     _tries = 0;
     _score = 0;
-    _highscore = 'NULL';
+    _highscore = 50;
+    _timeInfo = 0;
     _peekCardsClickCount = 0;
     _currentStage = 0;
 
@@ -523,18 +523,20 @@ class GameViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  set setHighScore(String newHighScore) {
-    print("dasldamsdkSDSADASDASDSADASDSADmadlka SETHG");
-    print(_highscore);
-    print("dasldamsdkmadlkFDFDSFSDFSDFSDFa SETHG");
+  set setHighScore(int newHighScore) {
     _highscore = newHighScore;
   }
 
-  String? get getHighScore {
-    print("JLMDLSAKDMSALDKSMFDFSDFSDFAD GETHG");
-    print(_highscore);
-    print("JLMDLSAKDMSALDKSMAD GETHG");
+  int get getHighScore {
     return _highscore;
+  }
+
+  set setTimeInfo(int newTime) {
+    _timeInfo = newTime;
+  }
+
+  int get getTimeInfo {
+    return _timeInfo;
   }
 
   void setFirstInit() {
