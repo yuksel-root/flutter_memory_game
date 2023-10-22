@@ -4,7 +4,6 @@ import 'package:flutter_memory_game/components/custom_elevated_button.dart';
 import 'package:flutter_memory_game/components/gradient_widget.dart';
 import 'package:flutter_memory_game/core/constants/app_colors.dart';
 import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
-import 'package:flutter_memory_game/view/game_view.dart';
 import 'package:flutter_memory_game/view_model/game_view_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -53,14 +52,11 @@ class CustomAlertDialog extends StatelessWidget {
                   child: containerTitleContentWidget(context, screenWidth),
                 ),
                 Expanded(
-                  flex: 40,
+                  flex: 100,
                   child: Container(
                       decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Colors.deepPurple,
-                            Color(0xff6dd5ed),
-                          ],
+                        gradient: const LinearGradient(
+                          colors: AppColors.deepPurpleColors,
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
                         ),
@@ -90,11 +86,8 @@ class CustomAlertDialog extends StatelessWidget {
                             flex: 20,
                             child: Container(
                               decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Colors.deepPurple,
-                                    Color(0xff6dd5ed),
-                                  ],
+                                gradient: const LinearGradient(
+                                  colors: AppColors.deepPurpleColors,
                                   begin: Alignment.bottomCenter,
                                   end: Alignment.topCenter,
                                 ),
@@ -139,7 +132,7 @@ class CustomAlertDialog extends StatelessWidget {
                           ),
                           const Spacer(flex: 1),
                           Expanded(
-                            flex: 7,
+                            flex: 5,
                             child: rowButtonsThirdContentWidget(context),
                           ),
                         ],
@@ -166,11 +159,8 @@ class CustomAlertDialog extends StatelessWidget {
             offset: Offset(0, 10),
           ),
         ],
-        gradient: LinearGradient(
-          colors: [
-            Colors.deepPurple,
-            Color(0xff6dd5ed),
-          ],
+        gradient: const LinearGradient(
+          colors: AppColors.deepPurpleColors,
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -186,16 +176,8 @@ class CustomAlertDialog extends StatelessWidget {
         context,
         "STAGE 1",
         context.dynamicH(0.01) * context.dynamicW(0.014),
-        LinearGradient(
-          colors: [
-            Color(0xFF9400D3),
-            Color(0xFF4B0082),
-            Color(0xFF0000FF),
-            Color(0xFF00FF00),
-            Color(0xFFFFFF00),
-            Color(0xFFFF7F00),
-            Color(0xFFFF0000),
-          ],
+        const LinearGradient(
+          colors: AppColors.rainBowColors,
         ),
       )),
     );
@@ -234,13 +216,13 @@ class CustomAlertDialog extends StatelessWidget {
           children: [
             gradientThreeStarXd(
               context,
-              context.dynamicH(0.0114) * context.dynamicW(0.016),
+              context.dynamicH(0.0114) * context.dynamicW(0.01),
             ),
             gradientText(
               context,
               "WELL DONE",
-              context.dynamicH(0.01) * context.dynamicW(0.01),
-              LinearGradient(
+              context.dynamicH(0.008) * context.dynamicW(0.01),
+              const LinearGradient(
                 colors: AppColors.rainBowColors,
               ),
             ),
@@ -274,24 +256,19 @@ class CustomAlertDialog extends StatelessWidget {
               context,
               "Score:",
               context.dynamicH(0.01) * context.dynamicW(0.01),
-              LinearGradient(
-                colors: [
-                  Color(0xff70e1f5),
-                  Color(0xffffd194),
-                ],
+              const LinearGradient(
+                colors: AppColors.fakeRainbowColors,
               ),
             ),
             gradientText(
               context,
               gameProv.getScore.toString(),
               context.dynamicH(0.01) * context.dynamicW(0.01),
-              LinearGradient(
+              const SweepGradient(
                 colors: [
-                  Color(0xfff12711),
-                  Color(0xfff5af19),
+                  Colors.pinkAccent,
+                  Colors.pinkAccent,
                 ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
               ),
             ),
           ]),
@@ -311,7 +288,8 @@ class CustomAlertDialog extends StatelessWidget {
               style: GoogleFonts.bungeeSpice(),
             ),
           ],
-          style: TextStyle(fontSize: fontSize, letterSpacing: 1, shadows: [
+          style:
+              TextStyle(fontSize: fontSize, letterSpacing: 1, shadows: const [
             BoxShadow(
               color: Colors.white,
               spreadRadius: 5,
@@ -345,37 +323,37 @@ class CustomAlertDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            gradientText(
-              context,
-              " Moves: ${gameProv.getTries}",
-              context.dynamicH(0.007141) * context.dynamicW(0.01),
-              LinearGradient(
-                colors: AppColors.coolBlue,
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-            gradientText(
-              context,
-              "   TIMES: 117 ",
-              context.dynamicH(0.00714) * context.dynamicW(0.01),
-              LinearGradient(
-                colors: AppColors.coolBlue,
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
-            gradientText(
-              context,
-              " HighScore: ${gameProv.getHighScore} ",
-              context.dynamicH(0.00714) * context.dynamicW(0.01),
-              LinearGradient(
-                colors: AppColors.coolBlue,
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
+            customInfoTexts(context, gameProv, "moves:", gameProv.getTries),
+            customInfoTexts(context, gameProv, "times:", gameProv.getHighScore),
+            customInfoTexts(
+                context, gameProv, "highscore:", gameProv.getHighScore),
           ]),
+    );
+  }
+
+  Row customInfoTexts(BuildContext context, GameViewModel gameProv,
+      String titleText, Object infoText) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        gradientText(
+            context,
+            " $titleText ",
+            context.dynamicH(0.007141) * context.dynamicW(0.01),
+            const LinearGradient(
+              colors: AppColors.fakeRainbowColors,
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            )),
+        gradientText(
+            context,
+            " $infoText",
+            context.dynamicH(0.007141) * context.dynamicW(0.01),
+            const SweepGradient(
+              colors: AppColors.coolBlue,
+            )),
+      ],
     );
   }
 
@@ -389,7 +367,7 @@ class CustomAlertDialog extends StatelessWidget {
           color: Colors.deepPurpleAccent.withOpacity(0.5),
           blurRadius: 10,
           spreadRadius: 0.5,
-          offset: Offset(0, 4),
+          offset: const Offset(0, 4),
         ),
       ],
       bgGradient: LinearGradient(
@@ -406,15 +384,7 @@ class CustomAlertDialog extends StatelessWidget {
         children: [
           GradientWidget(
             gradient: const SweepGradient(
-              colors: [
-                Color(0xFF9400D3),
-                Color(0xFF4B0082),
-                Color(0xFF0000FF),
-                Color(0xFF00FF00),
-                Color(0xFFFFFF00),
-                Color(0xFFFF7F00),
-                Color(0xFFFF0000),
-              ],
+              colors: AppColors.rainBowColors,
               startAngle: 0.9,
               endAngle: 6.0,
               tileMode: TileMode.clamp,
@@ -428,7 +398,7 @@ class CustomAlertDialog extends StatelessWidget {
             context,
             text,
             context.dynamicH(0.00714) * context.dynamicW(0.01),
-            LinearGradient(
+            const LinearGradient(
               colors: AppColors.coolBlue,
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
@@ -456,15 +426,7 @@ class CustomAlertDialog extends StatelessWidget {
     return GradientWidget(
       // ignore: prefer_const_constructors
       gradient: const RadialGradient(
-        colors: [
-          Color(0xFF9400D3),
-          Color(0xFF4B0082),
-          Color(0xFF0000FF),
-          Color(0xFF00FF00),
-          Color(0xFFFFFF00),
-          Color(0xFFFF7F00),
-          Color(0xFFFF0000),
-        ],
+        colors: AppColors.rainBowColors,
         center: Alignment(0.0, 0.5),
         tileMode: TileMode.clamp,
       ),
