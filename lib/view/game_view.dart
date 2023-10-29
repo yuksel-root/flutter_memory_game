@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/components/custom_app_bar.dart';
 import 'package:flutter_memory_game/components/custom_countdown_bar.dart';
+import 'package:flutter_memory_game/components/custom_dialog.dart';
 import 'package:flutter_memory_game/components/gradient_widget.dart';
 import 'package:flutter_memory_game/components/score_board.dart';
 import 'package:flutter_memory_game/core/constants/game_img_constants.dart';
 import 'package:flutter_memory_game/core/constants/navigation_constants.dart';
 import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
-import 'package:flutter_memory_game/core/notifier/time_state.dart';
+import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
+import 'package:flutter_memory_game/core/notifier/timeState_provider.dart';
 import 'package:flutter_memory_game/view_model/game_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -20,9 +22,12 @@ class GameView extends StatefulWidget {
 
 class _GameViewState extends State<GameView> {
   bool init = false;
+  late NavigationService _navigation;
   @override
   void initState() {
-    Provider.of<GameViewModel>(context, listen: false).initGame();
+    _navigation = NavigationService.instance;
+    Provider.of<GameViewModel>(context, listen: false).initGame(context);
+
     Future.microtask(() async {
       await Future.delayed(const Duration(milliseconds: 200)).then((value) {
         Provider.of<GameViewModel>(context, listen: false).setOpacity = 1;
@@ -35,11 +40,13 @@ class _GameViewState extends State<GameView> {
   @override
   Widget build(BuildContext context) {
     final timeProv = Provider.of<TimeState>(context, listen: false);
+    final gameViewProv = Provider.of<GameViewModel>(context);
+
     if (init == false) {
       timeProv.initTime(context);
+
       init = true;
     }
-    final gameViewProv = Provider.of<GameViewModel>(context);
 
     return scaffoldWidget(context, gameViewProv, timeProv);
   }
@@ -130,10 +137,19 @@ class _GameViewState extends State<GameView> {
                 children: [
                   Center(
                     child: Consumer<TimeState>(
-                      builder: ((context, timeState, _) => CustomCountDownBar(
-                            width: context.dynamicW(0.9),
-                            value: timeState.getTime,
-                            totalValue: context.dynamicW(0.9),
+                      builder: ((context, timeState, _) => FutureBuilder(
+                            future: Future.delayed(
+                                Duration.zero,
+                                () => timeProv.getIsActiveTimer == true
+                                    ? () {}
+                                    : GameViewModel().nextStageAlert(context)),
+                            builder: (context, snapshot) {
+                              return CustomCountDownBar(
+                                width: context.dynamicW(0.9),
+                                value: timeState.getTime,
+                                totalValue: context.dynamicW(0.9),
+                              );
+                            },
                           )),
                     ),
                   ),
@@ -206,7 +222,7 @@ class _GameViewState extends State<GameView> {
       ),
       onPressed: () {
         gameProv.restartGame();
-        timeProv.setDefaultTime(context.dynamicW(0.8));
+        timeProv.setTime = context.dynamicW(0.9);
       },
       child: Container(
         decoration: BoxDecoration(

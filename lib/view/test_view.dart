@@ -22,8 +22,9 @@ class TestView extends StatelessWidget {
                 builder: (BuildContext context) {
                   return CustomAlertDialog(
                     content: "",
-                    continueButtonText: "",
-                    continueFunction: () {},
+                    menuButtonFunction: () {},
+                    retryButtonFunction: () {},
+                    nextButtonFunction: () {},
                     title: "",
                     score: 0,
                     tries: 0,

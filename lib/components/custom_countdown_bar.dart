@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_memory_game/components/gradient_widget.dart';
 import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
 
 class CustomCountDownBar extends StatelessWidget {
   final double? width;
   final double value;
   final double totalValue;
-  const CustomCountDownBar(
-      {Key? key, this.width, required this.value, required this.totalValue})
-      : super(key: key);
+
+  const CustomCountDownBar({
+    Key? key,
+    this.width,
+    required this.value,
+    required this.totalValue,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    //print({"w: ": width});
+    //print({"V: ": value});
+    //print({"ratio": ratio});
+
     CustomCountDownBar(totalValue: totalValue, value: value, width: width);
     double ratio = value / totalValue;
-    print({"w: ": width});
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -39,7 +46,7 @@ class CustomCountDownBar extends StatelessWidget {
                 child: AnimatedContainer(
                   height: 10,
                   width: width! * ratio,
-                  duration: Duration(milliseconds: 500),
+                  duration: Duration(milliseconds: 1000),
                   decoration: BoxDecoration(
                     color: (ratio < 0.3)
                         ? Colors.red

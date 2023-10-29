@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/components/custom_elevated_button.dart';
 import 'package:flutter_memory_game/components/gradient_widget.dart';
 import 'package:flutter_memory_game/core/constants/app_colors.dart';
+import 'package:flutter_memory_game/core/constants/navigation_constants.dart';
 import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
 import 'package:flutter_memory_game/view_model/game_view_model.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,17 +14,19 @@ class CustomAlertDialog extends StatelessWidget {
   final String content;
   final int score;
   final int? tries;
-  final Function continueFunction;
-  final String continueButtonText;
-  const CustomAlertDialog(
-      {Key? key,
-      required this.title,
-      required this.content,
-      required this.score,
-      required this.tries,
-      required this.continueFunction,
-      required this.continueButtonText})
-      : super(key: key);
+  final Function menuButtonFunction;
+  final Function retryButtonFunction;
+  final Function nextButtonFunction;
+  const CustomAlertDialog({
+    Key? key,
+    required this.title,
+    required this.content,
+    required this.score,
+    required this.tries,
+    required this.menuButtonFunction,
+    required this.retryButtonFunction,
+    required this.nextButtonFunction,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +177,7 @@ class CustomAlertDialog extends StatelessWidget {
       child: Center(
           child: gradientText(
         context,
-        "STAGE 1",
+        title,
         context.dynamicH(0.01) * context.dynamicW(0.014),
         const LinearGradient(
           colors: AppColors.rainBowColors,
@@ -220,7 +223,7 @@ class CustomAlertDialog extends StatelessWidget {
             ),
             gradientText(
               context,
-              "WELL DONE",
+              content,
               context.dynamicH(0.008) * context.dynamicW(0.01),
               const LinearGradient(
                 colors: AppColors.rainBowColors,
@@ -379,7 +382,15 @@ class CustomAlertDialog extends StatelessWidget {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
       ),
-      onPressFunc: () {},
+      onPressFunc: () {
+        if (text == "MENU") {
+          menuButtonFunction();
+        } else if (text == "NEXT") {
+          nextButtonFunction();
+        } else {
+          retryButtonFunction();
+        }
+      },
       child: Column(
         children: [
           GradientWidget(

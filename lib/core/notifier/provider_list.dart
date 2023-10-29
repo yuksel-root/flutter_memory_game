@@ -1,5 +1,5 @@
 import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
-import 'package:flutter_memory_game/core/notifier/time_state.dart';
+import 'package:flutter_memory_game/core/notifier/timeState_provider.dart';
 import 'package:flutter_memory_game/view_model/game_view_model.dart';
 import 'package:flutter_memory_game/view_model/home_view_model.dart';
 import 'package:provider/single_child_widget.dart';

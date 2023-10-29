@@ -7,6 +7,7 @@ import 'package:flutter_memory_game/core/notifier/provider_list.dart';
 import 'package:flutter_memory_game/view/game_view.dart';
 import 'package:flutter_memory_game/view/home_view.dart';
 import 'package:flutter_memory_game/view/levels_view.dart';
+import 'package:flutter_memory_game/view/splash_view.dart';
 
 import 'package:provider/provider.dart';
 

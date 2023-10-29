@@ -1,10 +1,13 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/components/alert_dialog.dart';
+import 'package:flutter_memory_game/components/custom_dialog.dart';
 import 'package:flutter_memory_game/core/constants/game_img_constants.dart';
 import 'package:flutter_memory_game/core/constants/navigation_constants.dart';
 import 'package:flutter_memory_game/core/local_storage/local_storage_manager.dart';
 import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
+import 'package:flutter_memory_game/core/notifier/timeState_provider.dart';
+import 'package:provider/provider.dart';
 
 //-- GameState Variables -- //
 enum GameState {
@@ -21,8 +24,9 @@ class GameViewModel extends ChangeNotifier {
 
 // -- Game Logic Variables - //
   bool isFirstInit = true;
-  late bool _isFinished;
+  late bool _isFinishedCard;
   late bool _isMatchedCard;
+
   late int _tries;
   late int _score;
   late int _highscore;
@@ -63,8 +67,9 @@ class GameViewModel extends ChangeNotifier {
 
     _state = GameState.empty;
 
-    _isFinished = false;
+    _isFinishedCard = false;
     _isMatchedCard = false;
+
     _randomCardCount = 0;
     _matchCount = 0;
     _tries = 0;
@@ -168,7 +173,7 @@ class GameViewModel extends ChangeNotifier {
     _cardList!.clear();
   }
 
-  void initGame() {
+  void initGame(BuildContext context) {
     arrayClears();
 
     generateRandomImgList();
@@ -233,11 +238,11 @@ class GameViewModel extends ChangeNotifier {
     }
   }
 
-  void gameIsFinish() {
+  void allCardIsFinish() {
     if ((_cardList!.length / 2) == _matchCount) {
-      setIsFinish = true;
+      setIsFinishCard = true;
     } else {
-      setIsFinish = false;
+      setIsFinishCard = false;
     }
     notifyListeners();
   }
@@ -275,11 +280,11 @@ class GameViewModel extends ChangeNotifier {
       return;
     }
 
-    gameIsFinish();
+    allCardIsFinish();
 
-    if (getFinish) {
+    if (getFinishCard) {
       Future.delayed(const Duration(milliseconds: 2500), () {
-        nextStageAlert(context, getStage);
+        nextStageAlert(context);
       });
       notifyListeners();
     } else {
@@ -426,18 +431,29 @@ class GameViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void nextStageAlert(BuildContext context, int currentStage) {
-    GameAlertView alert = GameAlertView(
-      score: _score,
-      tries: _tries,
-      content: "You are inceridble..",
-      title: "STAGE  $currentStage",
-      continueButtonText: "NEXT",
-      continueFunction: () {
+  void nextStageAlert(BuildContext context) {
+    CustomAlertDialog alert = CustomAlertDialog(
+      score: 0,
+      tries: 0,
+      content: "WELL DONE",
+      title: "STAGE 5",
+      menuButtonFunction: () {
+        print("MENU BUTTON PRESSED");
+        Provider.of<TimeState>(context, listen: false).setIsActiveTimer = true;
+        _navigation
+            .navigateToPageClear(path: NavigationConstants.homeView, data: []);
+      },
+      retryButtonFunction: () {
+        print("RETRY BUTTON PRESSED");
+        Provider.of<TimeState>(context, listen: false).setIsActiveTimer = true;
         _navigation
             .navigateToPageClear(path: NavigationConstants.gameView, data: []);
-        nextStage();
-        notifyListeners();
+      },
+      nextButtonFunction: () {
+        print("NEXT BUTTON PRESSED");
+        Provider.of<TimeState>(context, listen: false).setIsActiveTimer = true;
+        _navigation
+            .navigateToPageClear(path: NavigationConstants.gameView, data: []);
       },
     );
     showDialog(
@@ -499,8 +515,8 @@ class GameViewModel extends ChangeNotifier {
     _state = state;
   }
 
-  set setIsFinish(bool finish) {
-    _isFinished = finish;
+  set setIsFinishCard(bool finishCard) {
+    _isFinishedCard = finishCard;
     notifyListeners();
   }
 
@@ -563,7 +579,7 @@ class GameViewModel extends ChangeNotifier {
 
   List<String> get _getBgList => _bgList!;
   GameState get state => _state!;
-  bool get getFinish => _isFinished;
+  bool get getFinishCard => _isFinishedCard;
   int get getPeekCardCount => _peekCardsClickCount;
   int get getScore => _score;
   int get getTries => _tries;
