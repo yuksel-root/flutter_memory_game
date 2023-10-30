@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/components/custom_app_bar.dart';
 import 'package:flutter_memory_game/components/custom_countdown_bar.dart';
@@ -146,7 +146,7 @@ class _GameViewState extends State<GameView> {
                             builder: (context, snapshot) {
                               return CustomCountDownBar(
                                 width: context.dynamicW(0.9),
-                                value: timeState.getTime,
+                                value: timeState.getTime.abs(),
                                 totalValue: context.dynamicW(0.9),
                               );
                             },
@@ -221,8 +221,7 @@ class _GameViewState extends State<GameView> {
         ),
       ),
       onPressed: () {
-        gameProv.restartGame();
-        timeProv.setTime = context.dynamicW(0.9);
+        gameProv.restartGame(context);
       },
       child: Container(
         decoration: BoxDecoration(

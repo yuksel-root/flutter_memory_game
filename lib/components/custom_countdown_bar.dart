@@ -46,7 +46,7 @@ class CustomCountDownBar extends StatelessWidget {
                 child: AnimatedContainer(
                   height: 10,
                   width: width! * ratio,
-                  duration: Duration(milliseconds: 1000),
+                  duration: Duration(milliseconds: 1200),
                   decoration: BoxDecoration(
                     color: (ratio < 0.3)
                         ? Colors.red

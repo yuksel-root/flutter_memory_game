@@ -4,7 +4,9 @@ import 'package:flutter_memory_game/components/custom_column_box.dart';
 import 'package:flutter_memory_game/components/custom_elevated_button.dart';
 import 'package:flutter_memory_game/components/gradient_widget.dart';
 import 'package:flutter_memory_game/core/constants/app_colors.dart';
+import 'package:flutter_memory_game/core/constants/navigation_constants.dart';
 import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
+import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
 import 'package:flutter_memory_game/view_model/game_view_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -14,14 +16,14 @@ class LevelsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final NavigationService _navigation;
+    _navigation = NavigationService.instance;
     final gameViewProv = Provider.of<GameViewModel>(context);
-    return scaffoldWidget(context, gameViewProv);
+    return scaffoldWidget(context, gameViewProv, _navigation);
   }
 
-  Scaffold scaffoldWidget(
-    BuildContext context,
-    GameViewModel gameViewProv,
-  ) {
+  Scaffold scaffoldWidget(BuildContext context, GameViewModel gameViewProv,
+      NavigationService _navigation) {
     return Scaffold(
         backgroundColor: Colors.transparent,
         appBar: CustomAppBar(
@@ -29,6 +31,7 @@ class LevelsView extends StatelessWidget {
           appBar: gameAppBarWidget(
             context,
             gameViewProv,
+            _navigation,
           ),
         ),
         body: AnimatedOpacity(
@@ -50,7 +53,7 @@ class LevelsView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Spacer(flex: 1),
-                      expandedCardWidget(context, gameViewProv),
+                      expandedCardWidget(context, gameViewProv, _navigation),
                       const Spacer(flex: 1),
                     ],
                   ),
@@ -61,15 +64,17 @@ class LevelsView extends StatelessWidget {
         ));
   }
 
-  AppBar gameAppBarWidget(BuildContext context, GameViewModel gameViewProv) {
+  AppBar gameAppBarWidget(BuildContext context, GameViewModel gameViewProv,
+      NavigationService _navigation) {
     return AppBar(
-      flexibleSpace: flexibleAppBarWidgets(context, gameViewProv),
+      flexibleSpace: flexibleAppBarWidgets(context, gameViewProv, _navigation),
     );
   }
 
   FittedBox flexibleAppBarWidgets(
     BuildContext context,
-    gameViewProv,
+    GameViewModel gameProv,
+    NavigationService _navigation,
   ) {
     return FittedBox(
       child: Column(
@@ -79,7 +84,8 @@ class LevelsView extends StatelessWidget {
             crossAxisAlignment: WrapCrossAlignment.end,
             spacing: context.dynamicH(0.4),
             children: [
-              elevatedBtn(context, Icons.arrow_back_rounded),
+              elevatedBtn(
+                  context, Icons.arrow_back_rounded, gameProv, _navigation),
               SizedBox(),
             ],
           ),
@@ -102,8 +108,8 @@ class LevelsView extends StatelessWidget {
     );
   }
 
-  Expanded expandedCardWidget(
-      BuildContext context, GameViewModel gameViewProv) {
+  Expanded expandedCardWidget(BuildContext context, GameViewModel gameViewProv,
+      NavigationService navigation) {
     return Expanded(
       flex: 100,
       child: GridView.builder(
@@ -123,18 +129,23 @@ class LevelsView extends StatelessWidget {
                 context,
                 gameViewProv,
                 index,
+                navigation,
               ));
         },
       ),
     );
   }
 
-  FittedBox levelBox(BuildContext context, GameViewModel gameProv, int index) {
+  FittedBox levelBox(BuildContext context, GameViewModel gameProv, int index,
+      NavigationService navigation) {
     final cPadding =
         EdgeInsets.all(context.dynamicH(0.0028) * context.dynamicW(0.004));
     return FittedBox(
       child: CustomColumnBox(
-        clickFunction: () {},
+        clickFunction: () {
+          navigation.navigateToPageClear(
+              path: NavigationConstants.gameView, data: []);
+        },
         cPadding: cPadding,
         bgGradient: LinearGradient(
           colors: [
@@ -224,7 +235,8 @@ class LevelsView extends StatelessWidget {
     );
   }
 
-  CustomBtn elevatedBtn(BuildContext context, IconData icon) {
+  CustomBtn elevatedBtn(BuildContext context, IconData icon,
+      GameViewModel gameProv, NavigationService _navigation) {
     return CustomBtn(
       borderRadius: BorderRadius.circular(
           context.dynamicH(0.01) * context.dynamicW(0.014)),
@@ -261,7 +273,10 @@ class LevelsView extends StatelessWidget {
         widget:
             Icon(icon, size: context.dynamicH(0.01) * context.dynamicW(0.01)),
       ),
-      onPressFunc: () {},
+      onPressFunc: () {
+        _navigation
+            .navigateToPageClear(path: NavigationConstants.homeView, data: []);
+      },
     );
   }
 }

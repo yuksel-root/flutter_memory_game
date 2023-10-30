@@ -385,7 +385,7 @@ class GameViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void restartGame() {
+  void restartGame(BuildContext context) {
     try {
       _matchCheck!.clear();
       gameCard!.clear();
@@ -410,6 +410,7 @@ class GameViewModel extends ChangeNotifier {
     } catch (e) {
       print({"res game error": e});
     }
+    Provider.of<TimeState>(context, listen: false).setIsActiveTimer = true;
     navigateToPageClear(NavigationConstants.gameView);
     setOpacity = 0;
     notifyListeners();
@@ -439,25 +440,19 @@ class GameViewModel extends ChangeNotifier {
       title: "STAGE 5",
       menuButtonFunction: () {
         print("MENU BUTTON PRESSED");
-        Provider.of<TimeState>(context, listen: false).setIsActiveTimer = true;
-        _navigation
-            .navigateToPageClear(path: NavigationConstants.homeView, data: []);
       },
       retryButtonFunction: () {
         print("RETRY BUTTON PRESSED");
-        Provider.of<TimeState>(context, listen: false).setIsActiveTimer = true;
-        _navigation
-            .navigateToPageClear(path: NavigationConstants.gameView, data: []);
+        restartGame(context);
       },
       nextButtonFunction: () {
         print("NEXT BUTTON PRESSED");
-        Provider.of<TimeState>(context, listen: false).setIsActiveTimer = true;
-        _navigation
-            .navigateToPageClear(path: NavigationConstants.gameView, data: []);
+        restartGame(context);
       },
     );
     showDialog(
       barrierDismissible: false,
+      barrierColor: Color(0xFF00FFFFFF),
       context: context,
       builder: (BuildContext context) {
         return alert;

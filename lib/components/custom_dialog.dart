@@ -65,7 +65,7 @@ class CustomAlertDialog extends StatelessWidget {
                         ),
                         boxShadow: const [
                           BoxShadow(
-                            color: Colors.black,
+                            color: Colors.yellow,
                             blurRadius: 10,
                             spreadRadius: 0.5,
                             offset: Offset(0, 1),
@@ -210,7 +210,7 @@ class CustomAlertDialog extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(
-          context.dynamicH(0.005) * context.dynamicW(0.008),
+          context.dynamicH(0.01) * context.dynamicW(0.01),
         ),
       ),
       child: Column(
@@ -219,12 +219,12 @@ class CustomAlertDialog extends StatelessWidget {
           children: [
             gradientThreeStarXd(
               context,
-              context.dynamicH(0.0114) * context.dynamicW(0.01),
+              context.dynamicH(0.01) * context.dynamicW(0.01),
             ),
             gradientText(
               context,
               content,
-              context.dynamicH(0.008) * context.dynamicW(0.01),
+              context.dynamicH(0.01) * context.dynamicW(0.01),
               const LinearGradient(
                 colors: AppColors.rainBowColors,
               ),
