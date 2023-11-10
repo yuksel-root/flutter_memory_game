@@ -1,12 +1,12 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter_memory_game/components/alert_dialog.dart';
-import 'package:flutter_memory_game/components/custom_dialog.dart';
+import 'package:flutter_memory_game/view/new_game_alert.dart';
 import 'package:flutter_memory_game/core/constants/game_img_constants.dart';
 import 'package:flutter_memory_game/core/constants/navigation_constants.dart';
 import 'package:flutter_memory_game/core/local_storage/local_storage_manager.dart';
 import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
 import 'package:flutter_memory_game/core/notifier/timeState_provider.dart';
+import 'package:flutter_memory_game/view/pause_button_menu_dialog.dart';
 import 'package:provider/provider.dart';
 
 //-- GameState Variables -- //
@@ -174,15 +174,23 @@ class GameViewModel extends ChangeNotifier {
   }
 
   void initGame(BuildContext context) {
-    arrayClears();
+    setFirstInit();
+    if (Provider.of<TimeState>(
+          context,
+          listen: false,
+        ).getIsPaused ==
+        true) {
+    } else {
+      arrayClears();
 
-    generateRandomImgList();
+      generateRandomImgList();
 
-    loadBgList();
+      loadBgList();
 
-    loadGameCardList();
+      loadGameCardList();
 
-    generateDefaultLists();
+      generateDefaultLists();
+    }
   }
 
   void generateRandomImgList() {
@@ -386,18 +394,9 @@ class GameViewModel extends ChangeNotifier {
   }
 
   void restartGame(BuildContext context) {
+    setFirstInit();
     try {
-      _matchCheck!.clear();
-      gameCard!.clear();
-      _cardList!.clear();
-      _randomImgList!.clear();
-
-      gameBgImageList!.clear();
-      _randomBgList!.clear();
-      _bgList!.clear();
-
-      _matchCount = 0;
-      _currentStage = 0;
+      arrayClears();
 
       if (_bgCounter < 10) {
         setBgCounter();
@@ -410,8 +409,18 @@ class GameViewModel extends ChangeNotifier {
     } catch (e) {
       print({"res game error": e});
     }
-    Provider.of<TimeState>(context, listen: false).setIsActiveTimer = true;
+
+    Provider.of<TimeState>(
+      context,
+      listen: false,
+    ).stopTimer(context, reset: true);
+
+    Provider.of<TimeState>(
+      context,
+      listen: false,
+    ).setIsActiveTimer = true;
     navigateToPageClear(NavigationConstants.gameView);
+
     setOpacity = 0;
     notifyListeners();
   }
@@ -432,8 +441,8 @@ class GameViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void nextStageAlert(BuildContext context) {
-    CustomAlertDialog alert = CustomAlertDialog(
+  Future<void> nextStageAlert(BuildContext context) async {
+    NewGameAlertDialog alert = NewGameAlertDialog(
       score: 0,
       tries: 0,
       content: "WELL DONE",
@@ -450,7 +459,7 @@ class GameViewModel extends ChangeNotifier {
         restartGame(context);
       },
     );
-    showDialog(
+    showDialog<void>(
       barrierDismissible: false,
       barrierColor: Color(0xFF00FFFFFF),
       context: context,
@@ -461,9 +470,42 @@ class GameViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> pauseGameAlert(BuildContext context) async {
+    PauseButtonMenuDialog alert = PauseButtonMenuDialog(
+      continueBtnFunction: () {
+        _navigation
+            .navigateToPageClear(path: NavigationConstants.gameView, data: []);
+
+        Provider.of<TimeState>(
+          context,
+          listen: false,
+        ).setIsPaused = true;
+
+        Provider.of<TimeState>(
+          context,
+          listen: false,
+        ).setIsActiveTimer = true;
+      },
+      soundBtnFunction: () {},
+      newGameButtonFunction: () {
+        navigateToPageClear(NavigationConstants.gameView);
+      },
+      menuButtonFunction: () {
+        navigateToPageClear(NavigationConstants.homeView);
+      },
+    );
+    showDialog(
+        barrierDismissible: false,
+        barrierColor: Color(0xFF0000ffff),
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        });
+    notifyListeners();
+  }
+
   void navigateToPageClear(String path) {
-    _navigation
-        .navigateToPageClear(path: NavigationConstants.gameView, data: []);
+    _navigation.navigateToPageClear(path: path, data: []);
     notifyListeners();
   }
 
