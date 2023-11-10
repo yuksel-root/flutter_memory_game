@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_memory_game/core/constants/navigation_constants.dart';
 import 'package:flutter_memory_game/core/navigation/navigation_route.dart';
 import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
 import 'package:flutter/services.dart';
@@ -41,7 +40,7 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       onGenerateRoute: NavigationRoute.instance.generateRoute,
       navigatorKey: NavigationService.instance.navigatorKey,
-      home: const GameView(),
+      home: const HomeView(),
     );
   }
 }

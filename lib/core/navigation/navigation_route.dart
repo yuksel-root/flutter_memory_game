@@ -14,13 +14,13 @@ class NavigationRoute {
   Route<dynamic> generateRoute(RouteSettings? settings) {
     switch (settings?.name) {
       case NavigationConstants.splashView:
-        return pageNavigate(const SplashView());
+        return pageNavigate(const SplashView(), settings!);
       case NavigationConstants.homeView:
-        return pageNavigate(const HomeView());
+        return pageNavigate(const HomeView(), settings!);
       case NavigationConstants.gameView:
-        return pageNavigate(const GameView());
+        return pageNavigate(const GameView(), settings!);
       case NavigationConstants.levelView:
-        return pageNavigate(const LevelsView());
+        return pageNavigate(const LevelsView(), settings!);
 
       default:
         return MaterialPageRoute(
@@ -30,11 +30,15 @@ class NavigationRoute {
               child: Text('Route is  not Found'),
             ),
           ),
+          settings: settings,
         );
     }
   }
 
-  static MaterialPageRoute pageNavigate(Widget widget) => MaterialPageRoute(
+  static MaterialPageRoute pageNavigate(
+          Widget widget, RouteSettings? settings) =>
+      MaterialPageRoute(
         builder: (context) => widget,
+        settings: settings,
       );
 }
