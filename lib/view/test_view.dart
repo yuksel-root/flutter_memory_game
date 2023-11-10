@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_memory_game/components/custom_dialog.dart';
+import 'package:flutter_memory_game/view/new_game_alert.dart';
 
 class TestView extends StatelessWidget {
 //flutter build apk --target-platform android-arm --analyze-size
@@ -20,7 +20,7 @@ class TestView extends StatelessWidget {
                 context: context,
                 barrierDismissible: false,
                 builder: (BuildContext context) {
-                  return CustomAlertDialog(
+                  return NewGameAlertDialog(
                     content: "",
                     menuButtonFunction: () {},
                     retryButtonFunction: () {},
