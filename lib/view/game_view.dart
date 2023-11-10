@@ -1,13 +1,9 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/components/custom_app_bar.dart';
 import 'package:flutter_memory_game/components/custom_countdown_bar.dart';
-import 'package:flutter_memory_game/components/custom_dialog.dart';
 import 'package:flutter_memory_game/components/gradient_widget.dart';
-import 'package:flutter_memory_game/components/score_board.dart';
 import 'package:flutter_memory_game/core/constants/game_img_constants.dart';
-import 'package:flutter_memory_game/core/constants/navigation_constants.dart';
 import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
 import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
 import 'package:flutter_memory_game/core/notifier/timeState_provider.dart';
@@ -21,10 +17,13 @@ class GameView extends StatefulWidget {
 }
 
 class _GameViewState extends State<GameView> {
-  bool init = false;
+  late bool init;
   late NavigationService _navigation;
+
   @override
   void initState() {
+    init = false;
+
     _navigation = NavigationService.instance;
     Provider.of<GameViewModel>(context, listen: false).initGame(context);
 
@@ -39,11 +38,22 @@ class _GameViewState extends State<GameView> {
 
   @override
   Widget build(BuildContext context) {
-    final timeProv = Provider.of<TimeState>(context, listen: false);
     final gameViewProv = Provider.of<GameViewModel>(context);
+    final timeProv = Provider.of<TimeState>(context);
 
     if (init == false) {
-      timeProv.initTime(context);
+      if (timeProv.getIsPaused == true) {
+        print("SDAD CONTU E");
+        final timeProv = Provider.of<TimeState>(context, listen: false);
+        print(timeProv.getIsPaused);
+
+        timeProv.startTime(context, reset: false);
+      } else {
+        print("İF");
+        final timeProv = Provider.of<TimeState>(context, listen: false);
+        timeProv.startTime(context);
+        print(timeProv.getIsPaused);
+      }
 
       init = true;
     }
@@ -110,7 +120,7 @@ class _GameViewState extends State<GameView> {
   }
 
   FittedBox flexibleAppBarWidgets(
-      BuildContext context, gameViewProv, TimeState timeProv) {
+      BuildContext context, GameViewModel gameViewProv, TimeState timeProv) {
     return FittedBox(
       child: Padding(
         padding: EdgeInsets.only(top: context.dynamicH(0.014)),
@@ -136,18 +146,35 @@ class _GameViewState extends State<GameView> {
                 spacing: context.dynamicW(0.17),
                 children: [
                   Center(
-                    child: Consumer<TimeState>(
-                      builder: ((context, timeState, _) => FutureBuilder(
+                    child: Consumer<GameViewModel>(
+                      builder: ((context, gameViewProv, _) => FutureBuilder(
                             future: Future.delayed(
                                 Duration.zero,
                                 () => timeProv.getIsActiveTimer == true
-                                    ? () {}
-                                    : GameViewModel().nextStageAlert(context)),
+                                    ? {
+                                        timeProv.getTimeFinish == true
+                                            ? {
+                                                gameViewProv
+                                                    .nextStageAlert(context)
+                                              }
+                                            : {}
+                                      }
+                                    : {
+                                        timeProv.getTimeFinish == true
+                                            ? {
+                                                gameViewProv
+                                                    .nextStageAlert(context)
+                                              }
+                                            : {}
+                                      }),
                             builder: (context, snapshot) {
-                              return CustomCountDownBar(
-                                width: context.dynamicW(0.9),
-                                value: timeState.getTime.abs(),
-                                totalValue: context.dynamicW(0.9),
+                              return Consumer<TimeState>(
+                                builder: ((context, timeState, _) =>
+                                    CustomCountDownBar(
+                                      width: context.dynamicW(0.9),
+                                      value: timeProv.getTime.abs(),
+                                      totalValue: context.dynamicW(0.9),
+                                    )),
                               );
                             },
                           )),
@@ -221,7 +248,9 @@ class _GameViewState extends State<GameView> {
         ),
       ),
       onPressed: () {
-        gameProv.restartGame(context);
+        gameProv.pauseGameAlert(context);
+        final timeProv = Provider.of<TimeState>(context, listen: false);
+        timeProv.stopTimer(context, reset: false);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -239,7 +268,7 @@ class _GameViewState extends State<GameView> {
         ),
         child: GradientWidget(
           widget: Icon(
-            Icons.replay,
+            Icons.pause,
             size: context.dynamicH(0.01) * context.dynamicW(0.014),
           ),
           gradient: const SweepGradient(
