@@ -17,7 +17,7 @@ class LottieCustomWidget extends StatelessWidget {
         height: height!,
         alignment: Alignment.center,
         width: width!,
-        "assets/animation_jsons/$path.json",
+        "assets/animations_json/$path.json",
       ),
     );
   }
