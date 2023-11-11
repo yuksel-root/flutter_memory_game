@@ -39,18 +39,18 @@ class _GameViewState extends State<GameView> {
   @override
   Widget build(BuildContext context) {
     final gameViewProv = Provider.of<GameViewModel>(context);
-    final timeProv = Provider.of<TimeState>(context);
+    final timeProv = Provider.of<TimerProvider>(context, listen: true);
 
     if (init == false) {
       if (timeProv.getIsPaused == true) {
         print("SDAD CONTU E");
-        final timeProv = Provider.of<TimeState>(context, listen: false);
+        final timeProv = Provider.of<TimerProvider>(context, listen: false);
         print(timeProv.getIsPaused);
 
         timeProv.startTime(context, reset: false);
       } else {
         print("İF");
-        final timeProv = Provider.of<TimeState>(context, listen: false);
+        final timeProv = Provider.of<TimerProvider>(context, listen: false);
         timeProv.startTime(context);
         print(timeProv.getIsPaused);
       }
@@ -61,8 +61,8 @@ class _GameViewState extends State<GameView> {
     return scaffoldWidget(context, gameViewProv, timeProv);
   }
 
-  Scaffold scaffoldWidget(
-      BuildContext context, GameViewModel gameViewProv, TimeState timeProv) {
+  Scaffold scaffoldWidget(BuildContext context, GameViewModel gameViewProv,
+      TimerProvider timeProv) {
     return Scaffold(
         backgroundColor: Colors.transparent,
         appBar: CustomAppBar(
@@ -112,15 +112,15 @@ class _GameViewState extends State<GameView> {
     );
   }
 
-  AppBar gameAppBarWidget(
-      BuildContext context, GameViewModel gameViewProv, TimeState timeProv) {
+  AppBar gameAppBarWidget(BuildContext context, GameViewModel gameViewProv,
+      TimerProvider timeProv) {
     return AppBar(
       flexibleSpace: flexibleAppBarWidgets(context, gameViewProv, timeProv),
     );
   }
 
-  FittedBox flexibleAppBarWidgets(
-      BuildContext context, GameViewModel gameViewProv, TimeState timeProv) {
+  FittedBox flexibleAppBarWidgets(BuildContext context,
+      GameViewModel gameViewProv, TimerProvider timeProv) {
     return FittedBox(
       child: Padding(
         padding: EdgeInsets.only(top: context.dynamicH(0.014)),
@@ -146,40 +146,41 @@ class _GameViewState extends State<GameView> {
                 spacing: context.dynamicW(0.17),
                 children: [
                   Center(
-                    child: Consumer<GameViewModel>(
-                      builder: ((context, gameViewProv, _) => FutureBuilder(
-                            future: Future.delayed(
-                                Duration.zero,
-                                () => timeProv.getIsActiveTimer == true
+                      child: FutureBuilder(
+                    future: Future.delayed(
+                        Duration.zero,
+                        () => timeProv.getIsActiveTimer == true
+                            ? {
+                                timeProv.getTimeFinish == true
                                     ? {
-                                        timeProv.getTimeFinish == true
+                                        gameViewProv.nextStageAlert(context),
+                                      }
+                                    : {}
+                              }
+                            : {
+                                timeProv.getTimeFinish == true
+                                    ? {
+                                        gameViewProv.nextStageAlert(context),
+                                      }
+                                    : {
+                                        timeProv.getIsPaused == true
                                             ? {
                                                 gameViewProv
-                                                    .nextStageAlert(context)
+                                                    .pauseGameAlert(context),
                                               }
                                             : {}
                                       }
-                                    : {
-                                        timeProv.getTimeFinish == true
-                                            ? {
-                                                gameViewProv
-                                                    .nextStageAlert(context)
-                                              }
-                                            : {}
-                                      }),
-                            builder: (context, snapshot) {
-                              return Consumer<TimeState>(
-                                builder: ((context, timeState, _) =>
-                                    CustomCountDownBar(
-                                      width: context.dynamicW(0.9),
-                                      value: timeProv.getTime.abs(),
-                                      totalValue: context.dynamicW(0.9),
-                                    )),
-                              );
-                            },
-                          )),
-                    ),
-                  ),
+                              }),
+                    builder: (context, snapshot) {
+                      return Consumer<TimerProvider>(
+                        builder: ((context, timeState, _) => CustomCountDownBar(
+                              width: context.dynamicW(0.9),
+                              value: timeProv.getTime.abs(),
+                              totalValue: context.dynamicW(0.9),
+                            )),
+                      );
+                    },
+                  )),
                 ],
               ),
             )
@@ -230,7 +231,7 @@ class _GameViewState extends State<GameView> {
   }
 
   ElevatedButton elevatedBtnPauseWidget(
-      GameViewModel gameProv, BuildContext context, TimeState timeProv) {
+      GameViewModel gameProv, BuildContext context, TimerProvider timeProv) {
     return ElevatedButton(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(Colors.transparent),
@@ -249,7 +250,7 @@ class _GameViewState extends State<GameView> {
       ),
       onPressed: () {
         gameProv.pauseGameAlert(context);
-        final timeProv = Provider.of<TimeState>(context, listen: false);
+        final timeProv = Provider.of<TimerProvider>(context, listen: false);
         timeProv.stopTimer(context, reset: false);
       },
       child: Container(

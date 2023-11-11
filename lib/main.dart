@@ -7,6 +7,7 @@ import 'package:flutter_memory_game/view/game_view.dart';
 import 'package:flutter_memory_game/view/home_view.dart';
 import 'package:flutter_memory_game/view/levels_view.dart';
 import 'package:flutter_memory_game/view/splash_view.dart';
+import 'package:flutter_memory_game/view_model/app_life_cycle_manager.dart';
 
 import 'package:provider/provider.dart';
 
@@ -36,11 +37,13 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      onGenerateRoute: NavigationRoute.instance.generateRoute,
-      navigatorKey: NavigationService.instance.navigatorKey,
-      home: const HomeView(),
+    return AppLifeCycleManager(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        onGenerateRoute: NavigationRoute.instance.generateRoute,
+        navigatorKey: NavigationService.instance.navigatorKey,
+        home: const HomeView(),
+      ),
     );
   }
 }

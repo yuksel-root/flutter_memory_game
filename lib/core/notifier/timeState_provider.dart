@@ -1,16 +1,39 @@
 import 'dart:async';
-import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
 import 'package:flutter_memory_game/view_model/game_view_model.dart';
 import 'package:provider/provider.dart';
 
-class TimeState with ChangeNotifier {
-  double _time = 0;
-  bool _isActiveTimer = true;
+//-- GameState Variables -- //
+enum TimeState {
+  empty,
+  isActive,
+  isPaused,
+  isCompleted,
+  error,
+}
+
+class TimerProvider with ChangeNotifier {
+  late TimeState? _timeState;
+  late double _time = 0;
+  late bool _isActiveTimer = true;
   Timer? timer;
-  bool _isPaused = false;
-  bool _isTimeFinish = false;
+  late bool _isPaused = false;
+  late bool _isTimeFinish = false;
+
+  TimerProvider() {
+    _timeState = TimeState.empty;
+    _time = 0;
+    _isActiveTimer = true;
+    _isPaused = false;
+    _isTimeFinish = false;
+  }
+
+  TimeState get getTimeState => _timeState!;
+  set setTimeState(TimeState newState) {
+    _timeState = newState;
+  }
 
   bool get getIsActiveTimer => _isActiveTimer;
   double get getTime => _time;
@@ -57,10 +80,6 @@ class TimeState with ChangeNotifier {
   }
 
   void startTime(BuildContext context, {bool reset = true}) async {
-    int i = 0;
-    print("T C");
-    print(context);
-    print("T C");
     if (reset && getTimeFinish == false && getIsPaused == false) {
       _time = context.dynamicW(0.9);
     }

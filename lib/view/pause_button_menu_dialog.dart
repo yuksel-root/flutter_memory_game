@@ -46,7 +46,7 @@ class PauseButtonMenuDialog extends StatelessWidget {
                         Expanded(
                           flex: 100,
                           child: Container(
-                            width: screenWidth / 1.9,
+                            width: screenWidth / 1.5,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.stretch,

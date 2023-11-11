@@ -26,7 +26,7 @@ class ApplicationProvider {
       create: (context) => GameViewModel(),
     ),
     ChangeNotifierProvider(
-      create: (context) => TimeState(),
+      create: (context) => TimerProvider(),
     ),
     Provider.value(value: NavigationService.instance)
   ];

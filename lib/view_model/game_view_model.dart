@@ -175,7 +175,7 @@ class GameViewModel extends ChangeNotifier {
 
   void initGame(BuildContext context) {
     setFirstInit();
-    if (Provider.of<TimeState>(
+    if (Provider.of<TimerProvider>(
           context,
           listen: false,
         ).getIsPaused ==
@@ -410,12 +410,12 @@ class GameViewModel extends ChangeNotifier {
       print({"res game error": e});
     }
 
-    Provider.of<TimeState>(
+    Provider.of<TimerProvider>(
       context,
       listen: false,
     ).stopTimer(context, reset: true);
 
-    Provider.of<TimeState>(
+    Provider.of<TimerProvider>(
       context,
       listen: false,
     ).setIsActiveTimer = true;
@@ -476,12 +476,12 @@ class GameViewModel extends ChangeNotifier {
         _navigation
             .navigateToPageClear(path: NavigationConstants.gameView, data: []);
 
-        Provider.of<TimeState>(
+        Provider.of<TimerProvider>(
           context,
           listen: false,
         ).setIsPaused = true;
 
-        Provider.of<TimeState>(
+        Provider.of<TimerProvider>(
           context,
           listen: false,
         ).setIsActiveTimer = true;
