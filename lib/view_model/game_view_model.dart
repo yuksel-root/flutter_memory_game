@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/view/new_game_alert.dart';
@@ -174,13 +175,11 @@ class GameViewModel extends ChangeNotifier {
   }
 
   void initGame(BuildContext context) {
+    final timerProv = Provider.of<TimerProvider>(context, listen: false);
     setFirstInit();
-    if (Provider.of<TimerProvider>(
-          context,
-          listen: false,
-        ).getIsPaused ==
-        true) {
-    } else {
+    if (timerProv.getTimeState == TimeState.timerFinish ||
+        timerProv.getTimeState == TimeState.timerReset ||
+        timerProv.getTimeState == TimeState.timerEmpty) {
       arrayClears();
 
       generateRandomImgList();
@@ -190,7 +189,7 @@ class GameViewModel extends ChangeNotifier {
       loadGameCardList();
 
       generateDefaultLists();
-    }
+    } else {}
   }
 
   void generateRandomImgList() {
@@ -394,6 +393,7 @@ class GameViewModel extends ChangeNotifier {
   }
 
   void restartGame(BuildContext context) {
+    final timerProv = Provider.of<TimerProvider>(context, listen: false);
     setFirstInit();
     try {
       arrayClears();
@@ -410,15 +410,9 @@ class GameViewModel extends ChangeNotifier {
       print({"res game error": e});
     }
 
-    Provider.of<TimerProvider>(
-      context,
-      listen: false,
-    ).stopTimer(context, reset: true);
+    timerProv.stopTimer(context, reset: true);
 
-    Provider.of<TimerProvider>(
-      context,
-      listen: false,
-    ).setIsActiveTimer = true;
+    timerProv.setIsActiveTimer = true;
     navigateToPageClear(NavigationConstants.gameView);
 
     setOpacity = 0;
@@ -442,6 +436,7 @@ class GameViewModel extends ChangeNotifier {
   }
 
   Future<void> nextStageAlert(BuildContext context) async {
+    print("nextStage alert");
     NewGameAlertDialog alert = NewGameAlertDialog(
       score: 0,
       tries: 0,
@@ -471,26 +466,22 @@ class GameViewModel extends ChangeNotifier {
   }
 
   Future<void> pauseGameAlert(BuildContext context) async {
+    final timerProv = Provider.of<TimerProvider>(context, listen: false);
+    print("Pause alert");
     PauseButtonMenuDialog alert = PauseButtonMenuDialog(
       continueBtnFunction: () {
         _navigation
             .navigateToPageClear(path: NavigationConstants.gameView, data: []);
-
-        Provider.of<TimerProvider>(
-          context,
-          listen: false,
-        ).setIsPaused = true;
-
-        Provider.of<TimerProvider>(
-          context,
-          listen: false,
-        ).setIsActiveTimer = true;
+        timerProv.setTimeState = TimeState.timerActive;
       },
       soundBtnFunction: () {},
       newGameButtonFunction: () {
+        timerProv.stopTimer(context, reset: true);
+
         navigateToPageClear(NavigationConstants.gameView);
       },
       menuButtonFunction: () {
+        timerProv.stopTimer(context, reset: true);
         navigateToPageClear(NavigationConstants.homeView);
       },
     );

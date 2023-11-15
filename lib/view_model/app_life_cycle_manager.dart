@@ -45,9 +45,11 @@ class _AppLifeCycleManagerState extends State<AppLifeCycleManager>
         break;
       case AppLifecycleState.paused:
         print('LifeCycleState = $state');
+        if (timeProv.getTimeState != TimeState.timerFinish) {
+          context.read<TimerProvider>().stopTimer(context, reset: false);
+        }
 
-        timeProv.stopTimer(context, reset: false);
-
+        print(timeProv.getTimeState);
         break;
       case AppLifecycleState.resumed:
         print('LifeCycleState = $state');

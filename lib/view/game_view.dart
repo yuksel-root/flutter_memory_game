@@ -42,18 +42,9 @@ class _GameViewState extends State<GameView> {
     final timeProv = Provider.of<TimerProvider>(context, listen: true);
 
     if (init == false) {
-      if (timeProv.getIsPaused == true) {
-        print("SDAD CONTU E");
-        final timeProv = Provider.of<TimerProvider>(context, listen: false);
-        print(timeProv.getIsPaused);
+      print("if init game view");
 
-        timeProv.startTime(context, reset: false);
-      } else {
-        print("İF");
-        final timeProv = Provider.of<TimerProvider>(context, listen: false);
-        timeProv.startTime(context);
-        print(timeProv.getIsPaused);
-      }
+      context.read<TimerProvider>().startTime(context);
 
       init = true;
     }
@@ -120,7 +111,7 @@ class _GameViewState extends State<GameView> {
   }
 
   FittedBox flexibleAppBarWidgets(BuildContext context,
-      GameViewModel gameViewProv, TimerProvider timeProv) {
+      GameViewModel gameViewProv, TimerProvider timerProv) {
     return FittedBox(
       child: Padding(
         padding: EdgeInsets.only(top: context.dynamicH(0.014)),
@@ -135,7 +126,7 @@ class _GameViewState extends State<GameView> {
               children: [
                 elevatedBtnPeekCards(context, gameViewProv),
                 gameLevelWidget(gameViewProv, gameViewProv),
-                elevatedBtnPauseWidget(gameViewProv, context, timeProv),
+                elevatedBtnPauseWidget(gameViewProv, context, timerProv),
               ],
             ),
             SizedBox(height: context.dynamicH(0.007)),
@@ -149,33 +140,26 @@ class _GameViewState extends State<GameView> {
                       child: FutureBuilder(
                     future: Future.delayed(
                         Duration.zero,
-                        () => timeProv.getIsActiveTimer == true
-                            ? {
-                                timeProv.getTimeFinish == true
-                                    ? {
-                                        gameViewProv.nextStageAlert(context),
-                                      }
-                                    : {}
-                              }
-                            : {
-                                timeProv.getTimeFinish == true
-                                    ? {
-                                        gameViewProv.nextStageAlert(context),
-                                      }
-                                    : {
-                                        timeProv.getIsPaused == true
-                                            ? {
-                                                gameViewProv
-                                                    .pauseGameAlert(context),
-                                              }
-                                            : {}
-                                      }
-                              }),
+                        () => {
+                              timerProv.getTimeState == TimeState.timerFinish
+                                  ? {
+                                      gameViewProv.nextStageAlert(context),
+                                    }
+                                  : {
+                                      timerProv.getTimeState ==
+                                              TimeState.timerPaused
+                                          ? {
+                                              gameViewProv
+                                                  .pauseGameAlert(context)
+                                            }
+                                          : {}
+                                    }
+                            }),
                     builder: (context, snapshot) {
                       return Consumer<TimerProvider>(
                         builder: ((context, timeState, _) => CustomCountDownBar(
                               width: context.dynamicW(0.9),
-                              value: timeProv.getTime.abs(),
+                              value: timerProv.getTime.abs(),
                               totalValue: context.dynamicW(0.9),
                             )),
                       );
@@ -250,8 +234,8 @@ class _GameViewState extends State<GameView> {
       ),
       onPressed: () {
         gameProv.pauseGameAlert(context);
-        final timeProv = Provider.of<TimerProvider>(context, listen: false);
-        timeProv.stopTimer(context, reset: false);
+
+        context.read<TimerProvider>().stopTimer(context, reset: false);
       },
       child: Container(
         decoration: BoxDecoration(

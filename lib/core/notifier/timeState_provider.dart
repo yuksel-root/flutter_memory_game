@@ -7,25 +7,26 @@ import 'package:provider/provider.dart';
 
 //-- GameState Variables -- //
 enum TimeState {
-  empty,
-  isActive,
-  isPaused,
-  isCompleted,
-  error,
+  timerEmpty,
+  timerActive,
+  timerPaused,
+  timerFinish,
+  timerReset,
+  timerError,
 }
 
 class TimerProvider with ChangeNotifier {
   late TimeState? _timeState;
   late double _time = 0;
-  late bool _isActiveTimer = true;
+  late bool _isActiveTimer;
   Timer? timer;
-  late bool _isPaused = false;
-  late bool _isTimeFinish = false;
+  late bool _isPaused;
+  late bool _isTimeFinish;
 
   TimerProvider() {
-    _timeState = TimeState.empty;
+    _timeState = TimeState.timerEmpty;
     _time = 0;
-    _isActiveTimer = true;
+    _isActiveTimer = false;
     _isPaused = false;
     _isTimeFinish = false;
   }
@@ -61,27 +62,32 @@ class TimerProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void resetTimer(BuildContext context) => setTime = context.dynamicW(0.9);
+  void resetTimer(BuildContext context) {
+    print("Timer reset F");
+    setTime = context.dynamicW(0.9);
+  }
 
   void stopTimer(BuildContext context, {bool reset = true}) {
     if (reset) {
+      print("timer reset");
       resetTimer(context);
-      setIsPaused = false;
-      setIsActiveTimer = false;
-      setTimeFinish = false;
+      setTimeState = TimeState.timerReset;
       timer!.cancel();
       notifyListeners();
     } else {
-      setIsPaused = true;
-      setIsActiveTimer = false;
+      print("timer paused else");
+      setTimeState = TimeState.timerPaused;
       timer!.cancel();
       notifyListeners();
     }
   }
 
   void startTime(BuildContext context, {bool reset = true}) async {
-    if (reset && getTimeFinish == false && getIsPaused == false) {
-      _time = context.dynamicW(0.9);
+    if (getTimeState == TimeState.timerFinish ||
+        getTimeState == TimeState.timerEmpty ||
+        getTimeState == TimeState.timerReset) {
+      print("initTime");
+      _time = context.dynamicW(0.2);
     }
 
     final gameProv =
@@ -89,15 +95,20 @@ class TimerProvider with ChangeNotifier {
     timer = Timer.periodic(const Duration(milliseconds: 1200), (_) {
       try {
         if ((getTime - context.dynamicW(0.05).abs()) < 0) {
-          stopTimer(context, reset: true);
-          setTimeFinish = true;
+          context.read<TimerProvider>().stopTimer(context, reset: true);
+          setTimeState = TimeState.timerFinish;
         }
         if (timer!.isActive) {
+          setTimeState = TimeState.timerActive;
           setTime = context.dynamicW(1 / (gameProv * 3));
         } else {
-          stopTimer(context, reset: false);
+          if (getTimeState == TimeState.timerPaused) {
+            print("timer paused button else ");
+            stopTimer(context, reset: false);
+          }
         }
       } catch (e) {
+        setTimeState = TimeState.timerError;
         print(e);
       }
     });
