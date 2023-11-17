@@ -87,7 +87,7 @@ class TimerProvider with ChangeNotifier {
         getTimeState == TimeState.timerEmpty ||
         getTimeState == TimeState.timerReset) {
       print("initTime");
-      _time = context.dynamicW(0.2);
+      _time = context.dynamicW(0.9);
     }
 
     final gameProv =

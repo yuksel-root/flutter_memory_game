@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/components/custom_app_bar.dart';
 import 'package:flutter_memory_game/components/custom_countdown_bar.dart';
 import 'package:flutter_memory_game/components/gradient_widget.dart';
+import 'package:flutter_memory_game/components/score_board.dart';
 import 'package:flutter_memory_game/core/constants/game_img_constants.dart';
 import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
 import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
@@ -125,10 +126,11 @@ class _GameViewState extends State<GameView> {
               spacing: context.dynamicW(0.15),
               children: [
                 elevatedBtnPeekCards(context, gameViewProv),
-                gameLevelWidget(gameViewProv, gameViewProv),
+                gameLevelWidget(gameViewProv),
                 elevatedBtnPauseWidget(gameViewProv, context, timerProv),
               ],
             ),
+            gameInfoWidgets(gameViewProv),
             SizedBox(height: context.dynamicH(0.007)),
             FittedBox(
               child: Wrap(
@@ -137,33 +139,33 @@ class _GameViewState extends State<GameView> {
                 spacing: context.dynamicW(0.17),
                 children: [
                   Center(
-                      child: FutureBuilder(
-                    future: Future.delayed(
-                        Duration.zero,
-                        () => {
-                              timerProv.getTimeState == TimeState.timerFinish
-                                  ? {
-                                      gameViewProv.nextStageAlert(context),
-                                    }
-                                  : {
-                                      timerProv.getTimeState ==
-                                              TimeState.timerPaused
-                                          ? {
-                                              gameViewProv
-                                                  .pauseGameAlert(context)
-                                            }
-                                          : {}
-                                    }
-                            }),
-                    builder: (context, snapshot) {
-                      return Consumer<TimerProvider>(
-                        builder: ((context, timeState, _) => CustomCountDownBar(
-                              width: context.dynamicW(0.9),
-                              value: timerProv.getTime.abs(),
-                              totalValue: context.dynamicW(0.9),
-                            )),
-                      );
-                    },
+                      child: Consumer<TimerProvider>(
+                    builder: (context, timeState, _) => FutureBuilder(
+                      future: Future.delayed(
+                          Duration.zero,
+                          () => {
+                                timeState.getTimeState == TimeState.timerFinish
+                                    ? {
+                                        gameViewProv.nextStageAlert(context),
+                                      }
+                                    : {
+                                        timeState.getTimeState ==
+                                                TimeState.timerPaused
+                                            ? {
+                                                gameViewProv
+                                                    .pauseGameAlert(context)
+                                              }
+                                            : {}
+                                      }
+                              }),
+                      builder: (context, snapshot) {
+                        return CustomCountDownBar(
+                          width: context.dynamicW(0.9),
+                          value: timeState.getTime.abs(),
+                          totalValue: context.dynamicW(0.9),
+                        );
+                      },
+                    ),
                   )),
                 ],
               ),
@@ -171,6 +173,32 @@ class _GameViewState extends State<GameView> {
           ],
         ),
       ),
+    );
+  }
+
+  Wrap gameInfoWidgets(GameViewModel gameProv) {
+    return Wrap(
+      alignment: WrapAlignment.spaceBetween,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      spacing: context.mediaQuery.size.width / 2,
+      children: [
+        ScoreBoard(
+          title: "Scores",
+          info: gameProv.getScore.toString(),
+          bgGradient: LinearGradient(colors: [
+            const Color(0xFF8470ff).withOpacity(0.5),
+            const Color(0xFF8470ff).withOpacity(0.5),
+          ]),
+        ),
+        ScoreBoard(
+          title: "Tries",
+          info: gameProv.getTries.toString(),
+          bgGradient: LinearGradient(colors: [
+            const Color(0xFF8470ff).withOpacity(0.5),
+            const Color(0xFF8470ff).withOpacity(0.5),
+          ]),
+        ),
+      ],
     );
   }
 
@@ -421,7 +449,7 @@ class _GameViewState extends State<GameView> {
     ));
   }
 
-  Container gameLevelWidget(GameViewModel gameViewProv, GameViewModel ctxProv) {
+  Container gameStageWidget(GameViewModel gameViewProv) {
     return Container(
       padding: EdgeInsets.only(
         bottom: context.dynamicH(0.001),
@@ -442,9 +470,7 @@ class _GameViewState extends State<GameView> {
             context.dynamicH(0.005) * context.dynamicW(0.008)),
       ),
       child: Row(
-        // ignore: prefer_const_literals_to_create_immutables
         children: [
-          // ignore: prefer_const_constructors
           GradientWidget(
             gradient: const LinearGradient(
               colors: [
@@ -482,7 +508,77 @@ class _GameViewState extends State<GameView> {
               tileMode: TileMode.clamp,
             ),
             widget: Text(
-              ctxProv.getStage.toString(),
+              gameViewProv.getStage.toString(),
+              style: TextStyle(
+                fontSize: context.dynamicH(0.009) * context.dynamicW(0.016),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container gameLevelWidget(GameViewModel gameViewProv) {
+    return Container(
+      padding: EdgeInsets.only(
+        bottom: context.dynamicH(0.001),
+        top: context.dynamicH(0.001),
+        left: context.dynamicW(0.02),
+        right: context.dynamicW(0.02),
+      ),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(colors: [
+          const Color(0xFF8470ff).withOpacity(0.5),
+          const Color(0xFF8470ff).withOpacity(0.5),
+        ]),
+        border: Border.all(
+          color: const Color(0xFF8470ff).withOpacity(0.5),
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(
+            context.dynamicH(0.005) * context.dynamicW(0.008)),
+      ),
+      child: Row(
+        children: [
+          GradientWidget(
+            gradient: const LinearGradient(
+              colors: [
+                Color(0xFF9400D3),
+                Color(0xFF4B0082),
+                Color(0xFF0000FF),
+                Color(0xFF00FF00),
+                Color(0xFFFFFF00),
+                Color(0xFFFF7F00),
+                Color(0xFFFF0000),
+              ],
+            ),
+            widget: Text(
+              "LEVEL",
+              style: TextStyle(
+                fontSize: context.dynamicH(0.008) * context.dynamicW(0.014),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: context.dynamicW(0.05),
+          ),
+          GradientWidget(
+            gradient: const RadialGradient(
+              colors: [
+                Color(0xFF9400D3),
+                Color(0xFF4B0082),
+                Color(0xFF0000FF),
+                Color(0xFF00FF00),
+                Color(0xFFFFFF00),
+                Color(0xFFFF7F00),
+                Color(0xFFFF0000),
+              ],
+              center: Alignment(0.0, 0.3),
+              tileMode: TileMode.clamp,
+            ),
+            widget: Text(
+              gameViewProv.getStage.toString(),
               style: TextStyle(
                 fontSize: context.dynamicH(0.009) * context.dynamicW(0.016),
               ),

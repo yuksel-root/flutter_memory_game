@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
@@ -27,6 +29,7 @@ class GameViewModel extends ChangeNotifier {
   bool isFirstInit = true;
   late bool _isFinishedCard;
   late bool _isMatchedCard;
+  late bool _isAlertOpen;
 
   late int _tries;
   late int _score;
@@ -70,6 +73,7 @@ class GameViewModel extends ChangeNotifier {
 
     _isFinishedCard = false;
     _isMatchedCard = false;
+    _isAlertOpen = false;
 
     _randomCardCount = 0;
     _matchCount = 0;
@@ -438,30 +442,38 @@ class GameViewModel extends ChangeNotifier {
   Future<void> nextStageAlert(BuildContext context) async {
     print("nextStage alert");
     NewGameAlertDialog alert = NewGameAlertDialog(
-      score: 0,
-      tries: 0,
+      score: getScore,
+      tries: getTries,
       content: "WELL DONE",
-      title: "STAGE 5",
+      title: "STAGE $getStage",
       menuButtonFunction: () {
         print("MENU BUTTON PRESSED");
+        _navigation
+            .navigateToPageClear(path: NavigationConstants.homeView, data: []);
+        _isAlertOpen == false;
       },
       retryButtonFunction: () {
         print("RETRY BUTTON PRESSED");
         restartGame(context);
+        _isAlertOpen == false;
       },
       nextButtonFunction: () {
         print("NEXT BUTTON PRESSED");
         restartGame(context);
+        _isAlertOpen == false;
       },
     );
-    showDialog<void>(
-      barrierDismissible: false,
-      barrierColor: Color(0xFF00FFFFFF),
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
+    if (_isAlertOpen == false) {
+      _isAlertOpen = true;
+      await showDialog(
+          barrierDismissible: false,
+          barrierColor: const Color(0x66000000),
+          context: context,
+          builder: (BuildContext context) {
+            return alert;
+          }).then((value) => _isAlertOpen = false);
+    }
+
     notifyListeners();
   }
 
@@ -473,25 +485,31 @@ class GameViewModel extends ChangeNotifier {
         _navigation
             .navigateToPageClear(path: NavigationConstants.gameView, data: []);
         timerProv.setTimeState = TimeState.timerActive;
+        _isAlertOpen = false;
       },
       soundBtnFunction: () {},
       newGameButtonFunction: () {
         timerProv.stopTimer(context, reset: true);
-
+        _isAlertOpen = false;
         navigateToPageClear(NavigationConstants.gameView);
       },
       menuButtonFunction: () {
         timerProv.stopTimer(context, reset: true);
+        _isAlertOpen = false;
         navigateToPageClear(NavigationConstants.homeView);
       },
     );
-    showDialog(
-        barrierDismissible: false,
-        barrierColor: Color(0xFF0000ffff),
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        });
+    if (_isAlertOpen == false) {
+      _isAlertOpen = true;
+      await showDialog(
+          barrierDismissible: false,
+          barrierColor: const Color(0x66000000),
+          context: context,
+          builder: (BuildContext context) {
+            return alert;
+          }).then((value) => _isAlertOpen = false);
+    }
+
     notifyListeners();
   }
 
