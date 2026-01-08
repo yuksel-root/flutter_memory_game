@@ -22,51 +22,58 @@ class LevelsView extends StatelessWidget {
     return scaffoldWidget(context, gameViewProv, _navigation);
   }
 
-  Scaffold scaffoldWidget(BuildContext context, GameViewModel gameViewProv,
-      NavigationService _navigation) {
+  Scaffold scaffoldWidget(
+    BuildContext context,
+    GameViewModel gameViewProv,
+    NavigationService _navigation,
+  ) {
     return Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: CustomAppBar(
-          dynamicPreferredSize: context.dynamicH(0.15),
-          appBar: gameAppBarWidget(
-            context,
-            gameViewProv,
-            _navigation,
-          ),
-        ),
-        body: AnimatedOpacity(
-          opacity: 1,
-          curve: Curves.elasticInOut,
-          duration: const Duration(microseconds: 200),
-          child: Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(
+      backgroundColor: Colors.transparent,
+      appBar: CustomAppBar(
+        dynamicPreferredSize: context.dynamicH(0.15),
+        appBar: gameAppBarWidget(context, gameViewProv, _navigation),
+      ),
+      body: AnimatedOpacity(
+        opacity: 1,
+        curve: Curves.elasticInOut,
+        duration: const Duration(microseconds: 200),
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
               image: AssetImage("assets/game_bg_jpeg/bg0.jpeg"),
               fit: BoxFit.cover,
-            )),
-            child: Center(
-              child: Container(
-                child: SizedBox(
-                  height: context.mediaQuery.size.height,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Spacer(flex: 1),
-                      expandedCardWidget(context, gameViewProv, _navigation),
-                      const Spacer(flex: 1),
-                    ],
-                  ),
+            ),
+          ),
+          child: Center(
+            child: Container(
+              child: SizedBox(
+                height: context.mediaQuery.size.height,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Spacer(flex: 1),
+                    expandedCardWidget(context, gameViewProv, _navigation),
+                    const Spacer(flex: 1),
+                  ],
                 ),
               ),
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
-  AppBar gameAppBarWidget(BuildContext context, GameViewModel gameViewProv,
-      NavigationService _navigation) {
+  AppBar gameAppBarWidget(
+    BuildContext context,
+    GameViewModel gameViewProv,
+    NavigationService _navigation,
+  ) {
     return AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      centerTitle: true,
       flexibleSpace: flexibleAppBarWidgets(context, gameViewProv, _navigation),
     );
   }
@@ -85,31 +92,39 @@ class LevelsView extends StatelessWidget {
             spacing: context.dynamicH(0.4),
             children: [
               elevatedBtn(
-                  context, Icons.arrow_back_rounded, gameProv, _navigation),
+                context,
+                Icons.arrow_back_rounded,
+                gameProv,
+                _navigation,
+              ),
               SizedBox(),
             ],
           ),
-          Wrap(children: [
-            gradientStarWidget(
-              context,
-              context.dynamicW(0.01) * context.dynamicH(0.01),
-            ),
-            gradientText(
-              context,
-              " 1 / 100",
-              context.dynamicW(0.01) * context.dynamicH(0.01),
-              LinearGradient(
-                colors: AppColors.rainBowColors,
+          Wrap(
+            children: [
+              gradientStarWidget(
+                context,
+                context.dynamicW(0.01) * context.dynamicH(0.01),
               ),
-            )
-          ], alignment: WrapAlignment.spaceEvenly),
+              gradientText(
+                context,
+                " 1 / 100",
+                context.dynamicW(0.01) * context.dynamicH(0.01),
+                LinearGradient(colors: AppColors.rainBowColors),
+              ),
+            ],
+            alignment: WrapAlignment.spaceEvenly,
+          ),
         ],
       ),
     );
   }
 
-  Expanded expandedCardWidget(BuildContext context, GameViewModel gameViewProv,
-      NavigationService navigation) {
+  Expanded expandedCardWidget(
+    BuildContext context,
+    GameViewModel gameViewProv,
+    NavigationService navigation,
+  ) {
     return Expanded(
       flex: 100,
       child: GridView.builder(
@@ -120,54 +135,51 @@ class LevelsView extends StatelessWidget {
           mainAxisSpacing: context.dynamicH(0.01428), //10px
           childAspectRatio: 1 / 1,
         ),
-        padding: EdgeInsets.all(//3*3 4px
-            context.dynamicH(0.004) * context.dynamicW(0.006)),
+        padding: EdgeInsets.all(
+          //3*3 4px
+          context.dynamicH(0.004) * context.dynamicW(0.006),
+        ),
         itemBuilder: (context, index) {
           return GestureDetector(
-              onTap: () {},
-              child: levelBox(
-                context,
-                gameViewProv,
-                index,
-                navigation,
-              ));
+            onTap: () {},
+            child: levelBox(context, gameViewProv, index, navigation),
+          );
         },
       ),
     );
   }
 
-  FittedBox levelBox(BuildContext context, GameViewModel gameProv, int index,
-      NavigationService navigation) {
-    final cPadding =
-        EdgeInsets.all(context.dynamicH(0.0028) * context.dynamicW(0.004));
+  FittedBox levelBox(
+    BuildContext context,
+    GameViewModel gameProv,
+    int index,
+    NavigationService navigation,
+  ) {
+    final cPadding = EdgeInsets.all(
+      context.dynamicH(0.0028) * context.dynamicW(0.004),
+    );
     return FittedBox(
       child: CustomColumnBox(
         clickFunction: () {
           navigation.navigateToPageClear(
-              path: NavigationConstants.gameView, data: []);
+            path: NavigationConstants.gameView,
+            data: [],
+          );
         },
         cPadding: cPadding,
         bgGradient: LinearGradient(
-          colors: [
-            Colors.deepPurple,
-            Color(0xff6dd5ed),
-          ],
+          colors: [Colors.deepPurple, Color(0xff6dd5ed)],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
         columnChild1: GradientWidget(
-          gradient: const SweepGradient(
-            colors: AppColors.fakeRainbowColors,
-          ),
+          gradient: const SweepGradient(colors: AppColors.fakeRainbowColors),
           widget: gradientText(
             context,
             (index + 1).toString(),
             context.dynamicW(0.01) * context.dynamicH(0.01),
             LinearGradient(
-              colors: [
-                Colors.deepPurple,
-                Color(0xff6dd5ed),
-              ],
+              colors: [Colors.deepPurple, Color(0xff6dd5ed)],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
@@ -203,43 +215,50 @@ class LevelsView extends StatelessWidget {
         tileMode: TileMode.clamp,
       ),
 
-      widget: Icon(
-        Icons.star,
-        size: starIconSize,
-      ),
+      widget: Icon(Icons.star, size: starIconSize),
     );
   }
 
   GradientWidget gradientText(
-      BuildContext context, String text, double fontSize, Gradient gradient) {
+    BuildContext context,
+    String text,
+    double fontSize,
+    Gradient gradient,
+  ) {
     return GradientWidget(
       gradient: gradient,
       widget: RichText(
         textAlign: TextAlign.center,
         text: TextSpan(
           children: <TextSpan>[
-            TextSpan(
-              text: text,
-              style: GoogleFonts.bungeeSpice(),
-            ),
+            TextSpan(text: text, style: GoogleFonts.bungeeSpice()),
           ],
-          style: TextStyle(fontSize: fontSize, letterSpacing: 1, shadows: [
-            BoxShadow(
-              color: Colors.white,
-              spreadRadius: 5,
-              offset: Offset(1, 1),
-            )
-          ]),
+          style: TextStyle(
+            fontSize: fontSize,
+            letterSpacing: 1,
+            shadows: [
+              BoxShadow(
+                color: Colors.white,
+                spreadRadius: 5,
+                offset: Offset(1, 1),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  CustomBtn elevatedBtn(BuildContext context, IconData icon,
-      GameViewModel gameProv, NavigationService _navigation) {
+  CustomBtn elevatedBtn(
+    BuildContext context,
+    IconData icon,
+    GameViewModel gameProv,
+    NavigationService _navigation,
+  ) {
     return CustomBtn(
       borderRadius: BorderRadius.circular(
-          context.dynamicH(0.01) * context.dynamicW(0.014)),
+        context.dynamicH(0.01) * context.dynamicW(0.014),
+      ),
       boxShadow: const [
         BoxShadow(
           color: Colors.transparent,
@@ -264,18 +283,22 @@ class LevelsView extends StatelessWidget {
             Colors.cyanAccent,
             Colors.pinkAccent,
             Colors.yellowAccent,
-            Colors.cyanAccent
+            Colors.cyanAccent,
           ],
           startAngle: 0.9,
           endAngle: 6.0,
           tileMode: TileMode.clamp,
         ),
-        widget:
-            Icon(icon, size: context.dynamicH(0.01) * context.dynamicW(0.01)),
+        widget: Icon(
+          icon,
+          size: context.dynamicH(0.01) * context.dynamicW(0.01),
+        ),
       ),
       onPressFunc: () {
-        _navigation
-            .navigateToPageClear(path: NavigationConstants.homeView, data: []);
+        _navigation.navigateToPageClear(
+          path: NavigationConstants.homeView,
+          data: [],
+        );
       },
     );
   }

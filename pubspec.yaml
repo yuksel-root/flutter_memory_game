@@ -1,14 +1,14 @@
 name: flutter_memory_game
 description: Flutter Memory Game
 
-publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.17.6 <3.0.0"
+  sdk: ^3.8.0
+
 
 dependencies:
-  cupertino_icons: ^1.0.5
+  cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
 
@@ -19,24 +19,25 @@ dependencies:
   fluttericon: ^2.0.0
 
   #Local Storage
-  flutter_secure_storage: ^6.0.0
+  flutter_secure_storage: ^9.2.4
 
   #Lottie animations
   lottie: ^2.0.0
   google_fonts: ^4.0.4
 
 dev_dependencies:
-  flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
+  flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true
 
   assets:
-    - assets/game_bg_jpeg/
-    - assets/game_card_png/
-    - assets/splash_jpeg/
-    - assets/animations_json/
-    - assets/home_bg_jpeg/
-    - assets/icons_png/
+      - assets/game_bg_jpeg/
+      - assets/game_card_png/
+      - assets/splash_jpeg/
+      - assets/animations_json/
+      - assets/home_bg_jpeg/
+      - assets/icons_png/
+  

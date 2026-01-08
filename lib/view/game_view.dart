@@ -53,49 +53,59 @@ class _GameViewState extends State<GameView> {
     return scaffoldWidget(context, gameViewProv, timeProv);
   }
 
-  Scaffold scaffoldWidget(BuildContext context, GameViewModel gameViewProv,
-      TimerProvider timeProv) {
+  Scaffold scaffoldWidget(
+    BuildContext context,
+    GameViewModel gameViewProv,
+    TimerProvider timeProv,
+  ) {
     return Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: CustomAppBar(
-          dynamicPreferredSize: context.dynamicH(0.15),
-          appBar: gameAppBarWidget(context, gameViewProv, timeProv),
-        ),
-        body: AnimatedOpacity(
-          opacity: gameViewProv.getOpacity,
-          curve: Curves.elasticInOut,
-          duration: const Duration(microseconds: 200),
-          child: Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(
+      backgroundColor: Colors.transparent,
+      appBar: CustomAppBar(
+        dynamicPreferredSize: context.dynamicH(0.15),
+        appBar: gameAppBarWidget(context, gameViewProv, timeProv),
+      ),
+      body: AnimatedOpacity(
+        opacity: gameViewProv.getOpacity,
+        curve: Curves.elasticInOut,
+        duration: const Duration(microseconds: 200),
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
               image: AssetImage(gameViewProv.getBgImages),
               fit: BoxFit.cover,
-            )),
-            height: context.mediaQuery.size.height,
-            width: context.mediaQuery.size.width,
-            child: Center(
-              child: SingleChildScrollView(
-                child: SizedBox(
-                  height: context.mediaQuery.size.height,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Spacer(flex: 1),
-                      expandedCardWidget(gameViewProv.getTries,
-                          gameViewProv.getScore, gameViewProv),
-                      const Spacer(flex: 1),
-                    ],
-                  ),
+            ),
+          ),
+          height: context.mediaQuery.size.height,
+          width: context.mediaQuery.size.width,
+          child: Center(
+            child: SingleChildScrollView(
+              child: SizedBox(
+                height: context.mediaQuery.size.height,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Spacer(flex: 1),
+                    expandedCardWidget(
+                      gameViewProv.getTries,
+                      gameViewProv.getScore,
+                      gameViewProv,
+                    ),
+                    const Spacer(flex: 1),
+                  ],
                 ),
               ),
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Image setBackgroundImageWidget(
-      GameViewModel gameViewProv, BuildContext context) {
+    GameViewModel gameViewProv,
+    BuildContext context,
+  ) {
     return Image.asset(
       gameViewProv.getBgImages,
       height: MediaQuery.of(context).size.height,
@@ -104,15 +114,24 @@ class _GameViewState extends State<GameView> {
     );
   }
 
-  AppBar gameAppBarWidget(BuildContext context, GameViewModel gameViewProv,
-      TimerProvider timeProv) {
+  AppBar gameAppBarWidget(
+    BuildContext context,
+    GameViewModel gameViewProv,
+    TimerProvider timeProv,
+  ) {
     return AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      centerTitle: true,
       flexibleSpace: flexibleAppBarWidgets(context, gameViewProv, timeProv),
     );
   }
 
-  FittedBox flexibleAppBarWidgets(BuildContext context,
-      GameViewModel gameViewProv, TimerProvider timerProv) {
+  FittedBox flexibleAppBarWidgets(
+    BuildContext context,
+    GameViewModel gameViewProv,
+    TimerProvider timerProv,
+  ) {
     return FittedBox(
       child: Padding(
         padding: EdgeInsets.only(top: context.dynamicH(0.014)),
@@ -139,37 +158,34 @@ class _GameViewState extends State<GameView> {
                 spacing: context.dynamicW(0.17),
                 children: [
                   Center(
-                      child: Consumer<TimerProvider>(
-                    builder: (context, timeState, _) => FutureBuilder(
-                      future: Future.delayed(
+                    child: Consumer<TimerProvider>(
+                      builder: (context, timeState, _) => FutureBuilder(
+                        future: Future.delayed(
                           Duration.zero,
                           () => {
-                                timeState.getTimeState == TimeState.timerFinish
-                                    ? {
-                                        gameViewProv.nextStageAlert(context),
-                                      }
-                                    : {
-                                        timeState.getTimeState ==
-                                                TimeState.timerPaused
-                                            ? {
-                                                gameViewProv
-                                                    .pauseGameAlert(context)
-                                              }
-                                            : {}
-                                      }
-                              }),
-                      builder: (context, snapshot) {
-                        return CustomCountDownBar(
-                          width: context.dynamicW(0.9),
-                          value: timeState.getTime.abs(),
-                          totalValue: context.dynamicW(0.9),
-                        );
-                      },
+                            timeState.getTimeState == TimeState.timerFinish
+                                ? {gameViewProv.nextStageAlert(context)}
+                                : {
+                                    timeState.getTimeState ==
+                                            TimeState.timerPaused
+                                        ? {gameViewProv.pauseGameAlert(context)}
+                                        : {},
+                                  },
+                          },
+                        ),
+                        builder: (context, snapshot) {
+                          return CustomCountDownBar(
+                            width: context.dynamicW(0.9),
+                            value: timeState.getTime.abs(),
+                            totalValue: context.dynamicW(0.9),
+                          );
+                        },
+                      ),
                     ),
-                  )),
+                  ),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -185,18 +201,22 @@ class _GameViewState extends State<GameView> {
         ScoreBoard(
           title: "Scores",
           info: gameProv.getScore.toString(),
-          bgGradient: LinearGradient(colors: [
-            const Color(0xFF8470ff).withOpacity(0.5),
-            const Color(0xFF8470ff).withOpacity(0.5),
-          ]),
+          bgGradient: LinearGradient(
+            colors: [
+              const Color(0xFF8470ff).withOpacity(0.5),
+              const Color(0xFF8470ff).withOpacity(0.5),
+            ],
+          ),
         ),
         ScoreBoard(
           title: "Tries",
           info: gameProv.getTries.toString(),
-          bgGradient: LinearGradient(colors: [
-            const Color(0xFF8470ff).withOpacity(0.5),
-            const Color(0xFF8470ff).withOpacity(0.5),
-          ]),
+          bgGradient: LinearGradient(
+            colors: [
+              const Color(0xFF8470ff).withOpacity(0.5),
+              const Color(0xFF8470ff).withOpacity(0.5),
+            ],
+          ),
         ),
       ],
     );
@@ -243,22 +263,25 @@ class _GameViewState extends State<GameView> {
   }
 
   ElevatedButton elevatedBtnPauseWidget(
-      GameViewModel gameProv, BuildContext context, TimerProvider timeProv) {
+    GameViewModel gameProv,
+    BuildContext context,
+    TimerProvider timeProv,
+  ) {
     return ElevatedButton(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(Colors.transparent),
         shadowColor: MaterialStateProperty.all(Colors.transparent),
-        overlayColor: MaterialStateProperty.resolveWith<Color?>(
-          (Set<MaterialState> states) {
-            if (states.contains(MaterialState.hovered)) {
-              return Colors.transparent;
-            }
-            if (states.contains(MaterialState.pressed)) {
-              return Colors.transparent;
-            }
-            return null;
-          },
-        ),
+        overlayColor: MaterialStateProperty.resolveWith<Color?>((
+          Set<MaterialState> states,
+        ) {
+          if (states.contains(MaterialState.hovered)) {
+            return Colors.transparent;
+          }
+          if (states.contains(MaterialState.pressed)) {
+            return Colors.transparent;
+          }
+          return null;
+        }),
       ),
       onPressed: () {
         gameProv.pauseGameAlert(context);
@@ -268,7 +291,8 @@ class _GameViewState extends State<GameView> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(
-              context.dynamicH(0.01) * context.dynamicW(0.014)),
+            context.dynamicH(0.01) * context.dynamicW(0.014),
+          ),
           gradient: LinearGradient(
             colors: [
               Colors.deepPurple.withOpacity(0.5),
@@ -304,22 +328,24 @@ class _GameViewState extends State<GameView> {
   }
 
   ElevatedButton elevatedBtnPeekCards(
-      BuildContext context, GameViewModel gameProv) {
+    BuildContext context,
+    GameViewModel gameProv,
+  ) {
     return ElevatedButton(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(Colors.transparent),
         shadowColor: MaterialStateProperty.all(Colors.transparent),
-        overlayColor: MaterialStateProperty.resolveWith<Color?>(
-          (Set<MaterialState> states) {
-            if (states.contains(MaterialState.hovered)) {
-              return Colors.transparent;
-            }
-            if (states.contains(MaterialState.pressed)) {
-              return Colors.transparent;
-            }
-            return null;
-          },
-        ),
+        overlayColor: MaterialStateProperty.resolveWith<Color?>((
+          Set<MaterialState> states,
+        ) {
+          if (states.contains(MaterialState.hovered)) {
+            return Colors.transparent;
+          }
+          if (states.contains(MaterialState.pressed)) {
+            return Colors.transparent;
+          }
+          return null;
+        }),
       ),
       onPressed: () {
         gameProv.setPeekCardCount = 1;
@@ -345,7 +371,8 @@ class _GameViewState extends State<GameView> {
             end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(
-              context.dynamicH(0.01) * context.dynamicW(0.014)),
+            context.dynamicH(0.01) * context.dynamicW(0.014),
+          ),
         ),
         child: GradientWidget(
           gradient: const SweepGradient(
@@ -372,7 +399,10 @@ class _GameViewState extends State<GameView> {
   }
 
   Expanded expandedCardWidget(
-      int tries, int score, GameViewModel gameViewProv) {
+    int tries,
+    int score,
+    GameViewModel gameViewProv,
+  ) {
     return Expanded(
       flex: 100,
       child: GridView.builder(
@@ -383,16 +413,20 @@ class _GameViewState extends State<GameView> {
           mainAxisSpacing: context.dynamicH(0.014), //10px
           childAspectRatio: 1 / 1,
         ),
-        padding: EdgeInsets.all(//3*3 4px
-            context.dynamicH(0.004) * context.dynamicW(0.006)),
+        padding: EdgeInsets.all(
+          //3*3 4px
+          context.dynamicH(0.004) * context.dynamicW(0.006),
+        ),
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
               gameViewProv.clickCard(index, context);
             },
             child: TweenAnimationBuilder(
-              tween:
-                  Tween<double>(begin: 0, end: gameViewProv.getAngleArr(index)),
+              tween: Tween<double>(
+                begin: 0,
+                end: gameViewProv.getAngleArr(index),
+              ),
               duration: const Duration(milliseconds: 650),
               builder: (BuildContext context, double val, __) {
                 return Transform(
@@ -409,12 +443,16 @@ class _GameViewState extends State<GameView> {
   }
 
   FittedBox gameCardWidget(
-      BuildContext context, GameViewModel gameViewProv, int index) {
+    BuildContext context,
+    GameViewModel gameViewProv,
+    int index,
+  ) {
     return (FittedBox(
       fit: BoxFit.contain,
       child: Container(
         padding: EdgeInsets.all(
-            context.dynamicH(0.004) * context.dynamicW(0.006)), //3*3 9px
+          context.dynamicH(0.004) * context.dynamicW(0.006),
+        ), //3*3 9px
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -431,7 +469,8 @@ class _GameViewState extends State<GameView> {
             width: gameViewProv.getCardBorderWidth(index),
           ),
           borderRadius: BorderRadius.circular(
-              context.dynamicH(0.002) * context.dynamicW(0.004)), //2*2
+            context.dynamicH(0.002) * context.dynamicW(0.004),
+          ), //2*2
           image: DecorationImage(
             repeat: ImageRepeat.noRepeat,
 
@@ -439,9 +478,10 @@ class _GameViewState extends State<GameView> {
             opacity: 0.9,
             alignment: Alignment.center,
             image: AssetImage(
-                gameViewProv.gameCard![index] == GameImgConstants.hiddenCardPng
-                    ? GameImgConstants.transparentPng
-                    : gameViewProv.gameCard![index]),
+              gameViewProv.gameCard![index] == GameImgConstants.hiddenCardPng
+                  ? GameImgConstants.transparentPng
+                  : gameViewProv.gameCard![index],
+            ),
             fit: BoxFit.contain,
           ),
         ),
@@ -458,16 +498,19 @@ class _GameViewState extends State<GameView> {
         right: context.dynamicW(0.02),
       ),
       decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [
-          const Color(0xFF8470ff).withOpacity(0.5),
-          const Color(0xFF8470ff).withOpacity(0.5),
-        ]),
+        gradient: LinearGradient(
+          colors: [
+            const Color(0xFF8470ff).withOpacity(0.5),
+            const Color(0xFF8470ff).withOpacity(0.5),
+          ],
+        ),
         border: Border.all(
           color: const Color(0xFF8470ff).withOpacity(0.5),
           width: 1,
         ),
         borderRadius: BorderRadius.circular(
-            context.dynamicH(0.005) * context.dynamicW(0.008)),
+          context.dynamicH(0.005) * context.dynamicW(0.008),
+        ),
       ),
       child: Row(
         children: [
@@ -490,9 +533,7 @@ class _GameViewState extends State<GameView> {
               ),
             ),
           ),
-          SizedBox(
-            width: context.dynamicW(0.05),
-          ),
+          SizedBox(width: context.dynamicW(0.05)),
           GradientWidget(
             gradient: const RadialGradient(
               colors: [
@@ -528,16 +569,19 @@ class _GameViewState extends State<GameView> {
         right: context.dynamicW(0.02),
       ),
       decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [
-          const Color(0xFF8470ff).withOpacity(0.5),
-          const Color(0xFF8470ff).withOpacity(0.5),
-        ]),
+        gradient: LinearGradient(
+          colors: [
+            const Color(0xFF8470ff).withOpacity(0.5),
+            const Color(0xFF8470ff).withOpacity(0.5),
+          ],
+        ),
         border: Border.all(
           color: const Color(0xFF8470ff).withOpacity(0.5),
           width: 1,
         ),
         borderRadius: BorderRadius.circular(
-            context.dynamicH(0.005) * context.dynamicW(0.008)),
+          context.dynamicH(0.005) * context.dynamicW(0.008),
+        ),
       ),
       child: Row(
         children: [
@@ -560,9 +604,7 @@ class _GameViewState extends State<GameView> {
               ),
             ),
           ),
-          SizedBox(
-            width: context.dynamicW(0.05),
-          ),
+          SizedBox(width: context.dynamicW(0.05)),
           GradientWidget(
             gradient: const RadialGradient(
               colors: [

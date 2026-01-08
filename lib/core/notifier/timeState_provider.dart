@@ -90,8 +90,10 @@ class TimerProvider with ChangeNotifier {
       _time = context.dynamicW(0.9);
     }
 
-    final gameProv =
-        Provider.of<GameViewModel>(context, listen: false).gameCard!.length;
+    final gameProv = Provider.of<GameViewModel>(
+      context,
+      listen: false,
+    ).gameCard!.length;
     timer = Timer.periodic(const Duration(milliseconds: 1200), (_) {
       try {
         if ((getTime - context.dynamicW(0.05).abs()) < 0) {
