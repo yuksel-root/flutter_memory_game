@@ -13,19 +13,14 @@ import 'package:flutter_memory_game/view/pause_button_menu_dialog.dart';
 import 'package:provider/provider.dart';
 
 //-- GameState Variables -- //
-enum GameState {
-  empty,
-  loading,
-  completed,
-  error,
-}
+enum GameState { empty, loading, completed, error }
 
 class GameViewModel extends ChangeNotifier {
   late NavigationService _navigation;
   late LocalStorageManager _storageManager;
   late GameState? _state;
 
-// -- Game Logic Variables - //
+  // -- Game Logic Variables - //
   bool isFirstInit = true;
   late bool _isFinishedCard;
   late bool _isMatchedCard;
@@ -46,14 +41,14 @@ class GameViewModel extends ChangeNotifier {
   late int _totalBgImageCount;
   late int _bgCounter;
 
-//-- Animation Variables -- //
+  //-- Animation Variables -- //
   late List<Color> _cardBorderColors;
   late List<double> _cardBorderWidth;
   late List<double>? _animationAngleArr;
 
   double _pageOpacity = 0;
 
-//-- Game Logic List -- //
+  //-- Game Logic List -- //
   late List<Map<int, String>>? _matchCheck;
   late List<String>? _imageList;
   late List<String>? _cardList;
@@ -84,7 +79,7 @@ class GameViewModel extends ChangeNotifier {
     _peekCardsClickCount = 0;
     _currentStage = 0;
 
-    _totalImageCount = 83;
+    _totalImageCount = 133;
     _minCardCount = 3;
     _maxCardCount = 6;
     _totalBgImageCount = 11;
@@ -125,8 +120,10 @@ class GameViewModel extends ChangeNotifier {
   void loadImageList() {
     try {
       _imageList!.clear();
-      _imageList =
-          List.generate(_totalImageCount, (i) => "assets/game_card_png/$i.png");
+      _imageList = List.generate(
+        _totalImageCount,
+        (i) => "assets/game_card_png/$i.png",
+      );
       _imageList!.shuffle();
     } catch (e) {
       print({"add card_images error": e});
@@ -137,7 +134,9 @@ class GameViewModel extends ChangeNotifier {
     try {
       _bgImagesList!.clear();
       _bgImagesList = List.generate(
-          _totalBgImageCount, (i) => "assets/game_bg_jpeg/bg$i.jpeg");
+        _totalBgImageCount,
+        (i) => "assets/game_bg_jpeg/bg$i.jpeg",
+      );
     } catch (e) {
       print({"add _bgImages error": e});
     }
@@ -149,7 +148,9 @@ class GameViewModel extends ChangeNotifier {
     try {
       _bgList!.clear();
       _bgList = List.generate(
-          _totalBgImageCount, (i) => "assets/game_bg_jpeg/bg$i.jpeg");
+        _totalBgImageCount,
+        (i) => "assets/game_bg_jpeg/bg$i.jpeg",
+      );
     } catch (e) {
       print({"add _bgsImages error": e});
     }
@@ -159,7 +160,9 @@ class GameViewModel extends ChangeNotifier {
     gameCard!.clear();
     gameCard!.shuffle();
     gameCard = List.generate(
-        _cardList!.length, (index) => GameImgConstants.hiddenCardPng);
+      _cardList!.length,
+      (index) => GameImgConstants.hiddenCardPng,
+    );
     gameCard!.shuffle();
   }
 
@@ -364,7 +367,9 @@ class GameViewModel extends ChangeNotifier {
     setTriesClear();
 
     gameCard = List.generate(
-        _cardList!.length, (index) => _cardList!.elementAt(index));
+      _cardList!.length,
+      (index) => _cardList!.elementAt(index),
+    );
 
     Future.delayed(const Duration(milliseconds: 1500), () {
       closeAllGameCard();
@@ -377,7 +382,9 @@ class GameViewModel extends ChangeNotifier {
     gameCard!.clear;
 
     gameCard = List.generate(
-        _cardList!.length, (index) => GameImgConstants.hiddenCardPng);
+      _cardList!.length,
+      (index) => GameImgConstants.hiddenCardPng,
+    );
     notifyListeners();
   }
 
@@ -448,8 +455,10 @@ class GameViewModel extends ChangeNotifier {
       title: "STAGE $getStage",
       menuButtonFunction: () {
         print("MENU BUTTON PRESSED");
-        _navigation
-            .navigateToPageClear(path: NavigationConstants.homeView, data: []);
+        _navigation.navigateToPageClear(
+          path: NavigationConstants.homeView,
+          data: [],
+        );
         _isAlertOpen == false;
       },
       retryButtonFunction: () {
@@ -466,12 +475,13 @@ class GameViewModel extends ChangeNotifier {
     if (_isAlertOpen == false) {
       _isAlertOpen = true;
       await showDialog(
-          barrierDismissible: false,
-          barrierColor: const Color(0x66000000),
-          context: context,
-          builder: (BuildContext context) {
-            return alert;
-          }).then((value) => _isAlertOpen = false);
+        barrierDismissible: false,
+        barrierColor: const Color(0x66000000),
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      ).then((value) => _isAlertOpen = false);
     }
 
     notifyListeners();
@@ -482,8 +492,10 @@ class GameViewModel extends ChangeNotifier {
     print("Pause alert");
     PauseButtonMenuDialog alert = PauseButtonMenuDialog(
       continueBtnFunction: () {
-        _navigation
-            .navigateToPageClear(path: NavigationConstants.gameView, data: []);
+        _navigation.navigateToPageClear(
+          path: NavigationConstants.gameView,
+          data: [],
+        );
         timerProv.setTimeState = TimeState.timerActive;
         _isAlertOpen = false;
       },
@@ -502,12 +514,13 @@ class GameViewModel extends ChangeNotifier {
     if (_isAlertOpen == false) {
       _isAlertOpen = true;
       await showDialog(
-          barrierDismissible: false,
-          barrierColor: const Color(0x66000000),
-          context: context,
-          builder: (BuildContext context) {
-            return alert;
-          }).then((value) => _isAlertOpen = false);
+        barrierDismissible: false,
+        barrierColor: const Color(0x66000000),
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      ).then((value) => _isAlertOpen = false);
     }
 
     notifyListeners();
@@ -543,8 +556,10 @@ class GameViewModel extends ChangeNotifier {
   }
 
   void setCardBorderColor() {
-    _cardBorderColors =
-        List.generate(_cardList!.length, (index) => const Color(0xFFB2FEFA));
+    _cardBorderColors = List.generate(
+      _cardList!.length,
+      (index) => const Color(0xFFB2FEFA),
+    );
   }
 
   void setAngleArr(double angle, int index) {
