@@ -1,15 +1,15 @@
 #!/bin/bash
 set -e
 
-# ---- Flutter SDK yükle (Netlify ortamı için) ----
 
-FLUTTER_VERSION="3.8.3"
+
+FLUTTER_VERSION="3.19.6"
 FLUTTER_DIR="$HOME/flutter"
 
 if [ ! -d "$FLUTTER_DIR" ]; then
     echo "Downloading Flutter $FLUTTER_VERSION..."
-    curl -LO https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_$FLUTTER_VERSION-stable.tar.xz
-    tar xf flutter_linux_$FLUTTER_VERSION-stable.tar.xz -C $HOME
+    curl -LO https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz
+    tar xf flutter_linux_${FLUTTER_VERSION}-stable.tar.xz -C $HOME
 fi
 
 export PATH="$FLUTTER_DIR/bin:$PATH"
