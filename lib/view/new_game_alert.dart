@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/components/custom_elevated_button.dart';
+import 'package:flutter_memory_game/components/custom_google_fonts.dart';
 import 'package:flutter_memory_game/components/gradient_widget.dart';
 import 'package:flutter_memory_game/core/constants/app_colors.dart';
 import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
@@ -43,8 +44,11 @@ class NewGameAlertDialog extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.all(Radius.circular(
-                  context.dynamicH(0.005) * context.dynamicW(0.008))),
+              borderRadius: BorderRadius.all(
+                Radius.circular(
+                  context.dynamicH(0.005) * context.dynamicW(0.008),
+                ),
+              ),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -56,90 +60,97 @@ class NewGameAlertDialog extends StatelessWidget {
                 Expanded(
                   flex: 100,
                   child: Container(
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: AppColors.deepPurpleColors,
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: AppColors.deepPurpleColors,
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.yellow,
+                          blurRadius: 10,
+                          spreadRadius: 0.5,
+                          offset: Offset(0, 1),
                         ),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.yellow,
-                            blurRadius: 10,
-                            spreadRadius: 0.5,
-                            offset: Offset(0, 1),
-                          ),
-                        ],
-                        shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(context.dynamicH(0.005) *
-                              context.dynamicW(0.008)),
-                          bottomRight: Radius.circular(context.dynamicH(0.005) *
-                              context.dynamicW(0.008)),
+                      ],
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(
+                          context.dynamicH(0.005) * context.dynamicW(0.008),
+                        ),
+                        bottomRight: Radius.circular(
+                          context.dynamicH(0.005) * context.dynamicW(0.008),
                         ),
                       ),
-                      width: screenWidth / 1.5,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const Spacer(flex: 1),
-                          Expanded(
-                            flex: 20,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                  colors: AppColors.deepPurpleColors,
-                                  begin: Alignment.bottomCenter,
-                                  end: Alignment.topCenter,
-                                ),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Colors.black,
-                                    blurRadius: 10,
-                                    spreadRadius: 5,
-                                    offset: Offset(0, 10),
-                                  ),
-                                ],
-                                shape: BoxShape.rectangle,
-                                borderRadius: BorderRadius.circular(
-                                  context.dynamicH(0.005) *
-                                      context.dynamicW(0.008),
-                                ),
+                    ),
+                    width: screenWidth / 1.5,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Spacer(flex: 1),
+                        Expanded(
+                          flex: 20,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: AppColors.deepPurpleColors,
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
                               ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    flex: 10,
-                                    child: columnFirstContentWidget(context),
-                                  ),
-                                  const Spacer(flex: 1),
-                                  Expanded(
-                                    flex: 10,
-                                    child: columnSecondContentWidget(
-                                        context, gameViewProv),
-                                  ),
-                                  const Spacer(flex: 1),
-                                  Expanded(
-                                    flex: 10,
-                                    child: columnThirdContentWidget(
-                                        context, gameViewProv),
-                                  ),
-                                  const Spacer(flex: 1),
-                                ],
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black,
+                                  blurRadius: 10,
+                                  spreadRadius: 5,
+                                  offset: Offset(0, 10),
+                                ),
+                              ],
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(
+                                context.dynamicH(0.005) *
+                                    context.dynamicW(0.008),
                               ),
                             ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  flex: 10,
+                                  child: columnFirstContentWidget(context),
+                                ),
+                                const Spacer(flex: 1),
+                                Expanded(
+                                  flex: 10,
+                                  child: columnSecondContentWidget(
+                                    context,
+                                    gameViewProv,
+                                  ),
+                                ),
+                                const Spacer(flex: 1),
+                                Expanded(
+                                  flex: 10,
+                                  child: columnThirdContentWidget(
+                                    context,
+                                    gameViewProv,
+                                  ),
+                                ),
+                                const Spacer(flex: 1),
+                              ],
+                            ),
                           ),
-                          const Spacer(flex: 1),
-                          Expanded(
-                            flex: 5,
-                            child: rowButtonsThirdContentWidget(context),
-                          ),
-                        ],
-                      )),
-                )
+                        ),
+                        const Spacer(flex: 1),
+                        Expanded(
+                          flex: 5,
+                          child: rowButtonsThirdContentWidget(context),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -149,7 +160,9 @@ class NewGameAlertDialog extends StatelessWidget {
   }
 
   Container containerTitleContentWidget(
-      BuildContext context, double screenWidth) {
+    BuildContext context,
+    double screenWidth,
+  ) {
     return Container(
       width: screenWidth / 1.5,
       decoration: BoxDecoration(
@@ -168,20 +181,21 @@ class NewGameAlertDialog extends StatelessWidget {
         ),
         borderRadius: BorderRadius.only(
           topRight: Radius.circular(
-              context.dynamicH(0.005) * context.dynamicW(0.008)),
+            context.dynamicH(0.005) * context.dynamicW(0.008),
+          ),
           topLeft: Radius.circular(
-              context.dynamicH(0.005) * context.dynamicW(0.008)),
+            context.dynamicH(0.005) * context.dynamicW(0.008),
+          ),
         ),
       ),
       child: Center(
-          child: gradientText(
-        context,
-        title,
-        context.dynamicH(0.01) * context.dynamicW(0.014),
-        const LinearGradient(
-          colors: AppColors.rainBowColors,
+        child: gradientText(
+          context,
+          title,
+          context.dynamicH(0.01) * context.dynamicW(0.014),
+          const LinearGradient(colors: AppColors.rainBowColors),
         ),
-      )),
+      ),
     );
   }
 
@@ -192,14 +206,17 @@ class NewGameAlertDialog extends StatelessWidget {
       direction: Axis.horizontal,
       children: [
         FittedBox(
-            alignment: Alignment.center,
-            child: alertBtn(context, "MENU", Icons.menu)),
+          alignment: Alignment.center,
+          child: alertBtn(context, "MENU", Icons.menu),
+        ),
         FittedBox(
-            alignment: Alignment.center,
-            child: alertBtn(context, "RETRY", Icons.replay)),
+          alignment: Alignment.center,
+          child: alertBtn(context, "RETRY", Icons.replay),
+        ),
         FittedBox(
-            alignment: Alignment.center,
-            child: alertBtn(context, "NEXT", Icons.skip_next)),
+          alignment: Alignment.center,
+          child: alertBtn(context, "NEXT", Icons.skip_next),
+        ),
       ],
     );
   }
@@ -213,27 +230,28 @@ class NewGameAlertDialog extends StatelessWidget {
         ),
       ),
       child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            gradientThreeStarXd(
-              context,
-              context.dynamicH(0.01) * context.dynamicW(0.01),
-            ),
-            gradientText(
-              context,
-              content,
-              context.dynamicH(0.01) * context.dynamicW(0.01),
-              const LinearGradient(
-                colors: AppColors.rainBowColors,
-              ),
-            ),
-          ]),
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          gradientThreeStarXd(
+            context,
+            context.dynamicH(0.01) * context.dynamicW(0.01),
+          ),
+          gradientText(
+            context,
+            content,
+            context.dynamicH(0.01) * context.dynamicW(0.01),
+            const LinearGradient(colors: AppColors.rainBowColors),
+          ),
+        ],
+      ),
     );
   }
 
   Container columnThirdContentWidget(
-      BuildContext context, GameViewModel gameProv) {
+    BuildContext context,
+    GameViewModel gameProv,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.green,
@@ -251,60 +269,57 @@ class NewGameAlertDialog extends StatelessWidget {
         ),
       ),
       child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            gradientText(
-              context,
-              "Score:",
-              context.dynamicH(0.01) * context.dynamicW(0.01),
-              const LinearGradient(
-                colors: AppColors.fakeRainbowColors,
-              ),
-            ),
-            gradientText(
-              context,
-              gameProv.getScore.toString(),
-              context.dynamicH(0.01) * context.dynamicW(0.01),
-              const SweepGradient(
-                colors: [
-                  Colors.pinkAccent,
-                  Colors.pinkAccent,
-                ],
-              ),
-            ),
-          ]),
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          gradientText(
+            context,
+            "Score:",
+            context.dynamicH(0.01) * context.dynamicW(0.01),
+            const LinearGradient(colors: AppColors.fakeRainbowColors),
+          ),
+          gradientText(
+            context,
+            gameProv.getScore.toString(),
+            context.dynamicH(0.01) * context.dynamicW(0.01),
+            const SweepGradient(colors: [Colors.pinkAccent, Colors.pinkAccent]),
+          ),
+        ],
+      ),
     );
   }
 
   GradientWidget gradientText(
-      BuildContext context, String text, double fontSize, Gradient gradient) {
+    BuildContext context,
+    String text,
+    double fontSize,
+    Gradient gradient,
+  ) {
     return GradientWidget(
       gradient: gradient,
-      widget: RichText(
+      widget: GoogleFontsText(
+        text,
         textAlign: TextAlign.center,
-        text: TextSpan(
-          children: <TextSpan>[
-            TextSpan(
-              text: text,
-              style: GoogleFonts.bungeeSpice(),
-            ),
-          ],
-          style:
-              TextStyle(fontSize: fontSize, letterSpacing: 1, shadows: const [
+        maxLines: 1,
+        styleOverride: TextStyle(
+          fontSize: fontSize,
+          letterSpacing: 1,
+          shadows: const [
             BoxShadow(
               color: Colors.white,
               spreadRadius: 5,
               offset: Offset(1, 1),
-            )
-          ]),
+            ),
+          ],
         ),
       ),
     );
   }
 
   Container columnSecondContentWidget(
-      BuildContext context, GameViewModel gameProv) {
+    BuildContext context,
+    GameViewModel gameProv,
+  ) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.purple,
@@ -322,39 +337,48 @@ class NewGameAlertDialog extends StatelessWidget {
         ),
       ),
       child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            customInfoTexts(context, gameProv, "moves:", gameProv.getTries),
-            customInfoTexts(context, gameProv, "times:", gameProv.getHighScore),
-            customInfoTexts(
-                context, gameProv, "highscore:", gameProv.getHighScore),
-          ]),
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          customInfoTexts(context, gameProv, "moves:", gameProv.getTries),
+          customInfoTexts(context, gameProv, "times:", gameProv.getHighScore),
+          customInfoTexts(
+            context,
+            gameProv,
+            "highscore:",
+            gameProv.getHighScore,
+          ),
+        ],
+      ),
     );
   }
 
-  Row customInfoTexts(BuildContext context, GameViewModel gameProv,
-      String titleText, Object infoText) {
+  Row customInfoTexts(
+    BuildContext context,
+    GameViewModel gameProv,
+    String titleText,
+    Object infoText,
+  ) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         gradientText(
-            context,
-            " $titleText ",
-            context.dynamicH(0.007141) * context.dynamicW(0.01),
-            const LinearGradient(
-              colors: AppColors.fakeRainbowColors,
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            )),
+          context,
+          " $titleText ",
+          context.dynamicH(0.007141) * context.dynamicW(0.01),
+          const LinearGradient(
+            colors: AppColors.fakeRainbowColors,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
         gradientText(
-            context,
-            " $infoText",
-            context.dynamicH(0.007141) * context.dynamicW(0.01),
-            const SweepGradient(
-              colors: AppColors.coolBlue,
-            )),
+          context,
+          " $infoText",
+          context.dynamicH(0.007141) * context.dynamicW(0.01),
+          const SweepGradient(colors: AppColors.coolBlue),
+        ),
       ],
     );
   }
@@ -413,7 +437,7 @@ class NewGameAlertDialog extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -441,10 +465,7 @@ class NewGameAlertDialog extends StatelessWidget {
         tileMode: TileMode.clamp,
       ),
 
-      widget: Icon(
-        Icons.star,
-        size: starIconSize,
-      ),
+      widget: Icon(Icons.star, size: starIconSize),
     );
   }
 }

@@ -23,7 +23,9 @@ dependencies:
 
   #Lottie animations
   lottie: ^2.0.0
-  google_fonts: ^4.0.4
+  audioplayers: ^6.5.1
+  just_audio: ^0.10.5
+  google_fonts: ^7.0.0
 
 dev_dependencies:
   flutter_test:
@@ -40,4 +42,14 @@ flutter:
       - assets/animations_json/
       - assets/home_bg_jpeg/
       - assets/icons_png/
+      - assets/sounds/backgrounds/d_gray.mp3
+      - assets/sounds/events/angels.mp3
+      - assets/sounds/events/bruh.mp3
+      - assets/sounds/events/click.mp3
+      - assets/sounds/events/ice.mp3
+      - assets/sounds/events/nope.mp3
+      - assets/sounds/events/pop.mp3
+      - assets/sounds/events/snap.mp3
+      - assets/sounds/events/wow.mp3
+
   

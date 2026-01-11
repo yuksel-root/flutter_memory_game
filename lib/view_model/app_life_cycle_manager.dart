@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/core/notifier/timeState_provider.dart';
 import 'package:flutter_memory_game/view_model/game_view_model.dart';
+import 'package:flutter_memory_game/view_model/sound_view_model.dart';
 import 'package:provider/provider.dart';
 
 class AppLifeCycleManager extends StatefulWidget {
@@ -35,6 +36,7 @@ class _AppLifeCycleManagerState extends State<AppLifeCycleManager>
     super.didChangeAppLifecycleState(state);
     final timeProv = Provider.of<TimerProvider>(context, listen: false);
     final gameProv = Provider.of<GameViewModel>(context, listen: false);
+    final soundProv = Provider.of<SoundViewModel>(context, listen: false);
 
     switch (state) {
       case AppLifecycleState.detached:
@@ -42,6 +44,7 @@ class _AppLifeCycleManagerState extends State<AppLifeCycleManager>
         break;
       case AppLifecycleState.inactive:
         print('LifeCycleState = $state');
+
         break;
       case AppLifecycleState.paused:
         print('LifeCycleState = $state');
