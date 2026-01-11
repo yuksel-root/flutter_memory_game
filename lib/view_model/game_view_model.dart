@@ -10,6 +10,7 @@ import 'package:flutter_memory_game/core/local_storage/local_storage_manager.dar
 import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
 import 'package:flutter_memory_game/core/notifier/timeState_provider.dart';
 import 'package:flutter_memory_game/view/pause_button_menu_dialog.dart';
+import 'package:flutter_memory_game/view_model/sound_view_model.dart';
 import 'package:provider/provider.dart';
 
 //-- GameState Variables -- //
@@ -266,15 +267,21 @@ class GameViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void clickCard(int index, BuildContext context) {
-    /*  print({
+  /*  print({
                 "match": readGameViewCtx.isMatchedCard,
                 "matchL": readGameViewCtx.matchCheck!.length,
                 "gameC": readGameViewCtx.gameCard
               }); */
+
+  void clickCard(
+    int index,
+    BuildContext context,
+    SoundViewModel soundProv,
+  ) async {
     if (gameCard![index] == GameImgConstants.hiddenCardPng &&
         _matchCheck!.length < 2) {
-      openGameCard(index);
+      openGameCard(index, soundProv);
+
       setTries();
       notifyListeners();
       if (_matchCheck!.length == 2) {
@@ -286,7 +293,7 @@ class GameViewModel extends ChangeNotifier {
           _matchCheck!.clear();
           notifyListeners();
         } else {
-          closeGameCard();
+          closeGameCard(soundProv);
           notifyListeners();
         }
       }
@@ -307,11 +314,13 @@ class GameViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void openGameCard(int index) {
+  void openGameCard(int index, SoundViewModel soundProv) async {
+    soundProv.eventMusic(index);
     flipGameCard(1, index);
     gameCard![index] = _cardList![index];
 
     _matchCheck!.add({index: _cardList![index]});
+
     notifyListeners();
   }
 
@@ -339,7 +348,7 @@ class GameViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void closeGameCard() {
+  void closeGameCard(SoundViewModel soundProv) {
     Color color = const Color.fromARGB(255, 255, 17, 0);
     final int index0 = _matchCheck![0].keys.first;
     final int index1 = _matchCheck![1].keys.first;
@@ -354,6 +363,7 @@ class GameViewModel extends ChangeNotifier {
       notifyListeners();
       gameCard![index0] = GameImgConstants.hiddenCardPng;
       gameCard![index1] = GameImgConstants.hiddenCardPng;
+      soundProv.stopMusic();
       notifyListeners();
     });
 

@@ -3,12 +3,7 @@ import 'package:flutter_memory_game/core/constants/navigation_constants.dart';
 import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
 
 //-- HomeState Variables -- //
-enum HomeState {
-  empty,
-  loading,
-  completed,
-  error,
-}
+enum HomeState { empty, loading, completed, error }
 
 class HomeViewModel extends ChangeNotifier {
   late NavigationService _navigation;
@@ -19,9 +14,7 @@ class HomeViewModel extends ChangeNotifier {
     _state = HomeState.empty;
   }
 
-  void navigateToPageClear(
-    String path,
-  ) {
+  void navigateToPageClear(String path) {
     _navigation.navigateToPageClear(path: path, data: []);
   }
 

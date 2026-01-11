@@ -9,6 +9,7 @@ import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
 import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
 import 'package:flutter_memory_game/core/notifier/timeState_provider.dart';
 import 'package:flutter_memory_game/view_model/game_view_model.dart';
+import 'package:flutter_memory_game/view_model/sound_view_model.dart';
 import 'package:provider/provider.dart';
 
 class GameView extends StatefulWidget {
@@ -41,6 +42,7 @@ class _GameViewState extends State<GameView> {
   Widget build(BuildContext context) {
     final gameViewProv = Provider.of<GameViewModel>(context);
     final timeProv = Provider.of<TimerProvider>(context, listen: true);
+    final soundProv = Provider.of<SoundViewModel>(context);
 
     if (init == false) {
       print("if init game view");
@@ -50,13 +52,14 @@ class _GameViewState extends State<GameView> {
       init = true;
     }
 
-    return scaffoldWidget(context, gameViewProv, timeProv);
+    return scaffoldWidget(context, gameViewProv, timeProv, soundProv);
   }
 
   Scaffold scaffoldWidget(
     BuildContext context,
     GameViewModel gameViewProv,
     TimerProvider timeProv,
+    SoundViewModel soundProv,
   ) {
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -90,6 +93,7 @@ class _GameViewState extends State<GameView> {
                       gameViewProv.getTries,
                       gameViewProv.getScore,
                       gameViewProv,
+                      soundProv,
                     ),
                     const Spacer(flex: 1),
                   ],
@@ -402,6 +406,7 @@ class _GameViewState extends State<GameView> {
     int tries,
     int score,
     GameViewModel gameViewProv,
+    SoundViewModel soundProv,
   ) {
     return Expanded(
       flex: 100,
@@ -420,7 +425,7 @@ class _GameViewState extends State<GameView> {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
-              gameViewProv.clickCard(index, context);
+              gameViewProv.clickCard(index, context, soundProv);
             },
             child: TweenAnimationBuilder(
               tween: Tween<double>(

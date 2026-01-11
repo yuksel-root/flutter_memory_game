@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/components/custom_elevated_button.dart';
+import 'package:flutter_memory_game/components/custom_google_fonts.dart';
 import 'package:flutter_memory_game/components/gradient_widget.dart';
 import 'package:flutter_memory_game/core/constants/app_colors.dart';
 import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
@@ -14,13 +15,13 @@ class PauseButtonMenuDialog extends StatelessWidget {
   final Function continueBtnFunction;
   final Function soundBtnFunction;
 
-  const PauseButtonMenuDialog(
-      {Key? key,
-      required this.menuButtonFunction,
-      required this.newGameButtonFunction,
-      required this.continueBtnFunction,
-      required this.soundBtnFunction})
-      : super(key: key);
+  const PauseButtonMenuDialog({
+    Key? key,
+    required this.menuButtonFunction,
+    required this.newGameButtonFunction,
+    required this.continueBtnFunction,
+    required this.soundBtnFunction,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,56 +31,75 @@ class PauseButtonMenuDialog extends StatelessWidget {
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 1, sigmaY: 1),
       child: Center(
-          child: AnimatedContainer(
-              height: screenHeight / 2.3799,
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.fastLinearToSlowEaseIn,
-              child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.all(Radius.circular(
-                        context.dynamicH(0.005) * context.dynamicW(0.008))),
-                  ),
-                  child: Container(
-                    child: Column(
-                      children: [
-                        Expanded(
-                          flex: 100,
-                          child: Container(
-                            width: screenWidth / 1.5,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Expanded(
-                                  flex: 100,
-                                  child: alertBtn(context, "  SOUND ON ",
-                                      Icons.surround_sound),
-                                ),
-                                const Spacer(flex: 1),
-                                Expanded(
-                                    flex: 100,
-                                    child: alertBtn(context,
-                                        "  MENU             ", Icons.menu)),
-                                const Spacer(flex: 1),
-                                Expanded(
-                                  flex: 100,
-                                  child: alertBtn(context, "   NEW GAME ",
-                                      Icons.add_card_sharp),
-                                ),
-                                const Spacer(flex: 1),
-                                Expanded(
-                                  flex: 100,
-                                  child: alertBtn(context, "    CONTINUE ",
-                                      Icons.skip_next),
-                                ),
-                              ],
+        child: AnimatedContainer(
+          height: screenHeight / 2.3799,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.fastLinearToSlowEaseIn,
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.all(
+                Radius.circular(
+                  context.dynamicH(0.005) * context.dynamicW(0.008),
+                ),
+              ),
+            ),
+            child: Container(
+              child: Column(
+                children: [
+                  Expanded(
+                    flex: 100,
+                    child: Container(
+                      width: screenWidth / 1.5,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Expanded(
+                            flex: 100,
+                            child: alertBtn(
+                              context,
+                              "  SOUND ON ",
+                              Icons.surround_sound,
                             ),
                           ),
-                        ),
-                      ],
+                          const Spacer(flex: 1),
+                          Expanded(
+                            flex: 100,
+                            child: alertBtn(
+                              context,
+                              "  MENU             ",
+                              Icons.menu,
+                            ),
+                          ),
+                          const Spacer(flex: 1),
+                          Expanded(
+                            flex: 100,
+                            child: alertBtn(
+                              context,
+                              "   NEW GAME ",
+                              Icons.add_card_sharp,
+                            ),
+                          ),
+                          const Spacer(flex: 1),
+                          Expanded(
+                            flex: 100,
+                            child: alertBtn(
+                              context,
+                              "    CONTINUE ",
+                              Icons.skip_next,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  )))),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -160,26 +180,27 @@ class PauseButtonMenuDialog extends StatelessWidget {
   }
 
   GradientWidget gradientText(
-      BuildContext context, String text, double fontSize, Gradient gradient) {
+    BuildContext context,
+    String text,
+    double fontSize,
+    Gradient gradient,
+  ) {
     return GradientWidget(
       gradient: gradient,
-      widget: RichText(
+      widget: GoogleFontsText(
+        text,
         textAlign: TextAlign.center,
-        text: TextSpan(
-          children: <TextSpan>[
-            TextSpan(
-              text: text,
-              style: GoogleFonts.bungeeSpice(),
-            ),
-          ],
-          style:
-              TextStyle(fontSize: fontSize, letterSpacing: 1, shadows: const [
+        maxLines: 1,
+        styleOverride: TextStyle(
+          fontSize: fontSize,
+          letterSpacing: 1,
+          shadows: const [
             BoxShadow(
               color: Colors.white,
               spreadRadius: 5,
               offset: Offset(1, 1),
-            )
-          ]),
+            ),
+          ],
         ),
       ),
     );

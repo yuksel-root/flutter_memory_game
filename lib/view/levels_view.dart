@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_memory_game/components/custom_app_bar.dart';
 import 'package:flutter_memory_game/components/custom_column_box.dart';
 import 'package:flutter_memory_game/components/custom_elevated_button.dart';
+import 'package:flutter_memory_game/components/custom_google_fonts.dart';
 import 'package:flutter_memory_game/components/gradient_widget.dart';
 import 'package:flutter_memory_game/core/constants/app_colors.dart';
 import 'package:flutter_memory_game/core/constants/navigation_constants.dart';
 import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
 import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
 import 'package:flutter_memory_game/view_model/game_view_model.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class LevelsView extends StatelessWidget {
@@ -227,23 +227,20 @@ class LevelsView extends StatelessWidget {
   ) {
     return GradientWidget(
       gradient: gradient,
-      widget: RichText(
+      widget: GoogleFontsText(
+        text,
         textAlign: TextAlign.center,
-        text: TextSpan(
-          children: <TextSpan>[
-            TextSpan(text: text, style: GoogleFonts.bungeeSpice()),
+        maxLines: 1,
+        styleOverride: TextStyle(
+          fontSize: fontSize,
+          letterSpacing: 1,
+          shadows: const [
+            BoxShadow(
+              color: Colors.white,
+              spreadRadius: 5,
+              offset: Offset(1, 1),
+            ),
           ],
-          style: TextStyle(
-            fontSize: fontSize,
-            letterSpacing: 1,
-            shadows: [
-              BoxShadow(
-                color: Colors.white,
-                spreadRadius: 5,
-                offset: Offset(1, 1),
-              ),
-            ],
-          ),
         ),
       ),
     );
