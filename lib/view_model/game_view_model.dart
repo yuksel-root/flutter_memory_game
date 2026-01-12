@@ -281,11 +281,16 @@ class GameViewModel extends ChangeNotifier {
     if (gameCard![index] == GameImgConstants.hiddenCardPng &&
         _matchCheck!.length < 2) {
       openGameCard(index, soundProv);
-
+      final int index0 = _matchCheck![0].keys.first;
+      if (_matchCheck!.length == 1) {
+        soundProv.eventMusic(index0);
+      }
       setTries();
       notifyListeners();
       if (_matchCheck!.length == 2) {
-        isMatchCard();
+        final int index1 = _matchCheck![1].keys.first;
+        isMatchCard(soundProv);
+        soundProv.eventMusic(index1);
         if (isMatchedCard) {
           setScore = 100;
           setMatchCount = 1;
@@ -315,7 +320,6 @@ class GameViewModel extends ChangeNotifier {
   }
 
   void openGameCard(int index, SoundViewModel soundProv) async {
-    soundProv.eventMusic(index);
     flipGameCard(1, index);
     gameCard![index] = _cardList![index];
 
@@ -363,7 +367,7 @@ class GameViewModel extends ChangeNotifier {
       notifyListeners();
       gameCard![index0] = GameImgConstants.hiddenCardPng;
       gameCard![index1] = GameImgConstants.hiddenCardPng;
-      soundProv.stopMusic();
+
       notifyListeners();
     });
 
@@ -398,10 +402,11 @@ class GameViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void isMatchCard() {
+  void isMatchCard(SoundViewModel soundProv) {
     final int index0 = _matchCheck![0].keys.first;
     final int index1 = _matchCheck![1].keys.first;
     Color color = const Color.fromARGB(255, 0, 255, 42);
+
     if (_matchCheck![0].values.first == _matchCheck![1].values.first) {
       isMatchedCard = true;
       Future.delayed(const Duration(milliseconds: 1350), () {

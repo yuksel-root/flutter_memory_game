@@ -17,8 +17,15 @@ class SoundViewModel extends ChangeNotifier {
 
   Future<void> eventMusic(int imgIndex) async {
     final eventPlayer = AudioPlayer();
+    if (imgIndex > 44) {
+      imgIndex = imgIndex ~/ 2;
+      if (imgIndex > 44) {
+        imgIndex = imgIndex ~/ 2;
+      }
+    }
     try {
       await eventPlayer.setAsset(AppConstants.soundListPath[imgIndex]);
+      print(AppConstants.soundListPath[imgIndex]);
       await eventPlayer.play();
 
       await Future.delayed(const Duration(milliseconds: 5));
