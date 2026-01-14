@@ -33,8 +33,9 @@ class HomeView extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
-            fit: BoxFit.fill,
-            image: AssetImage("assets/home_bg_jpeg/main_bg.jpeg")),
+          fit: BoxFit.fill,
+          image: AssetImage("assets/home_bg_jpeg/main_bg.jpeg"),
+        ),
       ),
       child: Column(
         children: [
@@ -46,24 +47,26 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Expanded expandedMainTexts(
-    BuildContext context,
-    int flex,
-  ) {
+  Expanded expandedMainTexts(BuildContext context, int flex) {
     return Expanded(
-        flex: flex,
-        child: Column(
-          children: [
-            Expanded(
-                flex: 1, child: gradientText(context, _mainTxt1Clr, "MEMORY")),
-            Expanded(
-                flex: 1, child: gradientText(context, _mainTxt2Clr, "GAME")),
-          ],
-        ));
+      flex: flex,
+      child: Column(
+        children: [
+          Expanded(
+            flex: 1,
+            child: gradientText(context, _mainTxt1Clr, "MEMORY"),
+          ),
+          Expanded(flex: 1, child: gradientText(context, _mainTxt2Clr, "GAME")),
+        ],
+      ),
+    );
   }
 
   Expanded expandedModeBoxes(
-      BuildContext context, int flex, HomeViewModel homeProv) {
+    BuildContext context,
+    int flex,
+    HomeViewModel homeProv,
+  ) {
     return Expanded(
       flex: flex,
       child: Wrap(
@@ -71,16 +74,22 @@ class HomeView extends StatelessWidget {
         crossAxisAlignment: WrapCrossAlignment.center,
         spacing: context.dynamicW(0.2),
         children: [
-          modeSelectBox(Icons.bar_chart_sharp, context, "Stage Mode", homeProv),
+          //modeSelectBox(Icons.bar_chart_sharp, context, "Stage Mode", homeProv),
           modeSelectBox(
-              Icons.access_alarms_rounded, context, "Arcade Mode", homeProv),
+            Icons.access_alarms_rounded,
+            context,
+            "Arcade Mode",
+            homeProv,
+          ),
         ],
       ),
     );
   }
 
   FittedBox settingsButtonWidgets(
-      BuildContext context, HomeViewModel homeProv) {
+    BuildContext context,
+    HomeViewModel homeProv,
+  ) {
     return FittedBox(
       child: Wrap(
         alignment: WrapAlignment.start,
@@ -94,10 +103,15 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  CustomColumnBox modeSelectBox(IconData iconName, BuildContext context,
-      String text, HomeViewModel homeProv) {
-    final cPadding =
-        EdgeInsets.all(context.dynamicH(0.004) * context.dynamicW(0.008));
+  CustomColumnBox modeSelectBox(
+    IconData iconName,
+    BuildContext context,
+    String text,
+    HomeViewModel homeProv,
+  ) {
+    final cPadding = EdgeInsets.all(
+      context.dynamicH(0.004) * context.dynamicW(0.008),
+    );
     return CustomColumnBox(
       clickFunction: () {
         if (text == "Stage Mode") {
@@ -123,7 +137,7 @@ class HomeView extends StatelessWidget {
             Colors.cyanAccent,
             Colors.pinkAccent,
             Colors.yellowAccent,
-            Colors.cyanAccent
+            Colors.cyanAccent,
           ],
         ),
         widget: Icon(
@@ -132,16 +146,16 @@ class HomeView extends StatelessWidget {
         ),
       ),
       columnChild2: GradientWidget(
-        gradient: const SweepGradient(colors: [
-          Color(0xff4D5B5B),
-          Color(0xff5E6C6C),
-        ]),
+        gradient: const SweepGradient(
+          colors: [Color(0xff4D5B5B), Color(0xff5E6C6C)],
+        ),
         widget: Text(
           text,
           style: TextStyle(
-              decoration: TextDecoration.none,
-              fontSize: context.dynamicH(0.00571) * context.dynamicW(0.008),
-              letterSpacing: 2),
+            decoration: TextDecoration.none,
+            fontSize: context.dynamicH(0.00571) * context.dynamicW(0.008),
+            letterSpacing: 2,
+          ),
         ),
       ),
     );
@@ -173,7 +187,8 @@ class HomeView extends StatelessWidget {
   CustomBtn elevatedBtn(BuildContext context, IconData icon) {
     return CustomBtn(
       borderRadius: BorderRadius.circular(
-          context.dynamicH(0.01) * context.dynamicW(0.014)),
+        context.dynamicH(0.01) * context.dynamicW(0.014),
+      ),
       boxShadow: const [
         BoxShadow(
           color: Colors.transparent,
@@ -198,14 +213,16 @@ class HomeView extends StatelessWidget {
             Colors.cyanAccent,
             Colors.pinkAccent,
             Colors.yellowAccent,
-            Colors.cyanAccent
+            Colors.cyanAccent,
           ],
           startAngle: 0.9,
           endAngle: 6.0,
           tileMode: TileMode.clamp,
         ),
-        widget:
-            Icon(icon, size: context.dynamicH(0.01) * context.dynamicW(0.014)),
+        widget: Icon(
+          icon,
+          size: context.dynamicH(0.01) * context.dynamicW(0.014),
+        ),
       ),
       onPressFunc: () {},
     );

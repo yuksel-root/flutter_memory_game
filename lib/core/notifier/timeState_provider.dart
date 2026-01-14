@@ -63,11 +63,13 @@ class TimerProvider with ChangeNotifier {
   }
 
   void resetTimer(BuildContext context) {
+    if (!context.mounted) return;
     print("Timer reset F");
     setTime = context.dynamicW(0.9);
   }
 
   void stopTimer(BuildContext context, {bool reset = true}) {
+    if (!context.mounted) return;
     if (reset) {
       print("timer reset");
       resetTimer(context);
@@ -83,6 +85,7 @@ class TimerProvider with ChangeNotifier {
   }
 
   void startTime(BuildContext context, {bool reset = true}) async {
+    if (!context.mounted) return;
     if (getTimeState == TimeState.timerFinish ||
         getTimeState == TimeState.timerEmpty ||
         getTimeState == TimeState.timerReset) {

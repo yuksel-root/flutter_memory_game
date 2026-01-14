@@ -183,6 +183,7 @@ class GameViewModel extends ChangeNotifier {
   }
 
   void initGame(BuildContext context) {
+    if (!context.mounted) return;
     final timerProv = Provider.of<TimerProvider>(context, listen: false);
     setFirstInit();
     if (timerProv.getTimeState == TimeState.timerFinish ||
@@ -263,7 +264,7 @@ class GameViewModel extends ChangeNotifier {
   }
 
   void flipGameCard(double direction, int index) {
-    setAngleArr((direction * pi), index);
+    setAngleArr(direction * pi, index);
     notifyListeners();
   }
 
@@ -281,16 +282,25 @@ class GameViewModel extends ChangeNotifier {
     if (gameCard![index] == GameImgConstants.hiddenCardPng &&
         _matchCheck!.length < 2) {
       openGameCard(index, soundProv);
-      final int index0 = _matchCheck![0].keys.first;
-      if (_matchCheck!.length == 1) {
-        soundProv.eventMusic(index0);
+      try {
+        final int index0 = _matchCheck![0].keys.first;
+        if (_matchCheck!.length == 1) {
+          soundProv.eventMusic(index0);
+        }
+      } catch (e) {
+        print('Event soundW0 error: $e');
       }
+
       setTries();
       notifyListeners();
       if (_matchCheck!.length == 2) {
         final int index1 = _matchCheck![1].keys.first;
         isMatchCard(soundProv);
-        soundProv.eventMusic(index1);
+        try {
+          soundProv.eventMusic(index1);
+        } catch (e) {
+          print('Event soundXW1 error: $e');
+        }
         if (isMatchedCard) {
           setScore = 100;
           setMatchCount = 1;
@@ -310,6 +320,7 @@ class GameViewModel extends ChangeNotifier {
 
     if (getFinishCard) {
       Future.delayed(const Duration(milliseconds: 2500), () {
+        if (!context.mounted) return;
         nextStageAlert(context);
       });
       notifyListeners();
@@ -420,7 +431,9 @@ class GameViewModel extends ChangeNotifier {
 
   void restartGame(BuildContext context) {
     final timerProv = Provider.of<TimerProvider>(context, listen: false);
+
     setFirstInit();
+
     try {
       arrayClears();
 
@@ -429,6 +442,7 @@ class GameViewModel extends ChangeNotifier {
       } else {
         clearBgCounter();
       }
+
       setScoreClear();
       setTriesClear();
       _peekCardsClickCountClear();
@@ -436,13 +450,22 @@ class GameViewModel extends ChangeNotifier {
       print({"res game error": e});
     }
 
+    // Timer reset
     timerProv.stopTimer(context, reset: true);
-
     timerProv.setIsActiveTimer = true;
-    navigateToPageClear(NavigationConstants.gameView);
 
-    setOpacity = 0;
+    _animationAngleArr = [];
+    _cardBorderColors = [];
+    _cardBorderWidth = [];
+
+    _pageOpacity = 0;
+
     notifyListeners();
+
+    Future.microtask(() {
+      if (!context.mounted) return;
+      _navigation.navigateToPageClear(path: NavigationConstants.gameView);
+    });
   }
 
   void nextStage() {
@@ -462,6 +485,7 @@ class GameViewModel extends ChangeNotifier {
   }
 
   Future<void> nextStageAlert(BuildContext context) async {
+    if (!context.mounted) return;
     print("nextStage alert");
     NewGameAlertDialog alert = NewGameAlertDialog(
       score: getScore,
@@ -503,6 +527,7 @@ class GameViewModel extends ChangeNotifier {
   }
 
   Future<void> pauseGameAlert(BuildContext context) async {
+    if (!context.mounted) return;
     final timerProv = Provider.of<TimerProvider>(context, listen: false);
     print("Pause alert");
     PauseButtonMenuDialog alert = PauseButtonMenuDialog(
@@ -516,14 +541,19 @@ class GameViewModel extends ChangeNotifier {
       },
       soundBtnFunction: () {},
       newGameButtonFunction: () {
+        if (!context.mounted) return;
         timerProv.stopTimer(context, reset: true);
-        _isAlertOpen = false;
+
+        navigateToPageClear(NavigationConstants.homeView);
+        restartGame(context);
         navigateToPageClear(NavigationConstants.gameView);
+        _isAlertOpen = false;
       },
       menuButtonFunction: () {
         timerProv.stopTimer(context, reset: true);
-        _isAlertOpen = false;
+
         navigateToPageClear(NavigationConstants.homeView);
+        _isAlertOpen = false;
       },
     );
     if (_isAlertOpen == false) {
@@ -567,12 +597,12 @@ class GameViewModel extends ChangeNotifier {
   }
 
   void setAngleGameCardList() {
-    _animationAngleArr = List.generate(_cardList!.length, (index) => 0);
+    _animationAngleArr = List.generate(_cardList?.length ?? 0, (index) => 0.0);
   }
 
   void setCardBorderColor() {
     _cardBorderColors = List.generate(
-      _cardList!.length,
+      _cardList?.length ?? 0,
       (index) => const Color(0xFFB2FEFA),
     );
   }
@@ -662,7 +692,24 @@ class GameViewModel extends ChangeNotifier {
   int get getMatchCount => _matchCount;
   bool get isMatchedCard => _isMatchedCard;
   int get getStage => _currentStage;
-  double getAngleArr(int index) => _animationAngleArr![index];
-  Color getCardBorderColors(int index) => _cardBorderColors[index];
-  double getCardBorderWidth(int index) => _cardBorderWidth[index];
+  double getAngleArr(int index) {
+    if (_animationAngleArr == null || index >= _animationAngleArr!.length) {
+      return 0.0;
+    }
+    return _animationAngleArr![index];
+  }
+
+  Color getCardBorderColors(int index) {
+    if (_cardBorderColors.isEmpty || index >= _cardBorderColors.length) {
+      return Colors.transparent;
+    }
+    return _cardBorderColors[index];
+  }
+
+  double getCardBorderWidth(int index) {
+    if (_cardBorderWidth.isEmpty || index >= _cardBorderWidth.length) {
+      return 0.0;
+    }
+    return _cardBorderWidth[index];
+  }
 }

@@ -11,6 +11,7 @@ import 'package:flutter_memory_game/core/notifier/timeState_provider.dart';
 import 'package:flutter_memory_game/view_model/game_view_model.dart';
 import 'package:flutter_memory_game/view_model/sound_view_model.dart';
 import 'package:provider/provider.dart';
+import 'dart:math';
 
 class GameView extends StatefulWidget {
   const GameView({Key? key}) : super(key: key);
@@ -25,17 +26,18 @@ class _GameViewState extends State<GameView> {
   @override
   void initState() {
     init = false;
-
+    super.initState();
+    if (!context.mounted) return;
     _navigation = NavigationService.instance;
     Provider.of<GameViewModel>(context, listen: false).initGame(context);
 
     Future.microtask(() async {
+      if (!context.mounted) return;
       await Future.delayed(const Duration(milliseconds: 200)).then((value) {
+        if (!context.mounted) return;
         Provider.of<GameViewModel>(context, listen: false).setOpacity = 1;
       });
     });
-
-    super.initState();
   }
 
   @override
@@ -429,7 +431,7 @@ class _GameViewState extends State<GameView> {
             },
             child: TweenAnimationBuilder(
               tween: Tween<double>(
-                begin: 0,
+                begin: 0.0,
                 end: gameViewProv.getAngleArr(index),
               ),
               duration: const Duration(milliseconds: 650),
@@ -452,42 +454,48 @@ class _GameViewState extends State<GameView> {
     GameViewModel gameViewProv,
     int index,
   ) {
+    final angle = gameViewProv.getAngleArr(index);
+    final isFront = angle > pi / 2;
     return (FittedBox(
       fit: BoxFit.contain,
-      child: Container(
-        padding: EdgeInsets.all(
-          context.dynamicH(0.004) * context.dynamicW(0.006),
-        ), //3*3 9px
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              const Color(0xFFB2FEFA).withOpacity(0.6),
-              const Color(0xFF6dd5ed).withOpacity(0.6),
-            ],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-            stops: const [0.0, 1.0],
-            tileMode: TileMode.repeated,
-          ),
-          border: Border.all(
-            color: gameViewProv.getCardBorderColors(index),
-            width: gameViewProv.getCardBorderWidth(index),
-          ),
-          borderRadius: BorderRadius.circular(
-            context.dynamicH(0.002) * context.dynamicW(0.004),
-          ), //2*2
-          image: DecorationImage(
-            repeat: ImageRepeat.noRepeat,
-
-            scale: context.dynamicH(0.005) * context.dynamicW(0.008), //4*4
-            opacity: 0.9,
-            alignment: Alignment.center,
-            image: AssetImage(
-              gameViewProv.gameCard![index] == GameImgConstants.hiddenCardPng
-                  ? GameImgConstants.transparentPng
-                  : gameViewProv.gameCard![index],
+      child: Transform(
+        alignment: Alignment.center,
+        transform: isFront ? Matrix4.rotationY(pi) : Matrix4.identity(),
+        child: Container(
+          padding: EdgeInsets.all(
+            context.dynamicH(0.004) * context.dynamicW(0.006),
+          ), //3*3 9px
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                const Color(0xFFB2FEFA).withOpacity(0.6),
+                const Color(0xFF6dd5ed).withOpacity(0.6),
+              ],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              stops: const [0.0, 1.0],
+              tileMode: TileMode.repeated,
             ),
-            fit: BoxFit.contain,
+            border: Border.all(
+              color: gameViewProv.getCardBorderColors(index),
+              width: gameViewProv.getCardBorderWidth(index),
+            ),
+            borderRadius: BorderRadius.circular(
+              context.dynamicH(0.002) * context.dynamicW(0.004),
+            ), //2*2
+            image: DecorationImage(
+              repeat: ImageRepeat.noRepeat,
+
+              scale: context.dynamicH(0.005) * context.dynamicW(0.008), //4*4
+              opacity: 0.9,
+              alignment: Alignment.center,
+              image: AssetImage(
+                gameViewProv.gameCard![index] == GameImgConstants.hiddenCardPng
+                    ? GameImgConstants.transparentPng
+                    : gameViewProv.gameCard![index],
+              ),
+              fit: BoxFit.contain,
+            ),
           ),
         ),
       ),

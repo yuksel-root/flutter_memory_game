@@ -24,13 +24,13 @@ class SoundViewModel extends ChangeNotifier {
       }
     }
     try {
-      await eventPlayer.setAsset(AppConstants.soundListPath[imgIndex]);
-      print(AppConstants.soundListPath[imgIndex]);
+      await eventPlayer.setAsset(AppConstants.eventListPath[imgIndex]);
+      print(AppConstants.eventListPath[imgIndex]);
       await eventPlayer.play();
 
       await Future.delayed(const Duration(milliseconds: 5));
     } catch (e) {
-      debugPrint('Event sound error: $e');
+      print('Event sound error: $e');
     } finally {
       await eventPlayer.dispose();
     }
