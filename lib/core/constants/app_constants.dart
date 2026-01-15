@@ -2,7 +2,7 @@ class AppConstants {
   static const hamster_json = "hamster";
   static const colorful_indicator = "colorfully_load";
 
-  static const List<String> eventListPath = [
+  static const List<String> eventSoundList = [
     "1000-iq.mp3",
     "angels.mp3",
     "anime-wow-sound-effect-mp3cut.mp3",
@@ -28,7 +28,6 @@ class AppConstants {
     "ding.mp3",
     "drinking-slurping.mp3",
     "electric-shock.mp3",
-    "error.mp3",
     "fbi.mp3",
     "female-ghost-laugh.mp3",
     "flashbang-sound-effect.mp3",

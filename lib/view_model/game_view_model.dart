@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_memory_game/core/constants/app_constants.dart';
 import 'package:flutter_memory_game/view/new_game_alert.dart';
 import 'package:flutter_memory_game/core/constants/game_img_constants.dart';
 import 'package:flutter_memory_game/core/constants/navigation_constants.dart';
@@ -285,7 +286,9 @@ class GameViewModel extends ChangeNotifier {
       try {
         final int index0 = _matchCheck![0].keys.first;
         if (_matchCheck!.length == 1) {
-          soundProv.eventMusic(index0);
+          String path1 =
+              "sounds/events/${AppConstants.eventSoundList[index0 > 89 ? index0 - 45 : index0]}";
+          soundProv.eventMusic(path1);
         }
       } catch (e) {
         print('Event soundW0 error: $e');
@@ -297,7 +300,9 @@ class GameViewModel extends ChangeNotifier {
         final int index1 = _matchCheck![1].keys.first;
         isMatchCard(soundProv);
         try {
-          soundProv.eventMusic(index1);
+          String path1 =
+              "sounds/events/${AppConstants.eventSoundList[index1 > 89 ? index1 - 45 : index1]}";
+          soundProv.eventMusic(path1);
         } catch (e) {
           print('Event soundXW1 error: $e');
         }
@@ -339,15 +344,24 @@ class GameViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void borderAnimate(int i0, int i1, int count, Color color, double borderW) {
+  void borderAnimate(
+    int i0,
+    int i1,
+    int count,
+    Color color,
+    double borderW,
+    SoundViewModel soundProv,
+  ) {
     if (count > 3) return;
-
     _cardBorderColors[i0] = color;
     _cardBorderColors[i1] = color;
+
     notifyListeners();
     _cardBorderWidth[i0] = 0.400;
+
     notifyListeners();
     _cardBorderWidth[i1] = _cardBorderWidth[i0];
+
     notifyListeners();
     Future.delayed(const Duration(milliseconds: 112), () {
       _cardBorderColors[i0] = const Color(0xFFB2FEFA);
@@ -356,7 +370,14 @@ class GameViewModel extends ChangeNotifier {
       _cardBorderWidth[i1] = 0;
       notifyListeners();
       Future.delayed(const Duration(milliseconds: 112), () {
-        borderAnimate(i0, i1, count + 1, color, Random().nextDouble() * 0.114);
+        borderAnimate(
+          i0,
+          i1,
+          count + 1,
+          color,
+          Random().nextDouble() * 0.114,
+          soundProv,
+        );
       });
       notifyListeners();
     });
@@ -369,7 +390,16 @@ class GameViewModel extends ChangeNotifier {
     final int index1 = _matchCheck![1].keys.first;
 
     Future.delayed(const Duration(milliseconds: 500), () {
-      borderAnimate(index0, index1, 0, color, Random().nextDouble() * 0.234);
+      borderAnimate(
+        index0,
+        index1,
+        0,
+        color,
+        Random().nextDouble() * 0.234,
+        soundProv,
+      );
+
+      soundProv.eventMusic("sounds/error.mp3");
     });
     notifyListeners();
     Future.delayed(const Duration(milliseconds: 1500), () {
@@ -420,8 +450,16 @@ class GameViewModel extends ChangeNotifier {
 
     if (_matchCheck![0].values.first == _matchCheck![1].values.first) {
       isMatchedCard = true;
-      Future.delayed(const Duration(milliseconds: 1350), () {
-        borderAnimate(index0, index1, 0, color, Random().nextDouble() * 0.222);
+      Future.delayed(const Duration(milliseconds: 500), () {
+        borderAnimate(
+          index0,
+          index1,
+          0,
+          color,
+          Random().nextDouble() * 0.222,
+          soundProv,
+        );
+        soundProv.eventMusic("sounds/correctx3.mp3");
       });
     } else {
       isMatchedCard = false;

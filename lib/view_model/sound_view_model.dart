@@ -15,29 +15,22 @@ class SoundViewModel extends ChangeNotifier {
     await _backgroundPlayer.play();
   }
 
-  Future<void> eventMusic(int imgIndex) async {
+  Future<void> eventMusic(String path) async {
     final eventPlayer = AudioPlayer();
-    if (imgIndex > 44) {
-      imgIndex = imgIndex ~/ 2;
-      if (imgIndex > 44) {
-        imgIndex = imgIndex ~/ 2;
-      }
-    }
-    try {
-      await eventPlayer.setAsset(AppConstants.eventListPath[imgIndex]);
-      print(AppConstants.eventListPath[imgIndex]);
-      await eventPlayer.play();
 
-      await Future.delayed(const Duration(milliseconds: 5));
+    try {
+      await eventPlayer.setAsset(path);
+
+      eventPlayer.play();
+
+      await Future.delayed(const Duration(seconds: 1));
+
+      await eventPlayer.stop();
     } catch (e) {
       print('Event sound error: $e');
     } finally {
       await eventPlayer.dispose();
     }
-  }
-
-  Future<void> stopMusic() async {
-    await _backgroundPlayer.stop();
   }
 
   @override
