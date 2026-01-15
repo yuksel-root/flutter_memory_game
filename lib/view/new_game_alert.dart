@@ -38,14 +38,14 @@ class NewGameAlertDialog extends StatelessWidget {
     final screenWidth = context.mediaQuery.size.width;
     final gameViewProv = Provider.of<GameViewModel>(context);
 
-    final bool kIsWeb = screenWidth > 700;
+    final bool kIsWeb = screenWidth > 645;
     final double webScaleFactor = kIsWeb ? 0.8 : 1.0;
 
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 7, sigmaY: 7),
       child: Center(
         child: AnimatedContainer(
-          height: kIsWeb ? 700 : screenHeight / 1.1,
+          height: kIsWeb ? 700 : screenHeight / 1.25,
           width: kIsWeb ? 600 : null,
           duration: const Duration(milliseconds: 500),
           curve: Curves.fastLinearToSlowEaseIn,

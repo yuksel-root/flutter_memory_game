@@ -19,7 +19,9 @@ class SoundViewModel extends ChangeNotifier {
     final eventPlayer = AudioPlayer();
 
     try {
-      await eventPlayer.setAsset(path);
+      final assetPath = path.startsWith('assets/') ? path : 'assets/$path';
+      await eventPlayer.setAsset(assetPath);
+      print(assetPath);
 
       eventPlayer.play();
 
