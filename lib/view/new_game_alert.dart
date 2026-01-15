@@ -193,7 +193,6 @@ class NewGameAlertDialog extends StatelessWidget {
           title,
           kIsWeb ? 40 : context.dynamicH(0.00714) * context.dynamicW(0.01),
           goldGradient,
-          hasShadow: true,
         ),
       ),
     );
@@ -212,7 +211,6 @@ class NewGameAlertDialog extends StatelessWidget {
           content,
           kIsWeb ? 40 : context.dynamicH(0.00714) * context.dynamicW(0.01),
           goldGradient,
-          hasShadow: true,
         ),
       ],
     );
@@ -446,9 +444,8 @@ class NewGameAlertDialog extends StatelessWidget {
     BuildContext context,
     String text,
     double fontSize,
-    Gradient gradient, {
-    bool hasShadow = true,
-  }) {
+    Gradient gradient,
+  ) {
     return GradientWidget(
       gradient: gradient,
       widget: Text(
@@ -458,15 +455,6 @@ class NewGameAlertDialog extends StatelessWidget {
           fontSize: fontSize,
           fontWeight: FontWeight.w900,
           fontFamily: 'Serif',
-          shadows: hasShadow
-              ? [
-                  const Shadow(
-                    color: Color.fromARGB(221, 211, 248, 2),
-                    offset: Offset(2, 2),
-                    blurRadius: 2,
-                  ),
-                ]
-              : null,
         ),
       ),
     );
