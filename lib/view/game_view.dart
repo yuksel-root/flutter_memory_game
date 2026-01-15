@@ -4,6 +4,7 @@ import 'package:flutter_memory_game/components/custom_app_bar.dart';
 import 'package:flutter_memory_game/components/custom_countdown_bar.dart';
 import 'package:flutter_memory_game/components/gradient_widget.dart';
 import 'package:flutter_memory_game/components/score_board.dart';
+import 'package:flutter_memory_game/core/constants/app_colors.dart';
 import 'package:flutter_memory_game/core/constants/game_img_constants.dart';
 import 'package:flutter_memory_game/core/extensions/context_extensions.dart';
 import 'package:flutter_memory_game/core/navigation/navigation_service.dart';
@@ -247,15 +248,7 @@ class _GameViewState extends State<GameView> {
       child: GradientWidget(
         // ignore: prefer_const_constructors
         gradient: const RadialGradient(
-          colors: [
-            Color(0xFF9400D3),
-            Color(0xFF4B0082),
-            Color(0xFF0000FF),
-            Color(0xFF00FF00),
-            Color(0xFFFFFF00),
-            Color(0xFFFF7F00),
-            Color(0xFFFF0000),
-          ],
+          colors: AppColors.rainBowColors,
           center: Alignment(0.0, 0.5),
           tileMode: TileMode.clamp,
         ),
@@ -315,15 +308,7 @@ class _GameViewState extends State<GameView> {
             size: context.dynamicH(0.01) * context.dynamicW(0.014),
           ),
           gradient: const SweepGradient(
-            colors: [
-              Color(0xFF9400D3),
-              Color(0xFF4B0082),
-              Color(0xFF0000FF),
-              Color(0xFF00FF00),
-              Color(0xFFFFFF00),
-              Color(0xFFFF7F00),
-              Color(0xFFFF0000),
-            ],
+            colors: AppColors.rainBowColors,
             startAngle: 0.9,
             endAngle: 6.0,
             tileMode: TileMode.clamp,
@@ -382,15 +367,7 @@ class _GameViewState extends State<GameView> {
         ),
         child: GradientWidget(
           gradient: const SweepGradient(
-            colors: [
-              Color(0xFF9400D3),
-              Color(0xFF4B0082),
-              Color(0xFF0000FF),
-              Color(0xFF00FF00),
-              Color(0xFFFFFF00),
-              Color(0xFFFF7F00),
-              Color(0xFFFF0000),
-            ],
+            colors: AppColors.rainBowColors,
             startAngle: 0.9,
             endAngle: 6.0,
             tileMode: TileMode.clamp,
@@ -528,17 +505,7 @@ class _GameViewState extends State<GameView> {
       child: Row(
         children: [
           GradientWidget(
-            gradient: const LinearGradient(
-              colors: [
-                Color(0xFF9400D3),
-                Color(0xFF4B0082),
-                Color(0xFF0000FF),
-                Color(0xFF00FF00),
-                Color(0xFFFFFF00),
-                Color(0xFFFF7F00),
-                Color(0xFFFF0000),
-              ],
-            ),
+            gradient: const LinearGradient(colors: AppColors.rainBowColors),
             widget: Text(
               "STAGE",
               style: TextStyle(
@@ -549,15 +516,7 @@ class _GameViewState extends State<GameView> {
           SizedBox(width: context.dynamicW(0.05)),
           GradientWidget(
             gradient: const RadialGradient(
-              colors: [
-                Color(0xFF9400D3),
-                Color(0xFF4B0082),
-                Color(0xFF0000FF),
-                Color(0xFF00FF00),
-                Color(0xFFFFFF00),
-                Color(0xFFFF7F00),
-                Color(0xFFFF0000),
-              ],
+              colors: AppColors.rainBowColors,
               center: Alignment(0.0, 0.3),
               tileMode: TileMode.clamp,
             ),
@@ -599,17 +558,7 @@ class _GameViewState extends State<GameView> {
       child: Row(
         children: [
           GradientWidget(
-            gradient: const LinearGradient(
-              colors: [
-                Color(0xFF9400D3),
-                Color(0xFF4B0082),
-                Color(0xFF0000FF),
-                Color(0xFF00FF00),
-                Color(0xFFFFFF00),
-                Color(0xFFFF7F00),
-                Color(0xFFFF0000),
-              ],
-            ),
+            gradient: const LinearGradient(colors: AppColors.rainBowColors),
             widget: Text(
               "LEVEL",
               style: TextStyle(
@@ -620,15 +569,7 @@ class _GameViewState extends State<GameView> {
           SizedBox(width: context.dynamicW(0.05)),
           GradientWidget(
             gradient: const RadialGradient(
-              colors: [
-                Color(0xFF9400D3),
-                Color(0xFF4B0082),
-                Color(0xFF0000FF),
-                Color(0xFF00FF00),
-                Color(0xFFFFFF00),
-                Color(0xFFFF7F00),
-                Color(0xFFFF0000),
-              ],
+              colors: AppColors.rainBowColors,
               center: Alignment(0.0, 0.3),
               tileMode: TileMode.clamp,
             ),
