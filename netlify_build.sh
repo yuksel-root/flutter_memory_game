@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 
-
 export PATH="$HOME/flutter/bin:$PATH"
 
 # ---- Flutter web build ----
@@ -9,7 +8,7 @@ flutter channel stable
 flutter upgrade
 flutter config --enable-web
 flutter pub get
-flutter build web --release --no-wasm
+flutter build web --release
 
 # ---- Netlify SPA redirect (CRITICAL) ----
 if [ -f web/_redirects ]; then
