@@ -165,6 +165,7 @@ class GameViewModel extends ChangeNotifier {
       _cardList!.length,
       (index) => GameImgConstants.hiddenCardPng,
     );
+
     gameCard!.shuffle();
   }
 
@@ -288,7 +289,7 @@ class GameViewModel extends ChangeNotifier {
         if (_matchCheck!.length == 1) {
           String path1 =
               "sounds/events/${AppConstants.eventSoundList[index0 > 89 ? index0 - 45 : index0]}";
-          soundProv.eventMusic(path1);
+          soundProv.eventMusic(index0, _cardList!);
         }
       } catch (e) {
         print('Event soundW0 error: $e');
@@ -302,7 +303,7 @@ class GameViewModel extends ChangeNotifier {
         try {
           String path1 =
               "sounds/events/${AppConstants.eventSoundList[index1 > 89 ? index1 - 45 : index1]}";
-          soundProv.eventMusic(path1);
+          soundProv.eventMusic(index1, _cardList!);
         } catch (e) {
           print('Event soundXW1 error: $e');
         }
@@ -399,7 +400,7 @@ class GameViewModel extends ChangeNotifier {
         soundProv,
       );
 
-      soundProv.eventMusic("sounds/error.mp3");
+      soundProv.pathMusic("sounds/error.mp3");
     });
     notifyListeners();
     Future.delayed(const Duration(milliseconds: 1500), () {
@@ -459,7 +460,7 @@ class GameViewModel extends ChangeNotifier {
           Random().nextDouble() * 0.222,
           soundProv,
         );
-        soundProv.eventMusic("sounds/correctx3.mp3");
+        soundProv.pathMusic("sounds/correctx3.mp3");
       });
     } else {
       isMatchedCard = false;
