@@ -141,6 +141,7 @@ flutter:
       - assets/sounds/events/wrong.mp3
       - assets/sounds/events/yamate.mp3
       - assets/sounds/events/yippie.mp3
+      - assets/sounds/events/sword.mp3
       - assets/sounds/error.mp3
       - assets/sounds/correctx3.mp3
 
