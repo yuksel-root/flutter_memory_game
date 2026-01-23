@@ -2,19 +2,32 @@
   command = "bash ./netlify_build.sh"
   publish = "build/web"
 
-# Flutter Web SPA redirect
+# SPA redirect
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-# 🔐 Security & HTTPS Headers
+# Security + NO CACHE headers
 [[headers]]
-  for = "/*"
+for = "/*"
   [headers.values]
+    # ---- NO CACHE ----
+    Cache-Control = "no-cache, no-store, must-revalidate"
+    Pragma = "no-cache"
+    Expires = "0"
+
+    # ---- SECURITY ----
     Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "geolocation=(), microphone=(), camera=()"
-    Content-Security-Policy = "default-src 'self' https: data: blob:; img-src 'self' https: data: blob:; media-src 'self' https: data: blob:; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; style-src 'self' https: 'unsafe-inline'; connect-src 'self' https: wss:;"
+
+    # ---- Flutter Web CSP ----
+    Content-Security-Policy = "default-src 'self' https: data: blob:;
+      img-src 'self' https: data: blob:;
+      media-src 'self' https: data: blob:;
+      script-src 'self' https: 'unsafe-inline' 'unsafe-eval';
+      style-src 'self' https: 'unsafe-inline';
+      connect-src 'self' https: wss:;"
