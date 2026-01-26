@@ -1,31 +1,44 @@
+# -------------------------------
+# Netlify Build Configuration
+# -------------------------------
 [build]
-  command = "bash ./netlify_build.sh"
-  publish = "build/web"
+  command = "bash ./netlify_build.sh"   # Flutter build script
+  publish = "build/web"                 # Output directory to deploy
 
-# SPA redirect
+# -------------------------------
+# SPA Redirect
+# -------------------------------
+# All SPA routes go to index.html
+# JS/WASM/JSON/image assets are not redirected
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  force = false   # ensures assets are not overwritten
 
-# Security + NO CACHE headers
+# -------------------------------
+# Headers for security and cache
+# -------------------------------
 [[headers]]
   for = "/*"
   [headers.values]
 
     # ---- NO CACHE ----
+    # index.html is always fresh; old builds are never served
     Cache-Control = "no-cache, no-store, must-revalidate"
     Pragma = "no-cache"
     Expires = "0"
 
-    # ---- SECURITY ----
+    # ---- SECURITY HEADERS ----
     Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "geolocation=(), microphone=(), camera=()"
 
-    # ---- Flutter Web CSP (NETLIFY SAFE)
+    # ---- Flutter Web Content Security Policy (CSP) ----
+    # Allows Flutter Web scripts, blob URLs, WebAssembly, and workers
+    # Fixes PC white screen issue
     Content-Security-Policy = '''
       default-src 'self' https: data: blob:;
       script-src 'self' https: blob: 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval';
@@ -35,3 +48,23 @@
       connect-src 'self' https: wss: blob:;
       worker-src 'self' blob:;
     '''
+
+# -------------------------------
+# Optional: cache hashed assets (faster loading)
+# -------------------------------
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "application/javascript"
+
+[[headers]]
+  for = "/*.wasm"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "application/wasm"
