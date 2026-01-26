@@ -8,8 +8,6 @@
 # -------------------------------
 # SPA Redirect
 # -------------------------------
-# All SPA routes go to index.html
-# JS/WASM/JSON/image assets are not redirected
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -19,12 +17,12 @@
 # -------------------------------
 # Headers for security and cache
 # -------------------------------
+
 [[headers]]
   for = "/*"
   [headers.values]
 
     # ---- NO CACHE ----
-    # index.html is always fresh; old builds are never served
     Cache-Control = "no-cache, no-store, must-revalidate"
     Pragma = "no-cache"
     Expires = "0"
@@ -37,34 +35,31 @@
     Permissions-Policy = "geolocation=(), microphone=(), camera=()"
 
     # ---- Flutter Web Content Security Policy (CSP) ----
-    # Allows Flutter Web scripts, blob URLs, WebAssembly, and workers
-    # Fixes PC white screen issue
-    Content-Security-Policy = '''
-      default-src 'self' https: data: blob:;
-      script-src 'self' https: blob: 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval';
-      style-src 'self' https: 'unsafe-inline';
-      img-src 'self' https: data: blob:;
-      media-src 'self' https: data: blob:;
-      connect-src 'self' https: wss: blob:;
-      worker-src 'self' blob:;
-    '''
+    # Multi-line, Netlify-safe, allows JS, WASM, blob, workers
+    Content-Security-Policy = "default-src 'self' https: data: blob:; \
+    script-src 'self' https: blob: 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'; \
+    style-src 'self' https: 'unsafe-inline'; \
+    img-src 'self' https: data: blob:; \
+    media-src 'self' https: data: blob:; \
+    connect-src 'self' https: wss: blob:; \
+    worker-src 'self' blob:;"
 
-# -------------------------------
-# Optional: cache hashed assets (faster loading)
-# -------------------------------
-[[headers]]
-  for = "/assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+    # -------------------------------
+    # Optional: cache hashed assets (faster loading)
+    # -------------------------------
+    [[headers]]
+      for = "/assets/*"
+      [headers.values]
+        Cache-Control = "public, max-age=31536000, immutable"
 
-[[headers]]
-  for = "/*.js"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    Content-Type = "application/javascript"
+    [[headers]]
+      for = "/*.js"
+      [headers.values]
+        Cache-Control = "public, max-age=31536000, immutable"
+        Content-Type = "application/javascript"
 
-[[headers]]
-  for = "/*.wasm"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-    Content-Type = "application/wasm"
+    [[headers]]
+      for = "/*.wasm"
+      [headers.values]
+        Cache-Control = "public, max-age=31536000, immutable"
+        Content-Type = "application/wasm"
