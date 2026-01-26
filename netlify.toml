@@ -17,7 +17,6 @@
 # -------------------------------
 # Headers for security and cache
 # -------------------------------
-
 [[headers]]
   for = "/*"
   [headers.values]
@@ -35,31 +34,24 @@
     Permissions-Policy = "geolocation=(), microphone=(), camera=()"
 
     # ---- Flutter Web Content Security Policy (CSP) ----
-    # Multi-line, Netlify-safe, allows JS, WASM, blob, workers
-    Content-Security-Policy = "default-src 'self' https: data: blob:; \
-    script-src 'self' https: blob: 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'; \
-    style-src 'self' https: 'unsafe-inline'; \
-    img-src 'self' https: data: blob:; \
-    media-src 'self' https: data: blob:; \
-    connect-src 'self' https: wss: blob:; \
-    worker-src 'self' blob:;"
+    Content-Security-Policy = "default-src 'self' https: data: blob:; script-src 'self' https: blob: 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval'; style-src 'self' https: 'unsafe-inline'; img-src 'self' https: data: blob:; media-src 'self' https: data: blob:; connect-src 'self' https: wss: blob:; worker-src 'self' blob:;"
 
-    # -------------------------------
-    # Optional: cache hashed assets (faster loading)
-    # -------------------------------
-    [[headers]]
-      for = "/assets/*"
-      [headers.values]
-        Cache-Control = "public, max-age=31536000, immutable"
+# -------------------------------
+# Optional: cache hashed assets (faster loading)
+# -------------------------------
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
 
-    [[headers]]
-      for = "/*.js"
-      [headers.values]
-        Cache-Control = "public, max-age=31536000, immutable"
-        Content-Type = "application/javascript"
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "application/javascript"
 
-    [[headers]]
-      for = "/*.wasm"
-      [headers.values]
-        Cache-Control = "public, max-age=31536000, immutable"
-        Content-Type = "application/wasm"
+[[headers]]
+  for = "/*.wasm"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "application/wasm"
