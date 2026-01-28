@@ -29,8 +29,8 @@ rm -rf build/web
 # ---- Get dependencies ----
 flutter pub get
 
-# ---- Build web (HTML renderer, PWA off, no cache) ----
-flutter build web --release --no-web-resources-cdn
+# ---- Build web 
+flutter build web --release
 
 # ---- Copy SPA redirect if exists ----
 if [ -f web/_redirects ]; then
