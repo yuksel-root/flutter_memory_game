@@ -6,26 +6,29 @@ version: 1.0.0+1
 environment:
   sdk: ^3.8.0
 
-
 dependencies:
   cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
 
-  #State Management
-  provider: ^6.0.4
+  # State Management
+  provider: ^6.1.5+1
 
-  #icons
+  # Icons
   fluttericon: ^2.0.0
 
-  #Local Storage
-  flutter_secure_storage: ^9.2.4
+  # Local Storage (secure encrypted)
+  flutter_secure_storage: ^10.0.0
 
-  #Lottie animations
-  lottie: ^2.0.0
+  # Lottie animations
+  lottie: ^3.1.2
+
+  # Audio players
   audioplayers: ^6.5.1
   just_audio: ^0.10.5
-  google_fonts: ^7.0.0
+
+  # Google Fonts
+  google_fonts: ^8.0.0
 
 dev_dependencies:
   flutter_test:

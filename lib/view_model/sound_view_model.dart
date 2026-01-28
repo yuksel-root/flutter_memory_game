@@ -31,7 +31,7 @@ class SoundViewModel extends ChangeNotifier {
       String path = "sounds/events/${AppConstants.eventSoundList[cardId]}";
       final assetPath = path.startsWith('assets/') ? path : 'assets/$path';
 
-      print("Playing card event sound: $assetPath");
+      //print("Playing card event sound: $assetPath");
 
       await eventPlayer.setAsset(assetPath);
 
@@ -52,7 +52,7 @@ class SoundViewModel extends ChangeNotifier {
     try {
       final assetPath = 'assets/$path';
       await eventPlayer.setAsset(assetPath);
-      print(assetPath);
+      // print(assetPath);
 
       eventPlayer.play();
 
